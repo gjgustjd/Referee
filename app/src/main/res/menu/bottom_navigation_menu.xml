@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="@drawable/ic_home"
+        android:title="@string/navigation_menu_home"/>
+    <item
+        android:icon="@drawable/ic_chef"
+        android:title="@string/navigation_menu_cook"/>
+    <item
+        android:icon="@drawable/ic_refridgerator"
+        android:title="@string/navigation_menu_fridger"/>
+    <item
+        android:icon="@drawable/ic_carrot"
+        android:title="@string/navigation_menu_ingredient"/>
+</menu>

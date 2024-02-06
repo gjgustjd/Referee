@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Referee</string>
+    <string name="navigation_menu_home">홈</string>
+    <string name="navigation_menu_ingredient">식재료</string>
+    <string name="navigation_menu_fridger">냉장고</string>
+    <string name="navigation_menu_cook">요리</string>
 </resources>
