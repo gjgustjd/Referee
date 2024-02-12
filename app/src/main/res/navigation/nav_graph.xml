@@ -9,6 +9,12 @@
         android:name="com.example.referee.IngredientsFragment"
         android:label="fragment_ingredients"
         tools:layout="@layout/fragment_ingredients" >
+        <action
+            android:id="@+id/action_ingredientsFragment_to_fridgeFragment"
+            app:destination="@id/fridgeFragment" />
+        <action
+            android:id="@+id/action_ingredientsFragment_to_cookFragment"
+            app:destination="@id/cookFragment" />
     </fragment>
 
     <fragment
@@ -18,6 +24,21 @@
         tools:layout="@layout/fragment_fridge" >
         <action
             android:id="@+id/action_fridgeFragment_to_ingredientsFragment"
+            app:destination="@id/ingredientsFragment" />
+        <action
+            android:id="@+id/action_fridgeFragment_to_cookFragment"
+            app:destination="@id/cookFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cookFragment"
+        android:name="com.example.referee.CookFragment"
+        android:label="fragment_cook"
+        tools:layout="@layout/fragment_cook" >
+        <action
+            android:id="@+id/action_cookFragment_to_fridgeFragment"
+            app:destination="@id/fridgeFragment" />
+        <action
+            android:id="@+id/action_cookFragment_to_ingredientsFragment"
             app:destination="@id/ingredientsFragment" />
     </fragment>
 </navigation>
