@@ -4,5 +4,5 @@
     <string name="navigation_menu_ingredient">식재료</string>
     <string name="navigation_menu_fridger">냉장고</string>
     <string name="navigation_menu_cook">요리</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ingredient_add_title">식재료 추가</string>
 </resources>

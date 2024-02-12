@@ -21,7 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".IngredientAddActivity"/>
+        <activity android:name=".IngredientAddActivity"
+            android:label="@string/ingredient_add_title"
+            android:theme="@style/Theme.Material3.Light"/>
     </application>
 
 </manifest>
