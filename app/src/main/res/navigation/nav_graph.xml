@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_ingredientsFragment_to_cookFragment"
             app:destination="@id/cookFragment" />
+        <action
+            android:id="@+id/action_ingredientsFragment_to_ingredientAddActivity"
+            app:destination="@id/ingredientAddActivity" />
     </fragment>
 
     <fragment
@@ -41,4 +44,8 @@
             android:id="@+id/action_cookFragment_to_ingredientsFragment"
             app:destination="@id/ingredientsFragment" />
     </fragment>
+    <activity
+        android:id="@+id/ingredientAddActivity"
+        android:name="com.example.referee.IngredientAddActivity"
+        android:label="IngredientAddActivity" />
 </navigation>
