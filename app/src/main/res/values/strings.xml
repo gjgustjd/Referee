@@ -4,5 +4,28 @@
     <string name="navigation_menu_ingredient">식재료</string>
     <string name="navigation_menu_fridger">냉장고</string>
     <string name="navigation_menu_cook">요리</string>
+
+<!-- 식재료 추가 화면 -->
     <string name="ingredient_add_title">식재료 추가</string>
+    <string name="ingredient_add_name">식재료명</string>
+    <string name="ingredient_add_unit">단위</string>
+    <string name="ingredient_add_photo">사진</string>
+    <string name="ingredient_add_description">설명</string>
+    <string name="ingredient_add_calory">칼로리</string>
+    <string name="ingredient_add_expiration_date">유통기한(구입날짜로부터)</string>
+    <array name="ingredient_category">
+        <item>육류</item>
+        <item>수산물</item>
+        <item>채소</item>
+        <item>유제품</item>
+        <item>신선식품</item>
+        <item>과일</item>
+        <item>견과류</item>
+        <item>곡류</item>
+        <item>장류</item>
+        <item>조미료</item>
+        <item>기름</item>
+        <item>향신료</item>
+        <item>가공식품</item>
+    </array>
 </resources>
