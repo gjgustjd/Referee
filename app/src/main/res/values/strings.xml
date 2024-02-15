@@ -4,6 +4,10 @@
     <string name="navigation_menu_ingredient">식재료</string>
     <string name="navigation_menu_fridger">냉장고</string>
     <string name="navigation_menu_cook">요리</string>
+    <string name="confirm">확인</string>
+    <string name="cancel">취소</string>
+    <string name="delete">삭제</string>
+    <string name="edit">수정</string>
 
 <!-- 식재료 추가 화면 -->
     <string name="ingredient_add_title">식재료 추가</string>
@@ -27,5 +31,31 @@
         <item>기름</item>
         <item>향신료</item>
         <item>가공식품</item>
+    </array>
+    <array name="ingredient_unit">
+        <item>개</item>
+        <item>묶음</item>
+        <item>병</item>
+        <item>봉투</item>
+        <item>통</item>
+        <item>g</item>
+        <item>mg</item>
+        <item>kg</item>
+        <item>ml</item>
+        <item>l</item>
+    </array>
+    <array name="ingredient_expiration_unit">
+        <item>1일</item>
+        <item>2일</item>
+        <item>3일</item>
+        <item>1주</item>
+        <item>2주</item>
+        <item>3주</item>
+        <item>1개월</item>
+        <item>2개월</item>
+        <item>3개월</item>
+        <item>반 년</item>
+        <item>1년</item>
+        <item>2년</item>
     </array>
 </resources>
