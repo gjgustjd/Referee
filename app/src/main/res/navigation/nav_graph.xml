@@ -6,7 +6,7 @@
     app:startDestination="@id/fridgeFragment">
     <fragment
         android:id="@+id/ingredientsFragment"
-        android:name="com.example.referee.IngredientsFragment"
+        android:name="com.example.referee.main.IngredientsFragment"
         android:label="fragment_ingredients"
         tools:layout="@layout/fragment_ingredients" >
         <action
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/fridgeFragment"
-        android:name="com.example.referee.FridgeFragment"
+        android:name="com.example.referee.main.FridgeFragment"
         android:label="fragment_fridge"
         tools:layout="@layout/fragment_fridge" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/cookFragment"
-        android:name="com.example.referee.CookFragment"
+        android:name="com.example.referee.main.CookFragment"
         android:label="fragment_cook"
         tools:layout="@layout/fragment_cook" >
         <action
@@ -46,6 +46,6 @@
     </fragment>
     <activity
         android:id="@+id/ingredientAddActivity"
-        android:name="com.example.referee.IngredientAddActivity"
+        android:name="com.example.referee.ingredientadd.IngredientAddActivity"
         android:label="IngredientAddActivity" />
 </navigation>

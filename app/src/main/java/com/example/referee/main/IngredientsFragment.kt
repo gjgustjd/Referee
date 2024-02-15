@@ -1,4 +1,4 @@
-package com.example.referee
+package com.example.referee.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import com.example.referee.R
 import com.example.referee.databinding.FragmentIngredientsBinding
 
 class IngredientsFragment : Fragment() {
