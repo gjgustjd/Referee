@@ -3,6 +3,7 @@ package com.example.referee.ingredientadd
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,22 @@ class IngredientAddActivity:AppCompatActivity() {
     }
 
     private fun initViews() {
+        initUnitRecyclerView()
+        initExpirationSpinner()
+    }
+
+    private fun initExpirationSpinner() {
+        val expirationUnits = resources.getStringArray(R.array.ingredient_expiration_unit)
+        with(binding.spExpiration) {
+            adapter = ArrayAdapter(
+                this@IngredientAddActivity,
+                R.layout.item_spinner,
+                expirationUnits
+            )
+        }
+    }
+
+    private fun initUnitRecyclerView() {
         val units = resources.getStringArray(R.array.ingredient_unit)
         with(binding.rvUnits) {
             layoutManager =
