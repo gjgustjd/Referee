@@ -6,5 +6,6 @@
     <color name="colorPrimary">#3C85DF</color>
     <color name="colorAccent">#036AEA</color>
     <color name="colorSecondary">#2FC1FA</color>
+    <color name="buttonEnable">#C6ECF8</color>
 
 </resources>

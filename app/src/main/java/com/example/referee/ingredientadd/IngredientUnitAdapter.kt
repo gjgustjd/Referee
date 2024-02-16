@@ -1,12 +1,16 @@
 package com.example.referee.ingredientadd
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.referee.R
 import com.example.referee.databinding.ItemIngredientsUnitBinding
 
-class IngredientUnitAdapter(private val items: Array<String>) :
+class IngredientUnitAdapter(val context: Context, private val items: Array<String>) :
     RecyclerView.Adapter<IngredientUnitAdapter.IngredientUnitViewHolder>() {
+
+    private var currentSelectedPosition: Int? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientUnitViewHolder {
         return IngredientUnitViewHolder(
@@ -27,6 +31,15 @@ class IngredientUnitAdapter(private val items: Array<String>) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             binding.unit = items[position]
+            binding.tvUnit.setOnClickListener {
+                currentSelectedPosition = position
+                notifyDataSetChanged()
+            }
+            if(position == currentSelectedPosition) {
+                binding.tvUnit.setBackgroundDrawable(context.resources.getDrawable(R.drawable.shape_ingredient_unit_background_enabled))
+            } else {
+                binding.tvUnit.setBackgroundDrawable(context.resources.getDrawable(R.drawable.shape_ingredient_unit_background))
+            }
         }
     }
 }

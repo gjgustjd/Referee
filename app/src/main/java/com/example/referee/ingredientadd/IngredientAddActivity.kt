@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.referee.R
 import com.example.referee.databinding.ActivityAddIngredientBinding
 
@@ -25,7 +24,7 @@ class IngredientAddActivity:AppCompatActivity() {
         with(binding.rvUnits) {
             layoutManager =
                 LinearLayoutManager(this@IngredientAddActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = IngredientUnitAdapter(units)
+            adapter = IngredientUnitAdapter(this@IngredientAddActivity,units)
             addItemDecoration(object :RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(
                     outRect: Rect,
