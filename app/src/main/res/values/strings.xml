@@ -17,7 +17,7 @@
     <string name="ingredient_add_description">설명</string>
     <string name="ingredient_add_calory">칼로리</string>
     <string name="ingredient_add_expiration_date">유통기한(구입날짜로부터)</string>
-    <array name="ingredient_category">
+    <string-array name="ingredient_category">
         <item>육류</item>
         <item>수산물</item>
         <item>채소</item>
@@ -31,8 +31,8 @@
         <item>기름</item>
         <item>향신료</item>
         <item>가공식품</item>
-    </array>
-    <array name="ingredient_unit">
+    </string-array>
+    <string-array name="ingredient_unit">
         <item>개</item>
         <item>묶음</item>
         <item>병</item>
@@ -43,7 +43,7 @@
         <item>kg</item>
         <item>ml</item>
         <item>l</item>
-    </array>
+    </string-array>
     <array name="ingredient_expiration_unit">
         <item>1일</item>
         <item>2일</item>
