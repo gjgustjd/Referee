@@ -1,9 +1,12 @@
 package com.example.referee.ingredientadd
 
+import android.graphics.Rect
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.referee.R
 import com.example.referee.databinding.ActivityAddIngredientBinding
@@ -19,8 +22,24 @@ class IngredientAddActivity:AppCompatActivity() {
 
     private fun initViews() {
         val units = resources.getStringArray(R.array.ingredient_unit)
-        binding.rvUnits.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvUnits.adapter = IngredientUnitAdapter(units)
+        with(binding.rvUnits) {
+            layoutManager =
+                LinearLayoutManager(this@IngredientAddActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = IngredientUnitAdapter(units)
+            addItemDecoration(object :RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    val position = parent.getChildAdapterPosition(view)
+
+                    if (position != units.lastIndex) {
+                        outRect.right = 30
+                    }
+                }
+            })
+        }
     }
 }

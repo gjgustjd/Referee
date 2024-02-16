@@ -8,7 +8,7 @@
             type="String" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:padding="14dp"
         android:background="@drawable/shape_ingredient_unit_background">
@@ -19,6 +19,7 @@
             android:layout_height="match_parent"
             android:textSize="14dp"
             android:text='@{unit}'
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
