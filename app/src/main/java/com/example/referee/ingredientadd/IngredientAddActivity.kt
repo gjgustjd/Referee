@@ -41,7 +41,9 @@ class IngredientAddActivity:AppCompatActivity() {
         with(binding.rvUnits) {
             layoutManager =
                 LinearLayoutManager(this@IngredientAddActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = IngredientUnitAdapter(this@IngredientAddActivity,units)
+            adapter = IngredientUnitAdapter(this@IngredientAddActivity, units).apply {
+                setHasStableIds(true)
+            }
             addItemDecoration(object :RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(
                     outRect: Rect,

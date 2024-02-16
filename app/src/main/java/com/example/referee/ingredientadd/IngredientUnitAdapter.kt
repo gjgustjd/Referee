@@ -27,6 +27,10 @@ class IngredientUnitAdapter(val context: Context, private val items: Array<Strin
         holder.bind(position)
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     inner class IngredientUnitViewHolder(private val binding: ItemIngredientsUnitBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
