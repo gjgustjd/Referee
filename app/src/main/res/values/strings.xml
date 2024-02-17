@@ -17,6 +17,10 @@
     <string name="ingredient_add_description">설명</string>
     <string name="ingredient_add_calory">칼로리</string>
     <string name="ingredient_add_expiration_date">유통기한(구입날짜로부터)</string>
+    <string name="ingredient_add_photo_title">식재료 사진 추가</string>
+    <string name="ingredient_add_photo_desc">식재료 사진을 추가하려면 아래 추가 방법을 선택해주세요.</string>
+    <string name="ingredient_add_photo_camera">카메라</string>
+    <string name="ingredient_add_photo_gallery">갤러리</string>
     <string-array name="ingredient_category">
         <item>육류</item>
         <item>수산물</item>
