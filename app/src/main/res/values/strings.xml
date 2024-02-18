@@ -8,6 +8,12 @@
     <string name="cancel">취소</string>
     <string name="delete">삭제</string>
     <string name="edit">수정</string>
+<!-- 식재료 화면  -->
+    <string name="ingredient_name">식재료명</string>
+    <string name="ingredient_unit">단위 : %s</string>
+    <string name="ingredient_calory">단위당 열량 : %s kcal</string>
+    <string name="ingredient_category">분류</string>
+    <string name="ingredient_expiration">보관기한 : %d </string>
 
 <!-- 식재료 추가 화면 -->
     <string name="ingredient_add_title">식재료 추가</string>
