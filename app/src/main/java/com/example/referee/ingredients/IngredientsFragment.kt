@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.referee.R
 import com.example.referee.databinding.FragmentIngredientsBinding
@@ -13,11 +14,12 @@ import com.example.referee.databinding.FragmentIngredientsBinding
 class IngredientsFragment : Fragment() {
 
     lateinit var binding:FragmentIngredientsBinding
+    private val viewModel by viewModels<IngredientsFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(layoutInflater, R.layout.fragment_ingredients, container, false)
         return binding.root
