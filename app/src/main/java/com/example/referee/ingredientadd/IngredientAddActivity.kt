@@ -22,14 +22,13 @@ import com.example.referee.databinding.ActivityAddIngredientBinding
 
 class IngredientAddActivity:AppCompatActivity() {
     lateinit var binding: ActivityAddIngredientBinding
-    val cameraActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val cameraActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == RESULT_OK) {
             val imageBitmap = result.data?.extras?.getParcelable("data", Bitmap::class.java)
             binding.ivPhoto.setImageBitmap(imageBitmap)
         }
     }
-
-    val galleryActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    private val galleryActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == RESULT_OK) {
             val imageUri = result.data?.data
             imageUri?.let {
@@ -52,15 +51,16 @@ class IngredientAddActivity:AppCompatActivity() {
 
     private fun initPhoto() {
         binding.ivPhoto.setOnClickListener {
-            val dialog = AlertDialog.Builder(this).apply {
+            AlertDialog.Builder(this).apply {
                 setTitle(R.string.ingredient_add_photo_desc)
+                setNegativeButton(R.string.cancel, null)
                 setItems(
                     arrayOf(
                         getString(R.string.ingredient_add_photo_camera),
                         getString(R.string.ingredient_add_photo_gallery)
                     )
                 ) { _, which ->
-                    when(which) {
+                    when (which) {
                         0 -> {
                             checkPermissionAndRequestForActivityResult(
                                 android.Manifest.permission.CAMERA,
@@ -73,6 +73,7 @@ class IngredientAddActivity:AppCompatActivity() {
                                 }
                             }
                         }
+
                         1 -> {
                             checkPermissionAndRequestForActivityResult(
                                 android.Manifest.permission.READ_MEDIA_IMAGES,
@@ -91,9 +92,9 @@ class IngredientAddActivity:AppCompatActivity() {
                         }
                     }
                 }
-                setNegativeButton(R.string.cancel,null)
             }
-            dialog.create().show()
+                .create()
+                .show()
         }
     }
 
