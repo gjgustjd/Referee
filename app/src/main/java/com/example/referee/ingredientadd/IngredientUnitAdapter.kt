@@ -3,6 +3,7 @@ package com.example.referee.ingredientadd
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
 import com.example.referee.databinding.ItemIngredientsUnitBinding
@@ -10,7 +11,7 @@ import com.example.referee.databinding.ItemIngredientsUnitBinding
 class IngredientUnitAdapter(val context: Context, private val items: Array<String>) :
     RecyclerView.Adapter<IngredientUnitAdapter.IngredientUnitViewHolder>() {
 
-    private var currentSelectedPosition: Int? = null
+    private var currentSelectedPosition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientUnitViewHolder {
         return IngredientUnitViewHolder(
@@ -31,7 +32,7 @@ class IngredientUnitAdapter(val context: Context, private val items: Array<Strin
         return position.toLong()
     }
 
-    fun getSelectedItemString() = currentSelectedPosition?.let { items[it] }
+    fun getSelectedItemString() = items[currentSelectedPosition]
 
     inner class IngredientUnitViewHolder(private val binding: ItemIngredientsUnitBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -42,9 +43,12 @@ class IngredientUnitAdapter(val context: Context, private val items: Array<Strin
                 notifyDataSetChanged()
             }
             if(position == currentSelectedPosition) {
-                binding.tvUnit.setBackgroundDrawable(context.resources.getDrawable(R.drawable.shape_ingredient_unit_background_enabled))
+                binding.tvUnit.background =
+                    ResourcesCompat.getDrawable(context.resources,R.drawable.shape_ingredient_unit_background_enabled,null)
+
             } else {
-                binding.tvUnit.setBackgroundDrawable(context.resources.getDrawable(R.drawable.shape_ingredient_unit_background))
+                binding.tvUnit.background =
+                    ResourcesCompat.getDrawable(context.resources,R.drawable.shape_ingredient_unit_background,null)
             }
         }
     }
