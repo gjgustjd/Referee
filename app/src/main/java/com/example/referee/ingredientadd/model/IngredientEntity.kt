@@ -5,9 +5,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "ingredients")
 data class IngredientEntity(
-    @PrimaryKey val id: Int,
     val name: String,
-    val photoPath: String,
+    val photoPath: ByteArray,
     val unit: String,
     val expiration: Int
-)
+) {
+    @PrimaryKey(autoGenerate = true) var id: Long = 0
+}

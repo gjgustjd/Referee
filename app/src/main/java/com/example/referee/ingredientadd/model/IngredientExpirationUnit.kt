@@ -1,6 +1,6 @@
 package com.example.referee.ingredientadd.model
 
-enum class IngredientUnit(val unitName:String,val days:Int) {
+enum class IngredientExpirationUnit(val unitName:String, val days:Int) {
     ONE_DAY("1일",1),
     TWO_DAY("3일",2),
     THREE_DAY("3일",3),
