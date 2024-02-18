@@ -3,6 +3,7 @@ package com.example.referee.ingredientadd
 import android.graphics.Bitmap
 import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
+import com.example.referee.common.RefereeApplication
 import com.example.referee.common.base.BaseViewModel
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
@@ -10,20 +11,19 @@ import com.example.referee.ingredientadd.model.IngredientRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
 
     fun insertIngredient(
         name: String,
-        photoPath: Bitmap,
+        bitmap: Bitmap? = null,
         unit: String,
         expiration: IngredientExpirationUnit
     ) {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        photoPath.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream)
-        val byteArray: ByteArray = byteArrayOutputStream.toByteArray()
-        val item = IngredientEntity(name, byteArray, unit, expiration.days)
+        val photoName = saveImage(bitmap)
+        val item = IngredientEntity(name, photoName, unit, expiration.days)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -40,6 +40,25 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
                 )
             } catch (e: Exception) {
                 _event.postValue(EventWrapper(IngredientAddEvent.InsertFailed))
+            }
+        }
+    }
+
+    private fun saveImage(bitmap: Bitmap?): String? {
+        return bitmap?.let {
+            try {
+                val storage = RefereeApplication.instance().cacheDir
+                val fileName = "ingredient_" + System.currentTimeMillis().toString()
+                val tempFile = File(storage, fileName)
+
+                tempFile.createNewFile()
+                val outStream = FileOutputStream(tempFile)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream)
+                outStream.close()
+
+                fileName
+            } catch (e: java.lang.Exception) {
+                null
             }
         }
     }
