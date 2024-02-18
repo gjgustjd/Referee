@@ -12,7 +12,7 @@ interface IngredientsDAO {
     fun getIngredientList():List<IngredientEntity>
 
     @Insert
-    fun insertIngredient(item:IngredientEntity)
+    fun insertIngredient(item:IngredientEntity):Long
 
     @Delete
     fun deleteIngredient(item:IngredientEntity)

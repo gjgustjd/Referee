@@ -81,6 +81,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvExpiration" />
 
         <Button
+            android:id="@+id/btnConfirm"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_input_background"

@@ -5,10 +5,12 @@ import com.example.referee.common.model.RefereeDataBase
 
 object IngredientRepository {
     private val db by lazy {
-        RefereeDataBase.getInstance(application = RefereeApplication)
+        val application = RefereeApplication.instance()
+        application?.let {
+            RefereeDataBase.getInstance(application = it)
+        }
     }
 
-    fun insertIngredient(item: IngredientEntity) {
-        db.ingredientsDAO().insertIngredient(item)
-    }
+    fun insertIngredient(item: IngredientEntity) =
+        db?.ingredientsDAO()?.insertIngredient(item) ?: -1
 }

@@ -12,5 +12,9 @@ enum class IngredientExpirationUnit(val unitName:String, val days:Int) {
     THREE_MONTH("3개월",90),
     HALF_YEAR("반 년",180),
     ONE_YEAR("1년",365),
-    TWO_YEAR("2년",730)
+    TWO_YEAR("2년",730);
+
+    companion object {
+        fun fromString(name: String) = values().firstOrNull { it.unitName == name }
+    }
 }

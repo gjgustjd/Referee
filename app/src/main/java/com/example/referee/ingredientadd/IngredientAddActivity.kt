@@ -8,19 +8,24 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
 import com.example.referee.common.Const
 import com.example.referee.databinding.ActivityAddIngredientBinding
+import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 
 class IngredientAddActivity:AppCompatActivity() {
+    private val viewModel:IngredientAddViewModel by viewModels()
     lateinit var binding: ActivityAddIngredientBinding
 
     private val unitsAdapter by lazy {
@@ -53,55 +58,77 @@ class IngredientAddActivity:AppCompatActivity() {
     private fun initViews() {
         initUnitRecyclerView()
         initExpirationSpinner()
-        initPhoto()
+        initListeners()
     }
 
-    private fun initPhoto() {
-        binding.ivPhoto.setOnClickListener {
-            AlertDialog.Builder(this).apply {
-                setTitle(R.string.ingredient_add_photo_desc)
-                setNegativeButton(R.string.cancel, null)
-                setItems(
-                    arrayOf(
-                        getString(R.string.ingredient_add_photo_camera),
-                        getString(R.string.ingredient_add_photo_gallery)
-                    )
-                ) { _, which ->
-                    when (which) {
-                        0 -> {
-                            checkPermissionAndRequestForActivityResult(
-                                android.Manifest.permission.CAMERA,
-                                Const.REQUEST_CAMERA_CODE
-                            ) {
-                                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                                    takePictureIntent.resolveActivity(packageManager)?.also {
-                                        cameraActivityResult.launch(takePictureIntent)
+    private fun initListeners() {
+        with(binding) {
+            btnConfirm.setOnClickListener {
+                val name = etIngredientName.text.toString()
+                val unit = unitsAdapter.getSelectedItemString()
+                val photoBitmap = ivPhoto.drawable.toBitmap()
+                val expiration =
+                    IngredientExpirationUnit.fromString(spExpiration.selectedItem as String)
+                if (unit != null && expiration != null) {
+                    viewModel.insertIngredient(name, photoBitmap, unit, expiration)
+                }
+            }
+            ivPhoto.setOnClickListener {
+                AlertDialog.Builder(this@IngredientAddActivity).apply {
+                    setTitle(R.string.ingredient_add_photo_desc)
+                    setNegativeButton(R.string.cancel, null)
+                    setItems(
+                        arrayOf(
+                            getString(R.string.ingredient_add_photo_camera),
+                            getString(R.string.ingredient_add_photo_gallery)
+                        )
+                    ) { _, which ->
+                        when (which) {
+                            0 -> {
+                                checkPermissionAndRequestForActivityResult(
+                                    android.Manifest.permission.CAMERA,
+                                    Const.REQUEST_CAMERA_CODE
+                                ) {
+                                    Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                                        takePictureIntent.resolveActivity(packageManager)?.also {
+                                            cameraActivityResult.launch(takePictureIntent)
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        1 -> {
-                            checkPermissionAndRequestForActivityResult(
-                                android.Manifest.permission.READ_MEDIA_IMAGES,
-                                Const.REQUEST_GALLERY_CODE
-                            ) {
-                                Intent().apply {
-                                    type = "image/*"
-                                    action = Intent.ACTION_GET_CONTENT
-                                    addCategory(Intent.CATEGORY_OPENABLE)
-                                }.also { pickPhotoIntent ->
-                                    pickPhotoIntent.resolveActivity(packageManager)?.also {
-                                        galleryActivityResult.launch(pickPhotoIntent)
+                            1 -> {
+                                checkPermissionAndRequestForActivityResult(
+                                    android.Manifest.permission.READ_MEDIA_IMAGES,
+                                    Const.REQUEST_GALLERY_CODE
+                                ) {
+                                    Intent().apply {
+                                        type = "image/*"
+                                        action = Intent.ACTION_GET_CONTENT
+                                        addCategory(Intent.CATEGORY_OPENABLE)
+                                    }.also { pickPhotoIntent ->
+                                        pickPhotoIntent.resolveActivity(packageManager)?.also {
+                                            galleryActivityResult.launch(pickPhotoIntent)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+                    .create()
+                    .show()
             }
-                .create()
-                .show()
+        }
+        viewModel.event.observe(this@IngredientAddActivity) {
+            when(it) {
+                IngredientAddEvent.InsertSuccess -> {
+                    Toast.makeText(this@IngredientAddActivity,getString(R.string.ingredient_add_succeed_toast),Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                IngredientAddEvent.InsertFailed ->
+                    Toast.makeText(this@IngredientAddActivity,getString(R.string.ingredient_add_failed_toast),Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -127,7 +154,7 @@ class IngredientAddActivity:AppCompatActivity() {
     }
 
     private fun initExpirationSpinner() {
-        val expirationUnits = IngredientUnit.values().map { it.unitName }
+        val expirationUnits = IngredientExpirationUnit.values().map { it.unitName }
         with(binding.spExpiration) {
             adapter = ArrayAdapter(
                 this@IngredientAddActivity,
