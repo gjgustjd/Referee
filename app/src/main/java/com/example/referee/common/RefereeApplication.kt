@@ -6,7 +6,7 @@ class RefereeApplication :Application() {
 
     companion object {
         @Volatile
-        private var instance:RefereeApplication? = null
+        lateinit var instance:RefereeApplication
         fun instance() = instance
     }
 

@@ -19,7 +19,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
-import com.example.referee.common.BaseActivity
+import com.example.referee.common.base.BaseActivity
 import com.example.referee.common.Const
 import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit

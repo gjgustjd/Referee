@@ -1,4 +1,4 @@
-package com.example.referee.common
+package com.example.referee.common.base
 
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity

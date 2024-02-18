@@ -2,9 +2,8 @@ package com.example.referee.ingredientadd
 
 import android.graphics.Bitmap
 import androidx.lifecycle.viewModelScope
-import com.example.referee.common.BaseViewModel
+import com.example.referee.common.base.BaseViewModel
 import com.example.referee.common.EventWrapper
-import com.example.referee.common.RefereeApplication
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 import com.example.referee.ingredientadd.model.IngredientRepository
@@ -14,7 +13,7 @@ import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
-class IngredientAddViewModel(application: RefereeApplication) : BaseViewModel<IngredientAddEvent>(application) {
+class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
 
     fun insertIngredient(
         name: String,

@@ -6,17 +6,14 @@ import com.example.referee.common.model.RefereeDataBase
 object IngredientRepository {
     private val db by lazy {
         val application = RefereeApplication.instance()
-        application?.let {
-            RefereeDataBase.getInstance(application = it)
-        }
+        RefereeDataBase.getInstance(application)
     }
 
-    fun insertIngredient(item: IngredientEntity) =
-        db?.ingredientsDAO()?.insertIngredient(item) ?: -1
+    fun insertIngredient(item: IngredientEntity) = db.ingredientsDAO().insertIngredient(item)
 
-    fun getIngredientsList() = db?.ingredientsDAO()?.getIngredientList()
+    fun getIngredientsList() = db.ingredientsDAO().getIngredientList()
 
-    fun removeIngredient(item: IngredientEntity) = db?.ingredientsDAO()?.deleteIngredient(item)
+    fun removeIngredient(item: IngredientEntity) = db.ingredientsDAO().deleteIngredient(item)
 
-    fun updateIngredient(item: IngredientEntity) = db?.ingredientsDAO()?.updateIngredient(item)
+    fun updateIngredient(item: IngredientEntity) = db.ingredientsDAO().updateIngredient(item)
 }

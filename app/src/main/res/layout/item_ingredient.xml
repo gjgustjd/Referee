@@ -12,14 +12,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_ingredient_item_background">
 
-        <androidx.cardview.widget.CardView
+    <androidx.cardview.widget.CardView
             android:id="@+id/cdItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:background="@drawable/shape_ingredient_item_background"
+            android:elevation="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,11 +46,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:drawableStart="@drawable/ingredient_category_icon_meat"
+                    android:drawablePadding="5dp"
                     android:text='@{item.name}'
                     android:textSize="16dp"
                     android:textStyle="bold"
-                    android:drawablePadding="5dp"
-                    android:drawableStart="@drawable/ingredient_category_icon_meat"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toEndOf="@+id/ivThumbnail"
@@ -62,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textSize="14dp"
+                    android:text="@{@string/ingredient_unit(item.unit)}"
                     app:layout_constraintStart_toStartOf="@+id/tvName"
                     app:layout_constraintTop_toBottomOf="@+id/tvName"
                     tools:text="@string/ingredient_unit" />
@@ -70,8 +72,9 @@
                     android:id="@+id/tvExpiration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14dp"
                     android:layout_marginTop="10dp"
+                    android:textSize="14dp"
+                    android:text="@{@string/ingredient_expiration(item.expiration)}"
                     app:layout_constraintStart_toStartOf="@+id/tvName"
                     app:layout_constraintTop_toBottomOf="@+id/tvUnit"
                     tools:text="@string/ingredient_expiration" />
