@@ -17,11 +17,26 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
+import com.example.referee.common.Const
 import com.example.referee.databinding.ActivityAddIngredientBinding
-import java.io.File
 
 class IngredientAddActivity:AppCompatActivity() {
     lateinit var binding: ActivityAddIngredientBinding
+    val cameraActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if(result.resultCode == RESULT_OK) {
+            val imageBitmap = result.data?.extras?.getParcelable("data", Bitmap::class.java)
+            binding.ivPhoto.setImageBitmap(imageBitmap)
+        }
+    }
+
+    val galleryActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if(result.resultCode == RESULT_OK) {
+            val imageUri = result.data?.data
+            imageUri?.let {
+                binding.ivPhoto.setImageURI(it)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,21 +51,6 @@ class IngredientAddActivity:AppCompatActivity() {
     }
 
     private fun initPhoto() {
-        val cameraActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-           if(result.resultCode == RESULT_OK) {
-               val imageBitmap = result.data?.extras?.get("data") as Bitmap
-               binding.ivPhoto.setImageBitmap(imageBitmap)
-           }
-        }
-
-        val galleryActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if(result.resultCode == RESULT_OK) {
-                val imageUri = result.data?.data
-                imageUri?.let {
-                    binding.ivPhoto.setImageURI(it)
-                }
-            }
-        }
         binding.ivPhoto.setOnClickListener {
             val dialog = AlertDialog.Builder(this).apply {
                 setTitle(R.string.ingredient_add_photo_desc)
@@ -62,18 +62,10 @@ class IngredientAddActivity:AppCompatActivity() {
                 ) { _, which ->
                     when(which) {
                         0 -> {
-                            val cameraPermissionCheck = ContextCompat.checkSelfPermission(
-                                this@IngredientAddActivity,
-                                android.Manifest.permission.CAMERA
-                            )
-
-                            if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
-                                ActivityCompat.requestPermissions(
-                                    this@IngredientAddActivity,
-                                    arrayOf(android.Manifest.permission.CAMERA),
-                                    1000
-                                )
-                            } else { //권한이 있는 경우
+                            checkPermissionAndRequestForActivityResult(
+                                android.Manifest.permission.CAMERA,
+                                Const.REQUEST_CAMERA_CODE
+                            ) {
                                 Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
                                     takePictureIntent.resolveActivity(packageManager)?.also {
                                         cameraActivityResult.launch(takePictureIntent)
@@ -82,40 +74,47 @@ class IngredientAddActivity:AppCompatActivity() {
                             }
                         }
                         1 -> {
-                            val galleryPermission = android.Manifest.permission.READ_MEDIA_IMAGES
-                            val galleryPermissionCheck = ContextCompat.checkSelfPermission(
-                                this@IngredientAddActivity,
-                                galleryPermission
-                            ) != PackageManager.PERMISSION_GRANTED
-
-                            if (galleryPermissionCheck) { // 권한이 없는 경우
-                                ActivityCompat.requestPermissions(
-                                    this@IngredientAddActivity,
-                                    arrayOf(galleryPermission),
-                                    1001
-                                )
-                            } else { //권한이 있는 경우
-                               Intent().apply {
-                                   type = "image/*"
-                                   action = Intent.ACTION_GET_CONTENT
-                                   addCategory(Intent.CATEGORY_OPENABLE)
-                               }.also { takePictureIntent ->
-                                   takePictureIntent.resolveActivity(packageManager)?.also {
-                                       galleryActivityResult.launch(takePictureIntent)
-                                   }
+                            checkPermissionAndRequestForActivityResult(
+                                android.Manifest.permission.READ_MEDIA_IMAGES,
+                                Const.REQUEST_GALLERY_CODE
+                            ) {
+                                Intent().apply {
+                                    type = "image/*"
+                                    action = Intent.ACTION_GET_CONTENT
+                                    addCategory(Intent.CATEGORY_OPENABLE)
+                                }.also { pickPhotoIntent ->
+                                    pickPhotoIntent.resolveActivity(packageManager)?.also {
+                                        galleryActivityResult.launch(pickPhotoIntent)
+                                    }
                                 }
                             }
                         }
                     }
                 }
-                setPositiveButton(R.string.confirm) {dialog,id ->
-
-                }
-                setNegativeButton(R.string.cancel) { dialog,id ->
-
-                }
+                setNegativeButton(R.string.cancel,null)
             }
             dialog.create().show()
+        }
+    }
+
+    private fun checkPermissionAndRequestForActivityResult(
+        permission: String,
+        requestCode: Int,
+        onGranted: () -> Unit
+    ) {
+        val permissionCheck = ContextCompat.checkSelfPermission(
+            this@IngredientAddActivity,
+            permission
+        )
+
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
+            ActivityCompat.requestPermissions(
+                this@IngredientAddActivity,
+                arrayOf(permission),
+                requestCode
+            )
+        } else { //권한이 있는 경우
+            onGranted()
         }
     }
 
