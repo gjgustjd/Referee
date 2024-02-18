@@ -1,11 +1,10 @@
 package com.example.referee.ingredientadd
 
-import android.app.Application
 import android.graphics.Bitmap
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.referee.common.BaseViewModel
+import com.example.referee.common.EventWrapper
+import com.example.referee.common.RefereeApplication
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 import com.example.referee.ingredientadd.model.IngredientRepository
@@ -15,9 +14,7 @@ import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
-class IngredientAddViewModel(application: Application) : AndroidViewModel(application) {
-    private var _event: MutableLiveData<IngredientAddEvent> = MutableLiveData()
-    val event: LiveData<IngredientAddEvent> = _event
+class IngredientAddViewModel(application: RefereeApplication) : BaseViewModel<IngredientAddEvent>(application) {
 
     fun insertIngredient(
         name: String,
@@ -37,13 +34,13 @@ class IngredientAddViewModel(application: Application) : AndroidViewModel(applic
 
                     _event.postValue(
                         if (result) {
-                            IngredientAddEvent.InsertSuccess
+                            EventWrapper(IngredientAddEvent.InsertSuccess)
                         } else {
-                            IngredientAddEvent.InsertFailed
+                            EventWrapper(IngredientAddEvent.InsertFailed)
                         }
                     )
                 } catch (e: Exception) {
-                    _event.postValue(IngredientAddEvent.InsertFailed)
+                    _event.postValue(EventWrapper(IngredientAddEvent.InsertFailed))
                 }
             }
         }

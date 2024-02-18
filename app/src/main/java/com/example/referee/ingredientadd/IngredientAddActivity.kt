@@ -123,13 +123,23 @@ class IngredientAddActivity : BaseActivity() {
             }
         }
         viewModel.event.observe(this@IngredientAddActivity) {
-            when(it) {
+            when (it.getContentIfNotHandled()) {
                 IngredientAddEvent.InsertSuccess -> {
-                    Toast.makeText(this@IngredientAddActivity,getString(R.string.ingredient_add_succeed_toast),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@IngredientAddActivity,
+                        getString(R.string.ingredient_add_succeed_toast),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     finish()
                 }
-                IngredientAddEvent.InsertFailed ->
-                    Toast.makeText(this@IngredientAddActivity,getString(R.string.ingredient_add_failed_toast),Toast.LENGTH_SHORT).show()
+
+                IngredientAddEvent.InsertFailed -> Toast.makeText(
+                    this@IngredientAddActivity,
+                    getString(R.string.ingredient_add_failed_toast),
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                else -> Unit
             }
         }
     }

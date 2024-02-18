@@ -1,4 +1,4 @@
-package com.example.referee.main
+package com.example.referee.ingredients
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

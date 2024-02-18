@@ -6,7 +6,7 @@
     app:startDestination="@id/fridgeFragment">
     <fragment
         android:id="@+id/ingredientsFragment"
-        android:name="com.example.referee.main.IngredientsFragment"
+        android:name="com.example.referee.ingredients.IngredientsFragment"
         android:label="fragment_ingredients"
         tools:layout="@layout/fragment_ingredients" >
         <action

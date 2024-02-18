@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".main.IngredientsFragment">
+        tools:context=".ingredients.IngredientsFragment">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAddIngredient"
