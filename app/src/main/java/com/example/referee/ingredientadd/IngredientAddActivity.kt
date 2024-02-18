@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -20,11 +19,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
+import com.example.referee.common.BaseActivity
 import com.example.referee.common.Const
 import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 
-class IngredientAddActivity:AppCompatActivity() {
+class IngredientAddActivity : BaseActivity() {
     private val viewModel:IngredientAddViewModel by viewModels()
     lateinit var binding: ActivityAddIngredientBinding
 
