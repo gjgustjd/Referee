@@ -15,6 +15,6 @@ enum class IngredientExpirationUnit(val unitName:String, val days:Int) {
     TWO_YEAR("2년",730);
 
     companion object {
-        fun fromString(name: String) = values().firstOrNull { it.unitName == name }
+        fun fromString(name: String) = values().first { it.unitName == name }
     }
 }

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "ingredients")
 data class IngredientEntity(
     val name: String,
-    val photoPath: ByteArray,
+    val photoPath: ByteArray? = null,
     val unit: String,
     val expiration: Int
 ) {

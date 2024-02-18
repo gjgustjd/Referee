@@ -67,9 +67,11 @@ class IngredientAddActivity : BaseActivity() {
                 val name = etIngredientName.text.toString()
                 val unit = unitsAdapter.getSelectedItemString()
                 val photoBitmap = ivPhoto.drawable.toBitmap()
-                val expiration =
-                    IngredientExpirationUnit.fromString(spExpiration.selectedItem as String)
-                if (unit != null && expiration != null) {
+                val expiration = IngredientExpirationUnit.fromString(spExpiration.selectedItem as String)
+
+                if(name.isEmpty()) {
+                    showToast(getString(R.string.ingredient_add_please_input_name))
+                } else {
                     viewModel.insertIngredient(name, photoBitmap, unit, expiration)
                 }
             }
