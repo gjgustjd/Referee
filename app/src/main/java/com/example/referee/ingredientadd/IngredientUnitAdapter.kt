@@ -31,6 +31,8 @@ class IngredientUnitAdapter(val context: Context, private val items: Array<Strin
         return position.toLong()
     }
 
+    fun getSelectedItemString() = currentSelectedPosition?.let { items[it] }
+
     inner class IngredientUnitViewHolder(private val binding: ItemIngredientsUnitBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {

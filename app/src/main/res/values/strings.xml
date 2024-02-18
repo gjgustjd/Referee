@@ -48,18 +48,4 @@
         <item>ml</item>
         <item>l</item>
     </string-array>
-    <array name="ingredient_expiration_unit">
-        <item>1일</item>
-        <item>2일</item>
-        <item>3일</item>
-        <item>1주</item>
-        <item>2주</item>
-        <item>3주</item>
-        <item>1개월</item>
-        <item>2개월</item>
-        <item>3개월</item>
-        <item>반 년</item>
-        <item>1년</item>
-        <item>2년</item>
-    </array>
 </resources>

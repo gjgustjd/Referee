@@ -22,6 +22,13 @@ import com.example.referee.databinding.ActivityAddIngredientBinding
 
 class IngredientAddActivity:AppCompatActivity() {
     lateinit var binding: ActivityAddIngredientBinding
+
+    private val unitsAdapter by lazy {
+        IngredientUnitAdapter(this@IngredientAddActivity, resources.getStringArray(R.array.ingredient_unit)).apply {
+            setHasStableIds(true)
+        }
+    }
+
     private val cameraActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if(result.resultCode == RESULT_OK) {
             val imageBitmap = result.data?.extras?.getParcelable("data", Bitmap::class.java)
@@ -120,7 +127,7 @@ class IngredientAddActivity:AppCompatActivity() {
     }
 
     private fun initExpirationSpinner() {
-        val expirationUnits = resources.getStringArray(R.array.ingredient_expiration_unit)
+        val expirationUnits = IngredientUnit.values().map { it.unitName }
         with(binding.spExpiration) {
             adapter = ArrayAdapter(
                 this@IngredientAddActivity,
@@ -135,9 +142,7 @@ class IngredientAddActivity:AppCompatActivity() {
         with(binding.rvUnits) {
             layoutManager =
                 LinearLayoutManager(this@IngredientAddActivity, LinearLayoutManager.HORIZONTAL, false)
-            adapter = IngredientUnitAdapter(this@IngredientAddActivity, units).apply {
-                setHasStableIds(true)
-            }
+            adapter = unitsAdapter
             addItemDecoration(object :RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(
                     outRect: Rect,
