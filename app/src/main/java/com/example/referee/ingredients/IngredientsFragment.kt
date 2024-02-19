@@ -1,5 +1,6 @@
 package com.example.referee.ingredients
 
+import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
 import com.example.referee.databinding.FragmentIngredientsBinding
 import com.example.referee.ingredientadd.model.IngredientEntity
@@ -18,6 +20,20 @@ class IngredientsFragment : Fragment() {
     lateinit var binding:FragmentIngredientsBinding
     private val viewModel by activityViewModels<IngredientsFragmentViewModel>()
     private var ingredientAdapter: IngredientsAdapter? = null
+    private val decoration by lazy {
+        object : RecyclerView.ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect,
+                view: View,
+                parent: RecyclerView,
+                state: RecyclerView.State
+            ) {
+                outRect.right = 30
+                outRect.left = 30
+                outRect.bottom = 30
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +64,12 @@ class IngredientsFragment : Fragment() {
         with(binding.rvIngredients) {
             adapter = ingredientAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(decoration)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     private fun initListener() {
