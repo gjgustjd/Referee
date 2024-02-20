@@ -58,16 +58,19 @@ class IngredientsFragment : Fragment() {
     }
 
     private fun initViews()  {
-
+        initRecyclerView()
     }
 
-    private fun initRecyclerView(items:List<IngredientEntity>) {
-        ingredientAdapter = IngredientsAdapter(items)
+    private fun initRecyclerView() {
         with(binding.rvIngredients) {
-            adapter = ingredientAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(decoration)
         }
+    }
+
+    private fun updateRecyclerView(items: List<IngredientEntity>) {
+        ingredientAdapter = IngredientsAdapter(items)
+        binding.rvIngredients.adapter = ingredientAdapter
     }
 
     private fun initListener() {
@@ -78,7 +81,7 @@ class IngredientsFragment : Fragment() {
             when (it.getContentIfNotHandled()) {
                 is IngredientsEvent.GetIngredients.Success -> {
                     val event = it.peekContent() as IngredientsEvent.GetIngredients.Success
-                    initRecyclerView(event.ingredients)
+                    updateRecyclerView(event.ingredients)
                 }
 
                 else -> Unit
