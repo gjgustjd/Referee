@@ -2,75 +2,46 @@ package com.example.referee.main
 
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.example.referee.R
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityMainBinding
-import com.example.referee.ingredients.IngredientsFragmentDirections
+import com.example.referee.ingredients.IngredientsFragment
 
 class MainActivity : BaseActivity() {
 
-    lateinit var binding:ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
+    private var currentFragment: Fragment = FridgeFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        initView()
         initListeners()
     }
 
+    private fun initView() {
+       supportFragmentManager.commit {
+           replace(R.id.fragmentMain,currentFragment)
+       }
+    }
+
     private fun initListeners() {
-       binding.bottomNavigationView.setOnItemSelectedListener {
-           val action = when (it.itemId) {
-               R.id.menu_ingredients -> {
-                  when (binding.bottomNavigationView.selectedItemId) {
-                       R.id.menu_fridge -> {
-                           FridgeFragmentDirections.actionFridgeFragmentToIngredientsFragment()
-                       }
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            currentFragment = when (it.itemId) {
+                R.id.menu_ingredients -> IngredientsFragment()
+                R.id.menu_fridge -> FridgeFragment()
+                R.id.menu_cook -> CookFragment()
+                else -> return@setOnItemSelectedListener false
+            }
 
-                       R.id.menu_cook -> {
-                           CookFragmentDirections.actionCookFragmentToIngredientsFragment()
-                       }
-                       else -> null
-                   }
-               }
+            supportFragmentManager.commit {
+                replace(R.id.fragmentMain, currentFragment)
+            }
 
-               R.id.menu_fridge -> {
-                   when (binding.bottomNavigationView.selectedItemId) {
-                       R.id.menu_ingredients -> {
-                           IngredientsFragmentDirections.actionIngredientsFragmentToFridgeFragment()
-                       }
-
-                       R.id.menu_cook -> {
-                           CookFragmentDirections.actionCookFragmentToFridgeFragment()
-                       }
-
-                       else -> null
-                   }
-               }
-
-               R.id.menu_cook -> {
-                   when (binding.bottomNavigationView.selectedItemId) {
-                       R.id.menu_ingredients -> {
-                           IngredientsFragmentDirections.actionIngredientsFragmentToCookFragment()
-                       }
-
-                       R.id.menu_fridge -> {
-                           FridgeFragmentDirections.actionFridgeFragmentToCookFragment()
-                       }
-
-                       else -> null
-                   }
-               }
-
-               else -> null
-           }
-
-           action?.let {
-               Navigation.findNavController(binding.navHostFragment).navigate(action)
-               true
-           } ?: run {
-               false
-           }
+            return@setOnItemSelectedListener true
        }
     }
 }

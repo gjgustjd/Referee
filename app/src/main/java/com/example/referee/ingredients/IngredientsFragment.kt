@@ -1,5 +1,6 @@
 package com.example.referee.ingredients
 
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
 import com.example.referee.databinding.FragmentIngredientsBinding
+import com.example.referee.ingredientadd.IngredientAddActivity
 import com.example.referee.ingredientadd.model.IngredientEntity
 
 class IngredientsFragment : Fragment() {
@@ -68,13 +70,9 @@ class IngredientsFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     private fun initListener() {
         binding.fabAddIngredient.setOnClickListener {
-            findNavController().navigate(R.id.action_ingredientsFragment_to_ingredientAddActivity)
+            startActivity(Intent(requireActivity(), IngredientAddActivity::class.java))
         }
         viewModel.event.observe(requireActivity()) {
             when (it.getContentIfNotHandled()) {
