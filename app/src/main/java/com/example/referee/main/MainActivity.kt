@@ -1,19 +1,16 @@
 package com.example.referee.main
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import com.example.referee.R
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityMainBinding
 import com.example.referee.ingredients.IngredientsFragmentDirections
-import com.example.referee.ingredients.IngredientsFragmentViewModel
 
 class MainActivity : BaseActivity() {
 
     lateinit var binding:ActivityMainBinding
-    private val ingredientsViewModel:IngredientsFragmentViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
