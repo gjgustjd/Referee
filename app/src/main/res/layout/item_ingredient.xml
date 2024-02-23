@@ -36,6 +36,7 @@
             android:text='@{item.name}'
             android:textSize="16dp"
             android:textStyle="bold"
+            app:ingCategoryType='@{item.category}'
             app:layout_constraintBottom_toTopOf="@+id/tvUnit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"

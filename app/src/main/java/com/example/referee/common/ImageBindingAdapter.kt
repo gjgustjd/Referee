@@ -27,9 +27,18 @@ object ImageBindingAdapter {
     @JvmStatic
     @BindingAdapter("ingCategoryType")
     fun setCategoryIcon(view: TextView, type: IngredientCategoryType) {
-        val context = view.context
         view.text = type.categoryName
         val drawable = ContextCompat.getDrawable(view.context, type.iconResourceId)
         view.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+    }
+
+    @JvmStatic
+    @BindingAdapter("ingCategoryType")
+    fun setCategoryIcon(view: TextView, categoryType: Int) {
+        val type = IngredientCategoryType.values().firstOrNull {it.ordinal == categoryType}
+        type?.let {
+            val drawable = ContextCompat.getDrawable(view.context, it.iconResourceId)
+            view.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+        }
     }
 }
