@@ -9,11 +9,6 @@ class CookFragment : BaseFragment<FragmentCookBinding>() {
 
     override val layoutResourceId = R.layout.fragment_cook
 
-    override fun onResume() {
-        super.onResume()
-        activity?.title = getString(R.string.navigation_menu_cook)
-    }
-
     override fun initView() = Unit
     override fun initListeners() = Unit
 

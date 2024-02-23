@@ -8,11 +8,6 @@ import com.example.referee.databinding.FragmentFridgeBinding
 class FridgeFragment : BaseFragment<FragmentFridgeBinding>() {
 
     override val layoutResourceId = R.layout.fragment_fridge
-
-    override fun onResume() {
-        super.onResume()
-        activity?.title = getString(R.string.navigation_menu_fridger)
-    }
     override fun initView() = Unit
     override fun initListeners() = Unit
 

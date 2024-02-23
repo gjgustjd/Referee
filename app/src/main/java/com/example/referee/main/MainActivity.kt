@@ -36,31 +36,42 @@ class MainActivity : BaseActivity() {
                     add(R.id.fragmentMain, it)
                 }
             }
+            title = getString(R.string.navigation_menu_fridger)
        }
     }
 
     private fun initListeners() {
         binding.bottomNavigationView.setOnItemSelectedListener {
             val fm = supportFragmentManager.beginTransaction()
+            var menuTitle: String? = null
             val currentFragment = when (it.itemId) {
-                R.id.menu_ingredients -> ingredientsFragment ?: run {
-                    ingredientsFragment = IngredientsFragment()
-                    ingredientsFragment?.apply {
-                        fm.add(R.id.fragmentMain,this)
+                R.id.menu_ingredients -> {
+                    menuTitle = getString(R.string.navigation_menu_ingredient)
+                    ingredientsFragment ?: run {
+                        ingredientsFragment = IngredientsFragment()
+                        ingredientsFragment?.apply {
+                            fm.add(R.id.fragmentMain,this)
+                        }
                     }
                 }
 
-                R.id.menu_fridge -> fridgeFragment ?: run {
-                    fridgeFragment = FridgeFragment()
-                    fridgeFragment?.apply {
-                        fm.add(R.id.fragmentMain,this)
+                R.id.menu_fridge -> {
+                    menuTitle = getString(R.string.navigation_menu_fridger)
+                    fridgeFragment ?: run {
+                        fridgeFragment = FridgeFragment()
+                        fridgeFragment?.apply {
+                            fm.add(R.id.fragmentMain,this)
+                        }
                     }
                 }
 
-                R.id.menu_cook -> cookFragment ?: run {
-                    cookFragment = CookFragment()
-                    cookFragment?.apply {
-                        fm.add(R.id.fragmentMain,this)
+                R.id.menu_cook -> {
+                    menuTitle = getString(R.string.navigation_menu_cook)
+                    cookFragment ?: run {
+                        cookFragment = CookFragment()
+                        cookFragment?.apply {
+                            fm.add(R.id.fragmentMain,this)
+                        }
                     }
                 }
 
@@ -73,6 +84,7 @@ class MainActivity : BaseActivity() {
                     show(fragment)
                 }
             }.commit()
+            title = menuTitle
 
             return@setOnItemSelectedListener true
        }
