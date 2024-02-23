@@ -1,9 +1,17 @@
 <resources>
     <style name="Base.Theme.Referee" parent="Theme.Material3.Light"/>
-    <style name="Theme.Referee" parent="Base.Theme.Referee" />
+    <style name="Theme.Referee" parent="Base.Theme.Referee" >
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+    </style>
 
     <style name="Theme.Referee.NoActionBar" parent="Theme.Referee">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+    </style>
+    <style name="WindowAnimationTransition">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/stay_still</item>
+        <item name="android:activityCloseEnterAnimation">@anim/stay_still</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
 </resources>
