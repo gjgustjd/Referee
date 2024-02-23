@@ -4,7 +4,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Rect
-import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ArrayAdapter
@@ -85,6 +84,8 @@ class IngredientAddActivity : BaseActivity() {
                         cameraActivityResult.launch(takePictureIntent)
                     }
                 }
+            } else if(!shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
+                showToast(getString(R.string.ingredient_add_please_grant_permission_toast))
             }
         }
 
@@ -100,6 +101,8 @@ class IngredientAddActivity : BaseActivity() {
                         galleryActivityResult.launch(pickPhotoIntent)
                     }
                 }
+            } else if(!shouldShowRequestPermissionRationale(android.Manifest.permission.READ_MEDIA_IMAGES)) {
+                showToast(getString(R.string.ingredient_add_please_grant_permission_toast))
             }
         }
 
