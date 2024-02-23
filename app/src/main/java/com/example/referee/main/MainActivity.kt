@@ -1,7 +1,5 @@
 package com.example.referee.main
 
-import android.os.Bundle
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
@@ -10,22 +8,13 @@ import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityMainBinding
 import com.example.referee.ingredients.IngredientsFragment
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
-    lateinit var binding: ActivityMainBinding
     private var fridgeFragment: FridgeFragment? = null
     private var cookFragment: CookFragment? = null
     private var ingredientsFragment: IngredientsFragment? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-        initView()
-        initListeners()
-    }
-
-    private fun initView() {
+    override fun initViews() {
         supportFragmentManager.commit {
             fridgeFragment?.let { fridge ->
                 hideOtherFragment(fridgeFragment)
@@ -40,7 +29,7 @@ class MainActivity : BaseActivity() {
        }
     }
 
-    private fun initListeners() {
+    override fun initListeners() {
         binding.bottomNavigationView.setOnItemSelectedListener {
             val fm = supportFragmentManager.beginTransaction()
             var menuTitle: String? = null

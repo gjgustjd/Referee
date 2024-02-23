@@ -8,10 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
-abstract class BaseFragment<T> : Fragment() where T : ViewDataBinding {
+abstract class BaseFragment<T>(protected val layoutResourceId: Int) :
+    Fragment() where T : ViewDataBinding {
 
     protected lateinit var binding: T
-    abstract val layoutResourceId:Int
     abstract fun initView()
     abstract fun initListeners()
 

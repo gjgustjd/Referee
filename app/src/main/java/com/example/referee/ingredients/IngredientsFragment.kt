@@ -12,9 +12,9 @@ import com.example.referee.databinding.FragmentIngredientsBinding
 import com.example.referee.ingredientadd.IngredientAddActivity
 import com.example.referee.ingredientadd.model.IngredientEntity
 
-class IngredientsFragment : BaseFragment<FragmentIngredientsBinding>() {
+class IngredientsFragment :
+    BaseFragment<FragmentIngredientsBinding>(R.layout.fragment_ingredients) {
 
-    override val layoutResourceId = R.layout.fragment_ingredients
     private val viewModel by activityViewModels<IngredientsFragmentViewModel>()
     private var ingredientAdapter: IngredientsAdapter? = null
     private val decoration by lazy {

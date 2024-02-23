@@ -5,9 +5,8 @@ import com.example.referee.R
 import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentFridgeBinding
 
-class FridgeFragment : BaseFragment<FragmentFridgeBinding>() {
+class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fridge) {
 
-    override val layoutResourceId = R.layout.fragment_fridge
     override fun initView() = Unit
     override fun initListeners() = Unit
 

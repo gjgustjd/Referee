@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
@@ -23,9 +22,9 @@ import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 
-class IngredientAddActivity : BaseActivity() {
+class IngredientAddActivity :
+    BaseActivity<ActivityAddIngredientBinding>(R.layout.activity_add_ingredient) {
     private val viewModel: IngredientAddViewModel by viewModels()
-    lateinit var binding: ActivityAddIngredientBinding
 
     private val unitsAdapter by lazy {
         IngredientUnitAdapter(
@@ -106,19 +105,12 @@ class IngredientAddActivity : BaseActivity() {
             }
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_add_ingredient)
-        initViews()
-    }
-
-    private fun initViews() {
+    override fun initViews() {
         initUnitRecyclerView()
         initExpirationSpinner()
-        initListeners()
     }
 
-    private fun initListeners() {
+    override fun initListeners() {
         with(binding) {
             btnConfirm.setOnClickListener {
                 val name = etIngredientName.text.toString()

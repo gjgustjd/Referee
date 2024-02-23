@@ -5,9 +5,7 @@ import com.example.referee.R
 import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentCookBinding
 
-class CookFragment : BaseFragment<FragmentCookBinding>() {
-
-    override val layoutResourceId = R.layout.fragment_cook
+class CookFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook) {
 
     override fun initView() = Unit
     override fun initListeners() = Unit
