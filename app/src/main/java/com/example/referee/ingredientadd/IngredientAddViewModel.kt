@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.RefereeApplication
 import com.example.referee.common.base.BaseViewModel
+import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 import com.example.referee.ingredientadd.model.IngredientRepository
@@ -20,10 +21,11 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
         name: String,
         bitmap: Bitmap? = null,
         unit: String,
-        expiration: IngredientExpirationUnit
+        expiration: IngredientExpirationUnit,
+        category:IngredientCategoryType
     ) {
         val photoName = saveImage(bitmap)
-        val item = IngredientEntity(name, photoName, unit, expiration.days)
+        val item = IngredientEntity(name, photoName, unit, expiration.days,category.ordinal)
 
         viewModelScope.launch(Dispatchers.IO) {
             try {

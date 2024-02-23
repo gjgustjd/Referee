@@ -8,7 +8,8 @@ data class IngredientEntity(
     val name: String,
     val photoName: String? = null,
     val unit: String,
-    val expiration: Int
+    val expiration: Int,
+    val category: Int? = null
 ) {
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 }

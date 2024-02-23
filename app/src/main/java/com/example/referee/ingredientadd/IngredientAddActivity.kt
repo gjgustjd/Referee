@@ -122,7 +122,7 @@ class IngredientAddActivity :
                 if (name.isEmpty()) {
                     showToast(getString(R.string.ingredient_add_please_input_name))
                 } else {
-                    viewModel.insertIngredient(name, photoBitmap, unit, expiration)
+                    viewModel.insertIngredient(name, photoBitmap, unit, expiration,categoriesAdapter.getSelectedItem())
                 }
             }
             ivPhoto.setOnClickListener {
