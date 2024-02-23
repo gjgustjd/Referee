@@ -108,6 +108,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/spExpiration" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/view_under_label_margin_top"
+                    tools:listitem="@layout/item_ingredients_category"
+                    tools:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCategory"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
