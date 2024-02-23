@@ -22,6 +22,7 @@ import com.example.referee.R
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.common.Const
 import com.example.referee.databinding.ActivityAddIngredientBinding
+import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 
 class IngredientAddActivity : BaseActivity() {
@@ -31,6 +32,29 @@ class IngredientAddActivity : BaseActivity() {
     private val unitsAdapter by lazy {
         IngredientUnitAdapter(this@IngredientAddActivity, resources.getStringArray(R.array.ingredient_unit)).apply {
             setHasStableIds(true)
+        }
+    }
+    private val categoriesAdapter by lazy {
+        IngredientCategoryAdapter(
+            this@IngredientAddActivity,
+            IngredientCategoryType.values()
+        ).apply {
+            setHasStableIds(true)
+        }
+    }
+
+    private fun getDecoration(lastIndex: Int) = object : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            val position = parent.getChildAdapterPosition(view)
+
+            if (position != lastIndex) {
+                outRect.right = 30
+            }
         }
     }
 
@@ -182,20 +206,14 @@ class IngredientAddActivity : BaseActivity() {
             layoutManager =
                 LinearLayoutManager(this@IngredientAddActivity, LinearLayoutManager.HORIZONTAL, false)
             adapter = unitsAdapter
-            addItemDecoration(object :RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(
-                    outRect: Rect,
-                    view: View,
-                    parent: RecyclerView,
-                    state: RecyclerView.State
-                ) {
-                    val position = parent.getChildAdapterPosition(view)
+            addItemDecoration(getDecoration(units.lastIndex))
+        }
 
-                    if (position != units.lastIndex) {
-                        outRect.right = 30
-                    }
-                }
-            })
+        with(binding.rvCategories) {
+            layoutManager =
+                LinearLayoutManager(this@IngredientAddActivity, LinearLayoutManager.HORIZONTAL, false)
+            adapter = categoriesAdapter
+            addItemDecoration(getDecoration(IngredientCategoryType.values().lastIndex))
         }
     }
 }

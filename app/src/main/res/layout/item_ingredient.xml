@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:drawablePadding="5dp"
+            android:drawablePadding="@dimen/drawable_icon_padding"
             android:text='@{item.name}'
             android:textSize="16dp"
             android:textStyle="bold"
