@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="label_text_margin_top">20dp</dimen>
+    <dimen name="view_under_label_margin_top">16dp</dimen>
+    <dimen name="plain_text_size">14dp</dimen>
+</resources>
