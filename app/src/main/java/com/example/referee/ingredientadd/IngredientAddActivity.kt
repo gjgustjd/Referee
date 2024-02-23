@@ -9,10 +9,10 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
@@ -20,17 +20,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
 import com.example.referee.common.base.BaseActivity
-import com.example.referee.common.Const
 import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 
 class IngredientAddActivity : BaseActivity() {
-    private val viewModel:IngredientAddViewModel by viewModels()
+    private val viewModel: IngredientAddViewModel by viewModels()
     lateinit var binding: ActivityAddIngredientBinding
 
     private val unitsAdapter by lazy {
-        IngredientUnitAdapter(this@IngredientAddActivity, resources.getStringArray(R.array.ingredient_unit)).apply {
+        IngredientUnitAdapter(
+            this@IngredientAddActivity,
+            resources.getStringArray(R.array.ingredient_unit)
+        ).apply {
             setHasStableIds(true)
         }
     }
@@ -58,20 +60,48 @@ class IngredientAddActivity : BaseActivity() {
         }
     }
 
-    private val cameraActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if(result.resultCode == RESULT_OK) {
-            val imageBitmap = result.data?.extras?.getParcelable("data", Bitmap::class.java)
-            binding.ivPhoto.setImageBitmap(imageBitmap)
-        }
-    }
-    private val galleryActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if(result.resultCode == RESULT_OK) {
-            val imageUri = result.data?.data
-            imageUri?.let {
-                binding.ivPhoto.setImageURI(it)
+    private val cameraActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val imageBitmap = result.data?.extras?.getParcelable("data", Bitmap::class.java)
+                binding.ivPhoto.setImageBitmap(imageBitmap)
             }
         }
-    }
+    private val galleryActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val imageUri = result.data?.data
+                imageUri?.let {
+                    binding.ivPhoto.setImageURI(it)
+                }
+            }
+        }
+
+    private val launchRequestCameraPermissionCallback =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                    takePictureIntent.resolveActivity(packageManager)?.also {
+                        cameraActivityResult.launch(takePictureIntent)
+                    }
+                }
+            }
+        }
+
+    private val launchRequestGalleryPermissionCallback =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                Intent().apply {
+                    type = "image/*"
+                    action = Intent.ACTION_GET_CONTENT
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                }.also { pickPhotoIntent ->
+                    pickPhotoIntent.resolveActivity(packageManager)?.also {
+                        galleryActivityResult.launch(pickPhotoIntent)
+                    }
+                }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,9 +121,10 @@ class IngredientAddActivity : BaseActivity() {
                 val name = etIngredientName.text.toString()
                 val unit = unitsAdapter.getSelectedItemString()
                 val photoBitmap = ivPhoto.drawable.toBitmap()
-                val expiration = IngredientExpirationUnit.fromString(spExpiration.selectedItem as String)
+                val expiration =
+                    IngredientExpirationUnit.fromString(spExpiration.selectedItem as String)
 
-                if(name.isEmpty()) {
+                if (name.isEmpty()) {
                     showToast(getString(R.string.ingredient_add_please_input_name))
                 } else {
                     viewModel.insertIngredient(name, photoBitmap, unit, expiration)
@@ -113,7 +144,7 @@ class IngredientAddActivity : BaseActivity() {
                             0 -> {
                                 checkPermissionAndRequestForActivityResult(
                                     android.Manifest.permission.CAMERA,
-                                    Const.REQUEST_CAMERA_CODE
+                                    launchRequestCameraPermissionCallback
                                 ) {
                                     Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
                                         takePictureIntent.resolveActivity(packageManager)?.also {
@@ -126,7 +157,7 @@ class IngredientAddActivity : BaseActivity() {
                             1 -> {
                                 checkPermissionAndRequestForActivityResult(
                                     android.Manifest.permission.READ_MEDIA_IMAGES,
-                                    Const.REQUEST_GALLERY_CODE
+                                    launchRequestGalleryPermissionCallback
                                 ) {
                                     Intent().apply {
                                         type = "image/*"
@@ -170,7 +201,7 @@ class IngredientAddActivity : BaseActivity() {
 
     private fun checkPermissionAndRequestForActivityResult(
         permission: String,
-        requestCode: Int,
+        callback: ActivityResultLauncher<String>,
         onGranted: () -> Unit
     ) {
         val permissionCheck = ContextCompat.checkSelfPermission(
@@ -179,10 +210,8 @@ class IngredientAddActivity : BaseActivity() {
         )
 
         if (permissionCheck != PackageManager.PERMISSION_GRANTED) { // 권한이 없는 경우
-            ActivityCompat.requestPermissions(
-                this@IngredientAddActivity,
-                arrayOf(permission),
-                requestCode
+            callback.launch(
+                permission
             )
         } else { //권한이 있는 경우
             onGranted()
@@ -204,14 +233,22 @@ class IngredientAddActivity : BaseActivity() {
         val units = resources.getStringArray(R.array.ingredient_unit)
         with(binding.rvUnits) {
             layoutManager =
-                LinearLayoutManager(this@IngredientAddActivity, LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(
+                    this@IngredientAddActivity,
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
             adapter = unitsAdapter
             addItemDecoration(getDecoration(units.lastIndex))
         }
 
         with(binding.rvCategories) {
             layoutManager =
-                LinearLayoutManager(this@IngredientAddActivity, LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(
+                    this@IngredientAddActivity,
+                    LinearLayoutManager.HORIZONTAL,
+                    false
+                )
             adapter = categoriesAdapter
             addItemDecoration(getDecoration(IngredientCategoryType.values().lastIndex))
         }
