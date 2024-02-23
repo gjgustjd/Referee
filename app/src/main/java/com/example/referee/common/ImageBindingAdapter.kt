@@ -2,8 +2,11 @@ package com.example.referee.common
 
 import android.graphics.BitmapFactory
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.example.referee.ingredientadd.model.IngredientCategoryType
 
 object ImageBindingAdapter {
 
@@ -19,5 +22,14 @@ object ImageBindingAdapter {
                 .load(bitmap)
                 .into(view)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("ingCategoryType")
+    fun setCategoryIcon(view: TextView, type: IngredientCategoryType) {
+        val context = view.context
+        view.text = type.categoryName
+        val drawable = ContextCompat.getDrawable(view.context, type.iconResourceId)
+        view.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
     }
 }

@@ -30,21 +30,6 @@
     <string name="ingredient_add_succeed_toast">식재료 저장에 성공했습니다.</string>
     <string name="ingredient_add_failed_toast">식재료 저장에 실패했습니다.</string>
     <string name="ingredient_add_please_input_name">식재료명을 입력해주세요.</string>
-    <string-array name="ingredient_category">
-        <item>육류</item>
-        <item>수산물</item>
-        <item>채소</item>
-        <item>유제품</item>
-        <item>신선식품</item>
-        <item>과일</item>
-        <item>견과류</item>
-        <item>곡류</item>
-        <item>장류</item>
-        <item>조미료</item>
-        <item>기름</item>
-        <item>향신료</item>
-        <item>가공식품</item>
-    </string-array>
     <string-array name="ingredient_unit">
         <item>개</item>
         <item>묶음</item>

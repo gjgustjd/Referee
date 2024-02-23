@@ -2,10 +2,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
         <variable
-            name="unit"
-            type="String" />
+            name="category"
+            type="com.example.referee.ingredientadd.model.IngredientCategoryType" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -17,12 +18,13 @@
             android:layout_height="wrap_content"
             android:padding="14dp"
             android:textSize="@dimen/plain_text_size"
-            android:text='@{unit}'
+            android:text='@{category.categoryName}'
+            app:ingCategoryType='@{category}'
             android:gravity="center"
             android:background="@drawable/shape_ingredient_unit_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="단위" />
+            tools:text="분류" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

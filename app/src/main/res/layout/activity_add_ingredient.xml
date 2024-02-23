@@ -40,7 +40,7 @@
                 <TextView
                     android:id="@+id/tvImage"
                     style="@style/labelTextView"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/label_text_margin_top"
                     android:text="@string/ingredient_add_photo"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/etIngredientName" />
@@ -49,7 +49,7 @@
                     android:id="@+id/ivPhoto"
                     android:layout_width="300dp"
                     android:layout_height="300dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/view_under_label_margin_top"
                     android:background="@color/white"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ingredient_photo_default_inset"
@@ -60,7 +60,7 @@
                 <TextView
                     android:id="@+id/tvUnit"
                     style="@style/labelTextView"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/label_text_margin_top"
                     android:text="@string/ingredient_add_unit"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ivPhoto" />
@@ -69,7 +69,7 @@
                     android:id="@+id/rvUnits"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/view_under_label_margin_top"
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +80,7 @@
                 <TextView
                     android:id="@+id/tvExpiration"
                     style="@style/labelTextView"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/label_text_margin_top"
                     android:text="@string/ingredient_add_expiration_date"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rvUnits" />
@@ -89,11 +89,25 @@
                     android:id="@+id/spExpiration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="@dimen/view_under_label_margin_top"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvExpiration"
-                    app:layout_constraintVertical_bias="0"
                     app:layout_constraintVertical_chainStyle="spread" />
+
+                <TextView
+                    android:id="@+id/tvCategory"
+                    style="@style/labelTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/label_text_margin_top"
+                    android:text="@string/ingredient_category"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spExpiration" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
@@ -104,7 +118,7 @@
             android:background="@drawable/shape_input_background"
             android:backgroundTint="@color/colorPrimary"
             android:text="@string/confirm"
-            android:textSize="14dp"
+            android:textSize="@dimen/plain_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
