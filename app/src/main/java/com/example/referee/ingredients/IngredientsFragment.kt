@@ -2,24 +2,19 @@ package com.example.referee.ingredients
 
 import android.content.Intent
 import android.graphics.Rect
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
+import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentIngredientsBinding
 import com.example.referee.ingredientadd.IngredientAddActivity
 import com.example.referee.ingredientadd.model.IngredientEntity
 
-class IngredientsFragment : Fragment() {
+class IngredientsFragment : BaseFragment<FragmentIngredientsBinding>() {
 
-    lateinit var binding:FragmentIngredientsBinding
+    override val layoutResourceId = R.layout.fragment_ingredients
     private val viewModel by activityViewModels<IngredientsFragmentViewModel>()
     private var ingredientAdapter: IngredientsAdapter? = null
     private val decoration by lazy {
@@ -36,45 +31,11 @@ class IngredientsFragment : Fragment() {
             }
         }
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding =
-            DataBindingUtil.inflate(layoutInflater, R.layout.fragment_ingredients, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initViews()
-        initListener()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        activity?.title = getString(R.string.navigation_menu_ingredient)
-        viewModel.getIngredientsList()
-    }
-
-    private fun initViews()  {
+    override fun initView() {
         initRecyclerView()
     }
 
-    private fun initRecyclerView() {
-        with(binding.rvIngredients) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(decoration)
-        }
-    }
-
-    private fun updateRecyclerView(items: List<IngredientEntity>) {
-        ingredientAdapter = IngredientsAdapter(items)
-        binding.rvIngredients.adapter = ingredientAdapter
-    }
-
-    private fun initListener() {
+    override fun initListeners() {
         binding.fabAddIngredient.setOnClickListener {
             startActivity(Intent(requireActivity(), IngredientAddActivity::class.java))
         }
@@ -88,5 +49,23 @@ class IngredientsFragment : Fragment() {
                 else -> Unit
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.title = getString(R.string.navigation_menu_ingredient)
+        viewModel.getIngredientsList()
+    }
+
+    private fun initRecyclerView() {
+        with(binding.rvIngredients) {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(decoration)
+        }
+    }
+
+    private fun updateRecyclerView(items: List<IngredientEntity>) {
+        ingredientAdapter = IngredientsAdapter(items)
+        binding.rvIngredients.adapter = ingredientAdapter
     }
 }
