@@ -31,7 +31,7 @@
         </activity>
         <activity android:name=".ingredientadd.IngredientAddActivity"
             android:label="@string/ingredient_add_title"
-            android:theme="@style/Theme.Material3.Light"/>
+            android:theme="@style/Theme.Referee"/>
     </application>
 
 </manifest>

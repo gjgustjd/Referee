@@ -15,11 +15,24 @@ class FridgeFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.title = getString(R.string.navigation_menu_fridger)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_fridge, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
+
+    private fun initViews() {
     }
 
     companion object {

@@ -22,6 +22,19 @@ class CookFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_cook, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.title = getString(R.string.navigation_menu_cook)
+    }
+
+    private fun initViews() {
+    }
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
