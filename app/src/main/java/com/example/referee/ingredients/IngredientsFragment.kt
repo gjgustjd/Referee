@@ -47,6 +47,7 @@ class IngredientsFragment :
                 is IngredientsEvent.GetIngredients.Success -> {
                     val event = it.peekContent() as IngredientsEvent.GetIngredients.Success
                     updateRecyclerView(event.ingredients)
+                    hideLoading()
                 }
 
                 else -> Unit
@@ -66,6 +67,7 @@ class IngredientsFragment :
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(decoration)
         }
+        showLoading()
         viewModel.getIngredientsList()
     }
 

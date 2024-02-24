@@ -24,10 +24,9 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
         expiration: IngredientExpirationUnit,
         category:IngredientCategoryType
     ) {
-        val photoName = saveImage(bitmap)
-        val item = IngredientEntity(name, photoName, unit, expiration.days,category.ordinal)
-
         viewModelScope.launch(Dispatchers.IO) {
+            val photoName = saveImage(bitmap)
+            val item = IngredientEntity(name, photoName, unit, expiration.days, category.ordinal)
             try {
                 val result = withContext(Dispatchers.IO) {
                     IngredientRepository.insertIngredient(item) > 0

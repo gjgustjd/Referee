@@ -179,14 +179,18 @@ class IngredientAddActivity :
                         getString(R.string.ingredient_add_succeed_toast),
                         Toast.LENGTH_SHORT
                     ).show()
+                    hideLoading()
                     finish()
                 }
 
-                IngredientAddEvent.InsertFailed -> Toast.makeText(
-                    this@IngredientAddActivity,
-                    getString(R.string.ingredient_add_failed_toast),
-                    Toast.LENGTH_SHORT
-                ).show()
+                IngredientAddEvent.InsertFailed -> {
+                    hideLoading()
+                    Toast.makeText(
+                        this@IngredientAddActivity,
+                        getString(R.string.ingredient_add_failed_toast),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
                 is IngredientAddEvent.IsThereIngredient -> {
                     val event = it.peekContent() as IngredientAddEvent.IsThereIngredient
@@ -203,6 +207,7 @@ class IngredientAddActivity :
                         if (name.isEmpty()) {
                             showToast(getString(R.string.ingredient_add_please_input_name))
                         } else {
+                            showLoading()
                             viewModel.insertIngredient(
                                 name,
                                 photoBitmap,
