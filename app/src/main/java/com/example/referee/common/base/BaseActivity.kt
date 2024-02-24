@@ -5,10 +5,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActivity() where T : ViewDataBinding {
 
     protected lateinit var binding: T
+    protected val compositeDisposable = CompositeDisposable()
     protected fun showToast(text:String) {
         Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
     }
@@ -19,6 +21,11 @@ abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActi
 
         initViews()
         initListeners()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        compositeDisposable.clear()
     }
 
     abstract fun initViews()

@@ -21,6 +21,10 @@ import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
+import com.jakewharton.rxbinding4.view.clicks
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import java.util.concurrent.TimeUnit
 
 class IngredientAddActivity :
     BaseActivity<ActivityAddIngredientBinding>(R.layout.activity_add_ingredient) {
@@ -112,19 +116,31 @@ class IngredientAddActivity :
 
     override fun initListeners() {
         with(binding) {
-            btnConfirm.setOnClickListener {
-                val name = etIngredientName.text.toString()
-                val unit = unitsAdapter.getSelectedItemString()
-                val photoBitmap = ivPhoto.drawable.toBitmap()
-                val expiration =
-                    IngredientExpirationUnit.fromString(spExpiration.selectedItem as String)
+            btnConfirm.clicks()
+                .throttleFirst(1300, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    val name = etIngredientName.text.toString()
+                    val unit = unitsAdapter.getSelectedItemString()
+                    val photoBitmap = ivPhoto.drawable.toBitmap()
+                    val expiration =
+                        IngredientExpirationUnit.fromString(spExpiration.selectedItem as String)
 
-                if (name.isEmpty()) {
-                    showToast(getString(R.string.ingredient_add_please_input_name))
-                } else {
-                    viewModel.insertIngredient(name, photoBitmap, unit, expiration,categoriesAdapter.getSelectedItem())
+                    if (name.isEmpty()) {
+                        showToast(getString(R.string.ingredient_add_please_input_name))
+                    } else {
+                        viewModel.insertIngredient(
+                            name,
+                            photoBitmap,
+                            unit,
+                            expiration,
+                            categoriesAdapter.getSelectedItem()
+                        )
+                    }
+                }.apply {
+                    compositeDisposable.add(this)
                 }
-            }
+
             ivPhoto.setOnClickListener {
                 AlertDialog.Builder(this@IngredientAddActivity).apply {
                     setTitle(R.string.ingredient_add_photo_desc)
