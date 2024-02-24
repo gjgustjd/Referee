@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Rect
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
@@ -11,6 +12,8 @@ import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentIngredientsBinding
 import com.example.referee.ingredientadd.IngredientAddActivity
 import com.example.referee.ingredientadd.model.IngredientEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class IngredientsFragment :
     BaseFragment<FragmentIngredientsBinding>(R.layout.fragment_ingredients) {
@@ -49,6 +52,13 @@ class IngredientsFragment :
                 else -> Unit
             }
         }
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.bitmapFlow.collect { event ->
+                event?.let {
+                    ingredientAdapter?.bindThumbnail(event.bitmap, event.position)
+                }
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -60,7 +70,7 @@ class IngredientsFragment :
     }
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
-        ingredientAdapter = IngredientsAdapter(items)
+        ingredientAdapter = IngredientsAdapter(items, viewModel::getImageBitmap)
         binding.rvIngredients.adapter = ingredientAdapter
     }
 }

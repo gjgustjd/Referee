@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.example.referee.ingredientadd.model.IngredientEntity" />
+            type="com.example.referee.ingredientadd.model.IngredientEntity"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,8 +21,8 @@
             android:id="@+id/ivThumbnail"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            app:glideBitmap='@{item.imageBitmap}'
             android:src="@drawable/ingredient_photo_default_inset"
-            app:glideSrc="@{item.photoName}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,8 +42,7 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@+id/ivThumbnail"
             app:layout_constraintTop_toTopOf="@+id/ivThumbnail"
-            tools:text="식재료명"
-            app:drawableStartCompat="@drawable/ingredient_category_icon_meat" />
+            tools:text="식재료명"/>
 
         <TextView
             android:id="@+id/tvUnit"

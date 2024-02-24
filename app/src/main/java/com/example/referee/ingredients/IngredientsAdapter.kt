@@ -1,5 +1,7 @@
 package com.example.referee.ingredients
 
+import android.graphics.Bitmap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,7 +9,8 @@ import com.example.referee.databinding.ItemIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientEntity
 
 class IngredientsAdapter(
-    private val items: List<IngredientEntity>
+    private val items: List<IngredientEntity>,
+    private val bindThumbFun: (imageName: String, position: Int) -> Unit
 ) :
     RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
 
@@ -24,13 +27,33 @@ class IngredientsAdapter(
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
+        Log.i(
+            "BindingTest onBindViewHolder ",
+            "position:$position imageName:${items[position].photoName}"
+        )
         holder.bind(position)
+    }
+
+    fun bindThumbnail(bitmap:Bitmap,position: Int) {
+        Log.i(
+            "BindingTest bindThumbnail",
+            "position:$position imageName:${items[position].photoName}"
+        )
+        items[position].imageBitmap = bitmap
+        notifyItemChanged(position)
     }
 
     inner class IngredientViewHolder(val binding: ItemIngredientBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-            binding.item = items[position]
+            val item = items[position]
+            binding.item = item
+
+            item.imageBitmap ?: run {
+                item.photoName?.let {
+                    bindThumbFun(it, position)
+                }
+            }
         }
     }
 }

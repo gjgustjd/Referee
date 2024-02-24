@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientsDAO
 
-@Database(entities = [IngredientEntity::class], version = 4)
+@Database(entities = [IngredientEntity::class], version = 5)
 abstract class RefereeDataBase : RoomDatabase() {
     companion object {
         private var instance: RefereeDataBase? = null
