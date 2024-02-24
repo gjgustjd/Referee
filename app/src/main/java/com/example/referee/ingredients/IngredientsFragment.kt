@@ -51,16 +51,12 @@ class IngredientsFragment :
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.getIngredientsList()
-    }
-
     private fun initRecyclerView() {
         with(binding.rvIngredients) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(decoration)
         }
+        viewModel.getIngredientsList()
     }
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {

@@ -5,11 +5,12 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface IngredientsDAO {
     @Query("SELECT * FROM ingredients")
-    fun getIngredientList():List<IngredientEntity>
+    fun getIngredientList(): Flow<List<IngredientEntity>>
 
     @Insert
     fun insertIngredient(item:IngredientEntity):Long

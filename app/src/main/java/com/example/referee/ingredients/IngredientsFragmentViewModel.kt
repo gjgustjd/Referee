@@ -14,10 +14,11 @@ class IngredientsFragmentViewModel :
     fun getIngredientsList() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val result = withContext(Dispatchers.IO) {
-                    IngredientRepository.getIngredientsList()
+                withContext(Dispatchers.IO) {
+                    IngredientRepository.getIngredientsList().collect {
+                        _event.postValue(EventWrapper(IngredientsEvent.GetIngredients.Success(it)))
+                    }
                 }
-                _event.postValue(EventWrapper(IngredientsEvent.GetIngredients.Success(result)))
             } catch (e: Exception) {
                 _event.postValue(EventWrapper(IngredientsEvent.GetIngredients.Failed))
             }
