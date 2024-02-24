@@ -31,6 +31,7 @@
     <string name="ingredient_add_failed_toast">식재료 저장에 실패했습니다.</string>
     <string name="ingredient_add_please_grant_permission_toast">권한 허용에 동의해주세요.</string>
     <string name="ingredient_add_please_input_name">식재료명을 입력해주세요.</string>
+    <string name="ingredient_add_there_is_same_item_toast">중복된 이름의 식재료가 있습니다.</string>
     <string-array name="ingredient_unit">
         <item>개</item>
         <item>묶음</item>

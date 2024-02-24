@@ -46,6 +46,18 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
         }
     }
 
+    fun isExistSameNameIngredient(name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = if (IngredientRepository.getIngredientsByName(name).isNotEmpty()) {
+                EventWrapper(IngredientAddEvent.IsThereIngredient(true))
+            } else {
+                EventWrapper(IngredientAddEvent.IsThereIngredient(false))
+            }
+
+            _event.postValue(result)
+        }
+    }
+
     private fun saveImage(bitmap: Bitmap?): String? {
         return bitmap?.let {
             try {

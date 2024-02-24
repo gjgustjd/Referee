@@ -12,6 +12,9 @@ interface IngredientsDAO {
     @Query("SELECT * FROM ingredients")
     fun getIngredientList(): Flow<List<IngredientEntity>>
 
+    @Query("SELECT * FROM ingredients where name=:ingName")
+    fun getIngredientByName(ingName: String): List<IngredientEntity>
+
     @Insert
     fun insertIngredient(item:IngredientEntity):Long
 

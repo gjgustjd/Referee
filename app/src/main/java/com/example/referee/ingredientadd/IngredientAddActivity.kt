@@ -23,7 +23,6 @@ import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 import com.jakewharton.rxbinding4.view.clicks
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 
 class IngredientAddActivity :
@@ -120,23 +119,7 @@ class IngredientAddActivity :
                 .throttleFirst(1300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    val name = etIngredientName.text.toString()
-                    val unit = unitsAdapter.getSelectedItemString()
-                    val photoBitmap = ivPhoto.drawable.toBitmap()
-                    val expiration =
-                        IngredientExpirationUnit.fromString(spExpiration.selectedItem as String)
-
-                    if (name.isEmpty()) {
-                        showToast(getString(R.string.ingredient_add_please_input_name))
-                    } else {
-                        viewModel.insertIngredient(
-                            name,
-                            photoBitmap,
-                            unit,
-                            expiration,
-                            categoriesAdapter.getSelectedItem()
-                        )
-                    }
+                    viewModel.isExistSameNameIngredient(etIngredientName.text.toString())
                 }.apply {
                     compositeDisposable.add(this)
                 }
@@ -204,6 +187,32 @@ class IngredientAddActivity :
                     getString(R.string.ingredient_add_failed_toast),
                     Toast.LENGTH_SHORT
                 ).show()
+
+                is IngredientAddEvent.IsThereIngredient -> {
+                    val event = it.peekContent() as IngredientAddEvent.IsThereIngredient
+
+                    if (event.value) {
+                        showToast(getString(R.string.ingredient_add_there_is_same_item_toast))
+                    } else {
+                        val name = binding.etIngredientName.text.toString()
+                        val unit = unitsAdapter.getSelectedItemString()
+                        val photoBitmap = binding.ivPhoto.drawable.toBitmap()
+                        val expiration =
+                            IngredientExpirationUnit.fromString(binding.spExpiration.selectedItem as String)
+
+                        if (name.isEmpty()) {
+                            showToast(getString(R.string.ingredient_add_please_input_name))
+                        } else {
+                            viewModel.insertIngredient(
+                                name,
+                                photoBitmap,
+                                unit,
+                                expiration,
+                                categoriesAdapter.getSelectedItem()
+                            )
+                        }
+                    }
+                }
 
                 else -> Unit
             }
