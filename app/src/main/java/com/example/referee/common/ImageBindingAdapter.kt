@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.referee.ingredientadd.model.IngredientCategoryType
 
 object ImageBindingAdapter {
@@ -19,7 +18,7 @@ object ImageBindingAdapter {
                 .with(view.context)
                 .load(bitmap)
                 .thumbnail(0.1f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .skipMemoryCache(true)
                 .into(view)
         }
     }
