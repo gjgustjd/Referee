@@ -5,22 +5,33 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.referee.ingredientadd.model.IngredientCategoryType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 object ImageBindingAdapter {
 
     @JvmStatic
     @BindingAdapter("glideSrc")
     fun setImage(view: ImageView, imageName: String? = null) {
-        imageName?.let {
+        view.findViewTreeLifecycleOwner()?.lifecycleScope?.launch(Dispatchers.IO) {
             val storage = view.context.cacheDir
             val path = "${storage}/$imageName"
             val bitmap = BitmapFactory.decodeFile(path)
-            Glide
-                .with(view.context)
-                .load(bitmap)
-                .into(view)
+            launch(Dispatchers.Main) {
+                imageName?.let {
+                    Glide
+                        .with(view.context)
+                        .load(bitmap)
+                        .thumbnail(0.1f)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(view)
+                }
+            }
         }
     }
 
