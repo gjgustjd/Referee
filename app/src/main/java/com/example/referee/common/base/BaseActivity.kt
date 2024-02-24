@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.example.referee.common.ProgressDialog
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActivity() where T : ViewDataBinding {
@@ -14,6 +15,7 @@ abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActi
     protected fun showToast(text:String) {
         Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
     }
+    protected var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,4 +32,13 @@ abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActi
 
     abstract fun initViews()
     abstract fun initListeners()
+
+     fun showLoading() {
+        progressDialog = ProgressDialog()
+        progressDialog?.show(supportFragmentManager,"progressDialog")
+    }
+
+     fun hideLoading() {
+        progressDialog?.dismiss()
+    }
 }

@@ -29,4 +29,14 @@ abstract class BaseFragment<T>(protected val layoutResourceId: Int) :
         binding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
         return binding.root
     }
+
+    protected fun showLoading() {
+        val baseActivity = activity as? BaseActivity<*>
+        baseActivity?.showLoading()
+    }
+
+    protected fun hideLoading() {
+        val baseActivity = activity as? BaseActivity<*>
+        baseActivity?.hideLoading()
+    }
 }
