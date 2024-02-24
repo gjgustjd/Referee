@@ -32,7 +32,7 @@ class IngredientAddActivity :
 
     private val unitsAdapter by lazy {
         IngredientUnitAdapter(
-            this@IngredientAddActivity,
+            binding.rvUnits,
             resources.getStringArray(R.array.ingredient_unit)
         ).apply {
             setHasStableIds(true)
@@ -40,7 +40,7 @@ class IngredientAddActivity :
     }
     private val categoriesAdapter by lazy {
         IngredientCategoryAdapter(
-            this@IngredientAddActivity,
+            binding.rvCategories,
             IngredientCategoryType.values()
         ).apply {
             setHasStableIds(true)

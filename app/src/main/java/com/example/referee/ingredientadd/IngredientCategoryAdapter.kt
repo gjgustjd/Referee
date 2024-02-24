@@ -1,6 +1,5 @@
 package com.example.referee.ingredientadd
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
@@ -9,7 +8,7 @@ import com.example.referee.R
 import com.example.referee.databinding.ItemIngredientsCategoryBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
 
-class IngredientCategoryAdapter(val context: Context, private val items: Array<IngredientCategoryType>) :
+class IngredientCategoryAdapter(val recyclerView: RecyclerView, private val items: Array<IngredientCategoryType>) :
     RecyclerView.Adapter<IngredientCategoryAdapter.IngredientUnitViewHolder>() {
 
     private var currentSelectedPosition = 0
@@ -40,13 +39,22 @@ class IngredientCategoryAdapter(val context: Context, private val items: Array<I
         fun bind(position: Int) {
             binding.category = items[position]
             binding.tvCategory.setOnClickListener {
+                val toPosition = if (currentSelectedPosition < position) {
+                    (position + 1).coerceAtMost(items.lastIndex)
+                } else if (currentSelectedPosition == position) {
+                    position
+                } else {
+                    (position - 1).coerceAtLeast(0)
+                }
+
+                recyclerView.smoothScrollToPosition(toPosition)
                 currentSelectedPosition = position
                 notifyDataSetChanged()
             }
             if (position == currentSelectedPosition) {
                 binding.tvCategory.background =
                     ResourcesCompat.getDrawable(
-                        context.resources,
+                        recyclerView.context.resources,
                         R.drawable.shape_ingredient_unit_background_enabled,
                         null
                     )
@@ -54,7 +62,7 @@ class IngredientCategoryAdapter(val context: Context, private val items: Array<I
             } else {
                 binding.tvCategory.background =
                     ResourcesCompat.getDrawable(
-                        context.resources,
+                        recyclerView.context.resources,
                         R.drawable.shape_ingredient_unit_background,
                         null
                     )
