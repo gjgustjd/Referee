@@ -8,13 +8,14 @@ import android.os.Bundle
 import com.example.referee.R
 import com.example.referee.common.base.BaseDialogFragment
 
-class ProgressDialog :BaseDialogFragment(){
+class ProgressDialog : BaseDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireContext())
             .setView(R.layout.view_loading_progressbar)
-            .setCancelable(false) // ProgressDialog가 취소 가능한지 여부를 설정합니다.
-            .show().apply {
+            .create().apply {
+                setCancelable(false)
+                setCanceledOnTouchOutside(false)
                 window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
             }
     }
