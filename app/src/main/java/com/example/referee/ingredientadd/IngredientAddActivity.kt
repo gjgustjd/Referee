@@ -114,6 +114,8 @@ class IngredientAddActivity :
     }
 
     override fun initListeners() {
+        super.initListeners()
+
         with(binding) {
             btnConfirm.clicks()
                 .throttleFirst(1300, TimeUnit.MILLISECONDS)

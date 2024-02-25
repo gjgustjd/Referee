@@ -43,11 +43,14 @@ abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActi
 
     abstract fun initViews()
     open fun initListeners() {
-        val duration = resources.getInteger(
-            R.integer.loading_throttle_default_duration
+        val showThrottle = resources.getInteger(
+            R.integer.show_loading_throttle_default_duration
         ).toLong()
-        val slSubject = showLoadingRequestSubject.throttleFirst(duration, TimeUnit.MILLISECONDS)
-        val hlSubject = hideLoadingRequestSubject.throttleLatest(duration, TimeUnit.MILLISECONDS)
+        val hideThrottle = resources.getInteger(
+            R.integer.hide_loading_throttle_default_duration
+        ).toLong()
+        val slSubject = showLoadingRequestSubject.throttleFirst(showThrottle, TimeUnit.MILLISECONDS)
+        val hlSubject = hideLoadingRequestSubject.throttleLatest(hideThrottle, TimeUnit.MILLISECONDS)
 
         loadingRequestObserver = PublishSubject.merge(slSubject, hlSubject).subscribe { event ->
             when (event) {
