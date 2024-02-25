@@ -9,6 +9,7 @@ import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 import com.example.referee.ingredientadd.model.IngredientRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -68,8 +69,8 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
     }
 
      fun saveImage(bitmap: Bitmap?) {
-         viewModelScope.launch(Dispatchers.IO) {
-             savedImageName = viewModelScope.async(Dispatchers.IO) {
+         applicationScope.launch(Dispatchers.IO) {
+             savedImageName = async(Dispatchers.IO) {
                  bitmap?.let {
                      try {
                          val storage = RefereeApplication.instance().cacheDir
@@ -82,11 +83,31 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
                          outStream.close()
 
                          fileName
-                     } catch (e: java.lang.Exception) {
+                     } catch (e: CancellationException) {
                          null
                      }
                  }
              }
          }
      }
+
+    fun dismissInsertIngredient() {
+        savedImageName?.let { imageName ->
+            applicationScope.launch(Dispatchers.IO) {
+                if (imageName.isCompleted) {
+                    imageName.getCompleted()
+                } else {
+                    imageName.await()
+                }?.let(::deleteImageFile)
+            }
+        }
+    }
+
+    private fun deleteImageFile(imageName:String) {
+        val storage = RefereeApplication.instance().cacheDir
+        val file = File(storage, imageName)
+        if (file.exists()) {
+            file.delete()
+        }
+    }
 }

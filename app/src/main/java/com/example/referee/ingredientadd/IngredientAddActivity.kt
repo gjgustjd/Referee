@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -232,6 +233,16 @@ class IngredientAddActivity :
         }
     }
 
+    override fun initOnBackPressedDispatcher() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                viewModel.dismissInsertIngredient()
+                finish()
+            }
+        }
+        onBackPressedDispatcher.addCallback(callback)
+    }
+
     private fun checkPermissionAndRequestForActivityResult(
         permission: String,
         callback: ActivityResultLauncher<String>,
@@ -286,4 +297,5 @@ class IngredientAddActivity :
             addItemDecoration(getDecoration(IngredientCategoryType.values().lastIndex))
         }
     }
+
 }

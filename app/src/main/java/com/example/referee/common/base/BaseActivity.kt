@@ -38,6 +38,7 @@ abstract class BaseActivity<T>(private val layoutResourceId: Int) :
 
         initViews()
         initListeners()
+        initOnBackPressedDispatcher()
     }
 
     override fun onDestroy() {
@@ -84,6 +85,8 @@ abstract class BaseActivity<T>(private val layoutResourceId: Int) :
             compositeDisposable.add(this)
         }
     }
+
+    open fun initOnBackPressedDispatcher() = Unit
 
     fun showLoading(onBackPressed: (() -> Unit)? = null) {
         showLoadingRequestSubject.onNext(CommonEvent.ShowLoading(onBackPressed))
