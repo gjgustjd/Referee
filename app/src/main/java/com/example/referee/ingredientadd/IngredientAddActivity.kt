@@ -207,14 +207,15 @@ class IngredientAddActivity :
                         if (name.isEmpty()) {
                             showToast(getString(R.string.ingredient_add_please_input_name))
                         } else {
-                            showLoading()
                             viewModel.insertIngredient(
                                 name,
                                 photoBitmap,
                                 unit,
                                 expiration,
                                 categoriesAdapter.getSelectedItem()
-                            )
+                            ).let { job ->
+                                showLoading(job::cancel)
+                            }
                         }
                     }
                 }

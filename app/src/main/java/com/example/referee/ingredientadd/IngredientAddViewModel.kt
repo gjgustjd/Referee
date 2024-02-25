@@ -10,6 +10,7 @@ import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 import com.example.referee.ingredientadd.model.IngredientRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -23,8 +24,8 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
         unit: String,
         expiration: IngredientExpirationUnit,
         category:IngredientCategoryType
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
+    ): Job {
+        return viewModelScope.launch(Dispatchers.IO) {
             val photoName = saveImage(bitmap)
             val item = IngredientEntity(name, photoName, unit, expiration.days, category.ordinal)
             try {

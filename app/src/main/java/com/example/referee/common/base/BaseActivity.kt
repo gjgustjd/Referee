@@ -33,9 +33,10 @@ abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActi
     abstract fun initViews()
     abstract fun initListeners()
 
-     fun showLoading() {
+    fun showLoading(onBackPressed: (() -> Unit)? = null) {
         progressDialog = ProgressDialog()
-        progressDialog?.show(supportFragmentManager,"progressDialog")
+        progressDialog?.show(supportFragmentManager, "progressDialog")
+        progressDialog?.onBackPressed = onBackPressed
     }
 
      fun hideLoading() {

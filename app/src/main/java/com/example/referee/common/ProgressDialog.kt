@@ -1,22 +1,30 @@
 package com.example.referee.common
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
+import androidx.appcompat.app.AppCompatDialog
+import androidx.databinding.DataBindingUtil
 import com.example.referee.R
-import com.example.referee.common.base.BaseDialogFragment
+import com.example.referee.common.base.BaseAppCompatDialogFragment
+import com.example.referee.databinding.ViewLoadingProgressbarBinding
 
-class ProgressDialog : BaseDialogFragment() {
+class ProgressDialog : BaseAppCompatDialogFragment() {
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext())
-            .setView(R.layout.view_loading_progressbar)
-            .create().apply {
-                setCancelable(false)
-                setCanceledOnTouchOutside(false)
-                window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
-            }
+    override fun onCreateDialog(): AppCompatDialog {
+        val binding: ViewLoadingProgressbarBinding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.view_loading_progressbar,
+            null,
+            false
+        )
+
+        val dialog = AppCompatDialog(requireContext()).apply {
+            setContentView(binding.root)
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        }
+
+        return dialog
     }
 }
