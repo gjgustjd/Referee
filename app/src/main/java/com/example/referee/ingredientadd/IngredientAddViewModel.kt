@@ -18,31 +18,56 @@ import java.io.FileOutputStream
 
 class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
 
+    private var savedImageName: String? = null
+    private var saveImageJob: Job? = null
+
     fun insertIngredient(
         name: String,
-        bitmap: Bitmap? = null,
         unit: String,
         expiration: IngredientExpirationUnit,
         category:IngredientCategoryType
     ): Job {
         return viewModelScope.launch(Dispatchers.IO) {
-            val photoName = saveImage(bitmap)
-            val item = IngredientEntity(name, photoName, unit, expiration.days, category.ordinal)
-            try {
-                val result = withContext(Dispatchers.IO) {
-                    IngredientRepository.insertIngredient(item) > 0
+            var photoName = savedImageName
+            photoName?.let {
+                insertIngredientIntoDB(name, unit, it.ifEmpty { null }, expiration, category)
+            } ?: saveImageJob?.invokeOnCompletion {
+                viewModelScope.launch(Dispatchers.IO) {
+                    photoName = savedImageName?.ifEmpty { null }
+                    insertIngredientIntoDB(name, unit, photoName, expiration, category)
                 }
-
-                _event.postValue(
-                    if (result) {
-                        EventWrapper(IngredientAddEvent.InsertSuccess)
-                    } else {
-                        EventWrapper(IngredientAddEvent.InsertFailed)
-                    }
-                )
-            } catch (e: Exception) {
-                _event.postValue(EventWrapper(IngredientAddEvent.InsertFailed))
             }
+        }
+    }
+
+    private suspend fun insertIngredientIntoDB(
+        name: String,
+        unit: String,
+        imageName: String?,
+        expiration: IngredientExpirationUnit,
+        category: IngredientCategoryType
+    ) {
+        val item = IngredientEntity(
+            name,
+            imageName,
+            unit,
+            expiration.days,
+            category.ordinal
+        )
+        try {
+            val result = withContext(Dispatchers.IO) {
+                IngredientRepository.insertIngredient(item) > 0
+            }
+
+            _event.postValue(
+                if (result) {
+                    EventWrapper(IngredientAddEvent.InsertSuccess)
+                } else {
+                    EventWrapper(IngredientAddEvent.InsertFailed)
+                }
+            )
+        } catch (e: Exception) {
+            _event.postValue(EventWrapper(IngredientAddEvent.InsertFailed))
         }
     }
 
@@ -58,21 +83,23 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
         }
     }
 
-    private fun saveImage(bitmap: Bitmap?): String? {
-        return bitmap?.let {
-            try {
-                val storage = RefereeApplication.instance().cacheDir
-                val fileName = "ingredient_" + System.currentTimeMillis().toString()
-                val tempFile = File(storage, fileName)
+     fun saveImage(bitmap: Bitmap?) {
+        saveImageJob = viewModelScope.launch(Dispatchers.IO) {
+            savedImageName = bitmap?.let {
+                try {
+                    val storage = RefereeApplication.instance().cacheDir
+                    val fileName = "ingredient_" + System.currentTimeMillis().toString()
+                    val tempFile = File(storage, fileName)
 
-                tempFile.createNewFile()
-                val outStream = FileOutputStream(tempFile)
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream)
-                outStream.close()
+                    tempFile.createNewFile()
+                    val outStream = FileOutputStream(tempFile)
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream)
+                    outStream.close()
 
-                fileName
-            } catch (e: java.lang.Exception) {
-                null
+                    fileName
+                } catch (e: java.lang.Exception) {
+                    ""
+                }
             }
         }
     }

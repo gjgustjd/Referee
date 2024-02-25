@@ -66,6 +66,8 @@ class IngredientAddActivity :
             if (result.resultCode == RESULT_OK) {
                 val imageBitmap = result.data?.extras?.getParcelable("data", Bitmap::class.java)
                 binding.ivPhoto.setImageBitmap(imageBitmap)
+                val photoBitmap = binding.ivPhoto.drawable.toBitmap()
+                viewModel.saveImage(photoBitmap)
             }
         }
     private val galleryActivityResult =
@@ -74,6 +76,8 @@ class IngredientAddActivity :
                 val imageUri = result.data?.data
                 imageUri?.let {
                     binding.ivPhoto.setImageURI(it)
+                    val photoBitmap = binding.ivPhoto.drawable.toBitmap()
+                    viewModel.saveImage(photoBitmap)
                 }
             }
         }
@@ -118,7 +122,10 @@ class IngredientAddActivity :
 
         with(binding) {
             btnConfirm.clicks()
-                .throttleFirst(1300, TimeUnit.MILLISECONDS)
+                .throttleFirst(
+                    resources.getInteger(R.integer.click_throttle_default_duration).toLong(),
+                    TimeUnit.MILLISECONDS
+                )
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     viewModel.isExistSameNameIngredient(etIngredientName.text.toString())
@@ -202,7 +209,6 @@ class IngredientAddActivity :
                     } else {
                         val name = binding.etIngredientName.text.toString()
                         val unit = unitsAdapter.getSelectedItemString()
-                        val photoBitmap = binding.ivPhoto.drawable.toBitmap()
                         val expiration =
                             IngredientExpirationUnit.fromString(binding.spExpiration.selectedItem as String)
 
@@ -211,7 +217,6 @@ class IngredientAddActivity :
                         } else {
                             viewModel.insertIngredient(
                                 name,
-                                photoBitmap,
                                 unit,
                                 expiration,
                                 categoriesAdapter.getSelectedItem()
