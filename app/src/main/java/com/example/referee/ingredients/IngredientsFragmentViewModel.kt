@@ -8,12 +8,15 @@ import com.example.referee.common.base.BaseViewModel
 import com.example.referee.ingredientadd.model.IngredientRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 class IngredientsFragmentViewModel :
     BaseViewModel<IngredientsEvent>() {
 
-    val bitmapFlow: MutableSharedFlow<IngredientsEvent.IngredientBitmap?> = MutableSharedFlow(0)
+    private var _bitmapFlow: MutableSharedFlow<IngredientsEvent.IngredientBitmap?> =
+        MutableSharedFlow(0)
+    val bitmapFlow: SharedFlow<IngredientsEvent.IngredientBitmap?> = _bitmapFlow
 
     fun getIngredientsList() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -33,7 +36,7 @@ class IngredientsFragmentViewModel :
                 val storage = RefereeApplication.instance.applicationContext.cacheDir
                 val path = "${storage}/$imageName"
                 val bitmap = BitmapFactory.decodeFile(path)
-                bitmapFlow.emit(IngredientsEvent.IngredientBitmap(position, bitmap))
+                _bitmapFlow.emit(IngredientsEvent.IngredientBitmap(position, bitmap))
             } catch (e: java.lang.Exception) {
             }
         }

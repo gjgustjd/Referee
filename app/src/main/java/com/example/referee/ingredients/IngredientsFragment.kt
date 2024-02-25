@@ -56,6 +56,7 @@ class IngredientsFragment :
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.bitmapFlow.collect { event ->
                 event?.let {
+                    hideLoading()
                     ingredientAdapter?.bindThumbnail(event.bitmap, event.position)
                 }
             }
@@ -72,7 +73,12 @@ class IngredientsFragment :
     }
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
-        ingredientAdapter = IngredientsAdapter(items, viewModel::getImageBitmap)
+        ingredientAdapter = IngredientsAdapter(
+            items
+        ) { imageName, position ->
+            showLoading()
+            viewModel.getImageBitmap(imageName, position)
+        }
         binding.rvIngredients.adapter = ingredientAdapter
     }
 }

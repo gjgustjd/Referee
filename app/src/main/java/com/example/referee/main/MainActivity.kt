@@ -30,6 +30,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     override fun initListeners() {
+        super.initListeners()
+
         binding.bottomNavigationView.setOnItemSelectedListener {
             val fm = supportFragmentManager.beginTransaction()
             var menuTitle: String? = null
