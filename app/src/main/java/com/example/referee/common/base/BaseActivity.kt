@@ -8,19 +8,20 @@ import androidx.databinding.ViewDataBinding
 import com.example.referee.R
 import com.example.referee.common.ProgressDialog
 import com.example.referee.common.model.CommonEvent
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
-import io.reactivex.rxjava3.subjects.Subject
 import java.util.concurrent.TimeUnit
 
 abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActivity() where T : ViewDataBinding {
 
     protected lateinit var binding: T
     protected val compositeDisposable = CompositeDisposable()
-    private val hideLoadingRequestSubject: Subject<CommonEvent> = PublishSubject.create()
-    private lateinit var hideLodaingRequestObserver:Disposable
+    private val hideLoadingRequestSubject: PublishSubject<CommonEvent.HideLoading> =
+        PublishSubject.create()
+    private val showLoadingRequestSubject: PublishSubject<CommonEvent.ShowLoading> =
+        PublishSubject.create()
+    private lateinit var loadingRequestObserver: Disposable
 
     protected fun showToast(text:String) {
         Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
@@ -42,35 +43,45 @@ abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActi
 
     abstract fun initViews()
     open fun initListeners() {
-        hideLodaingRequestObserver =
-            hideLoadingRequestSubject
-                .throttleLatest(
-                    resources.getInteger(R.integer.hide_loading_throttle_default_duration).toLong(),
-                    TimeUnit.MILLISECONDS
-                )
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+        val duration = resources.getInteger(
+            R.integer.loading_throttle_default_duration
+        ).toLong()
+        val slSubject = showLoadingRequestSubject.throttleFirst(duration, TimeUnit.MILLISECONDS)
+        val hlSubject = hideLoadingRequestSubject.throttleLatest(duration, TimeUnit.MILLISECONDS)
+
+        loadingRequestObserver = PublishSubject.merge(slSubject, hlSubject).subscribe { event ->
+            when (event) {
+                is CommonEvent.ShowLoading -> {
+                    if (progressDialog == null) {
+                        progressDialog = ProgressDialog()
+                    }
+
+                    if (progressDialog?.isAdded == false) {
+                        progressDialog?.show(
+                            supportFragmentManager,
+                            ProgressDialog.PROGRESS_DIALOG_TAG
+                        )
+                    }
+
+                    progressDialog?.onBackPressed = event.onBackPressed
+                }
+
+                is CommonEvent.HideLoading -> {
                     if (progressDialog?.isDetached == false) {
                         progressDialog?.dismiss()
                     }
-                }.apply {
-                    compositeDisposable.add(this)
                 }
+            }
+        }.apply {
+            compositeDisposable.add(this)
+        }
     }
 
     fun showLoading(onBackPressed: (() -> Unit)? = null) {
-        if (progressDialog == null) {
-            progressDialog = ProgressDialog()
-        }
-
-        if (progressDialog?.isAdded != true) {
-            progressDialog?.show(supportFragmentManager, ProgressDialog.PROGRESS_DIALOG_TAG)
-        }
-
-        progressDialog?.onBackPressed = onBackPressed
+        showLoadingRequestSubject.onNext(CommonEvent.ShowLoading(onBackPressed))
     }
 
      fun hideLoading() {
-         hideLoadingRequestSubject.onNext(CommonEvent.HideLodaing)
+         hideLoadingRequestSubject.onNext(CommonEvent.HideLoading)
     }
 }
