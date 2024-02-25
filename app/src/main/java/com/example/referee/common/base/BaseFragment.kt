@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.example.referee.common.RefereeApplication
 
 abstract class BaseFragment<T>(protected val layoutResourceId: Int) :
     Fragment() where T : ViewDataBinding {
 
     protected lateinit var binding: T
+    protected val applicationScope = RefereeApplication.instance.applicationScope
+
     abstract fun initView()
     abstract fun initListeners()
 
