@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import com.example.referee.common.RefereeApplication
 
 abstract class BaseAppCompatDialogFragment<B : ViewDataBinding>(private val layoutResourceId: Int) :
     AppCompatDialogFragment() {
@@ -21,7 +20,6 @@ abstract class BaseAppCompatDialogFragment<B : ViewDataBinding>(private val layo
             false
         )
     }
-    protected val applicationScope = RefereeApplication.instance.applicationScope
 
     /* Dialog가 show를 통해 보여지기 전 */
     override fun onStart() {

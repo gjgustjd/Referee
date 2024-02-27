@@ -7,15 +7,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.example.referee.R
 import com.example.referee.common.ProgressDialog
-import com.example.referee.common.RefereeApplication
 import com.example.referee.common.model.CommonEvent
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
-abstract class BaseActivity<T>(private val layoutResourceId: Int) :
-    AppCompatActivity() where T : ViewDataBinding {
+abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActivity() where T : ViewDataBinding {
 
     protected lateinit var binding: T
     protected val compositeDisposable = CompositeDisposable()
@@ -24,12 +22,10 @@ abstract class BaseActivity<T>(private val layoutResourceId: Int) :
     private val showLoadingRequestSubject: PublishSubject<CommonEvent.ShowLoading> =
         PublishSubject.create()
     private lateinit var loadingRequestObserver: Disposable
-    protected val applicationScope = RefereeApplication.instance.applicationScope
 
-    protected fun showToast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+    protected fun showToast(text:String) {
+        Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
     }
-
     protected var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,8 +51,7 @@ abstract class BaseActivity<T>(private val layoutResourceId: Int) :
             R.integer.hide_loading_throttle_default_duration
         ).toLong()
         val slSubject = showLoadingRequestSubject.throttleFirst(showThrottle, TimeUnit.MILLISECONDS)
-        val hlSubject =
-            hideLoadingRequestSubject.throttleLatest(hideThrottle, TimeUnit.MILLISECONDS)
+        val hlSubject = hideLoadingRequestSubject.throttleLatest(hideThrottle, TimeUnit.MILLISECONDS)
 
         loadingRequestObserver = PublishSubject.merge(slSubject, hlSubject).subscribe { event ->
             when (event) {
@@ -92,7 +87,7 @@ abstract class BaseActivity<T>(private val layoutResourceId: Int) :
         showLoadingRequestSubject.onNext(CommonEvent.ShowLoading(onBackPressed))
     }
 
-    fun hideLoading() {
-        hideLoadingRequestSubject.onNext(CommonEvent.HideLoading)
+     fun hideLoading() {
+         hideLoadingRequestSubject.onNext(CommonEvent.HideLoading)
     }
 }
