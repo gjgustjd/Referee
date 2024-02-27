@@ -12,6 +12,7 @@ import com.example.referee.ingredientadd.model.IngredientRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -57,7 +58,7 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
     }
 
     fun isExistSameNameIngredient(name: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
             val result = if (IngredientRepository.getIngredientsByName(name).isNotEmpty()) {
                 EventWrapper(IngredientAddEvent.IsThereIngredient(true))
             } else {
@@ -69,7 +70,7 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
     }
 
      fun saveImage(bitmap: Bitmap?) {
-         applicationScope.launch(Dispatchers.IO) {
+         GlobalScope.launch(Dispatchers.IO) {
              savedImageName = async(Dispatchers.IO) {
                  bitmap?.let {
                      try {
@@ -93,7 +94,7 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
 
     fun dismissInsertIngredient() {
         savedImageName?.let { imageName ->
-            applicationScope.launch(Dispatchers.IO) {
+            GlobalScope.launch(Dispatchers.IO) {
                 if (imageName.isCompleted) {
                     imageName.getCompleted()
                 } else {
