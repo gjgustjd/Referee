@@ -14,5 +14,4 @@ class RefereeApplication :Application() {
         super.onCreate()
         instance = this
     }
-
 }

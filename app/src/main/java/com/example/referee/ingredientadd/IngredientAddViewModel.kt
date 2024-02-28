@@ -1,9 +1,11 @@
 package com.example.referee.ingredientadd
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.RefereeApplication
+import com.example.referee.common.applicationScope
 import com.example.referee.common.base.BaseViewModel
 import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientEntity
@@ -12,7 +14,6 @@ import com.example.referee.ingredientadd.model.IngredientRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -58,7 +59,7 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
     }
 
     fun isExistSameNameIngredient(name: String) {
-        GlobalScope.launch(Dispatchers.IO) {
+        applicationScope.launch(Dispatchers.IO) {
             val result = if (IngredientRepository.getIngredientsByName(name).isNotEmpty()) {
                 EventWrapper(IngredientAddEvent.IsThereIngredient(true))
             } else {
@@ -70,8 +71,8 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
     }
 
      fun saveImage(bitmap: Bitmap?) {
-         GlobalScope.launch(Dispatchers.IO) {
-             savedImageName = async(Dispatchers.IO) {
+         applicationScope.launch {
+             savedImageName = async {
                  bitmap?.let {
                      try {
                          val storage = RefereeApplication.instance().cacheDir
@@ -94,7 +95,7 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
 
     fun dismissInsertIngredient() {
         savedImageName?.let { imageName ->
-            GlobalScope.launch(Dispatchers.IO) {
+            applicationScope.launch {
                 if (imageName.isCompleted) {
                     imageName.getCompleted()
                 } else {
