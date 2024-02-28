@@ -4,9 +4,13 @@ import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.referee.R
 import com.example.referee.databinding.ItemIngredientBinding
+import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientEntity
 
 class IngredientsAdapter(
@@ -54,7 +58,19 @@ class IngredientsAdapter(
                 item.photoName?.let {
                     Glide.with(binding.ivThumbnail.context)
                         .clear(binding.ivThumbnail)
+                    binding.ivThumbnail.setPadding(0)
                     bindThumbFun(it, position)
+                } ?: run {
+                    val type =
+                        IngredientCategoryType.values().firstOrNull { it.ordinal == item.category }
+                    type?.let {
+                        Glide.with(binding.ivThumbnail.context)
+                            .load(type.iconResourceId)
+                            .into(binding.ivThumbnail)
+                        val padding =
+                            binding.ivThumbnail.context.resources.getInteger(R.integer.ingredient_placeholder_inset)
+                        binding.ivThumbnail.setPadding(padding)
+                    }
                 }
             }
         }
