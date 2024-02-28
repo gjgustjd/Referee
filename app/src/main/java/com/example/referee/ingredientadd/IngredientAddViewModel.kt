@@ -22,7 +22,8 @@ import java.io.FileOutputStream
 
 class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
 
-    private var savedImageName: Deferred<String?>? = null
+    var preSavedImageName: Deferred<String?>? = null
+        private set
 
     fun insertIngredient(
         name: String,
@@ -31,7 +32,7 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
         category:IngredientCategoryType
     ): Job {
         return viewModelScope.launch(Dispatchers.IO) {
-            val photoName = savedImageName?.await()
+            val photoName = preSavedImageName?.await()
             val item = IngredientEntity(
                 name,
                 photoName,
@@ -71,7 +72,7 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
 
      fun saveImage(bitmap: Bitmap?) {
          applicationScope.launch {
-             savedImageName = async {
+             preSavedImageName = async {
                  bitmap?.let {
                      try {
                          val storage = RefereeApplication.instance().cacheDir
@@ -93,7 +94,7 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
      }
 
     fun deletePreSavedImage() {
-        savedImageName?.let { imageName ->
+        preSavedImageName?.let { imageName ->
             applicationScope.launch {
                 if (imageName.isCompleted) {
                     imageName.getCompleted()

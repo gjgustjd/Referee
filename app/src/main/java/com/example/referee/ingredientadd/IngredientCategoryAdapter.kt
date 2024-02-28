@@ -8,7 +8,11 @@ import com.example.referee.R
 import com.example.referee.databinding.ItemIngredientsCategoryBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
 
-class IngredientCategoryAdapter(val recyclerView: RecyclerView, private val items: Array<IngredientCategoryType>) :
+class IngredientCategoryAdapter(
+    val recyclerView: RecyclerView,
+    private val items: Array<IngredientCategoryType>,
+    private val onClick: ((type:IngredientCategoryType) -> Unit)? = null
+) :
     RecyclerView.Adapter<IngredientCategoryAdapter.IngredientUnitViewHolder>() {
 
     private var currentSelectedPosition = 0
@@ -37,7 +41,8 @@ class IngredientCategoryAdapter(val recyclerView: RecyclerView, private val item
     inner class IngredientUnitViewHolder(private val binding: ItemIngredientsCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-            binding.category = items[position]
+            val item = items[position]
+            binding.category = item
             binding.tvCategory.setOnClickListener {
                 val toPosition = if (currentSelectedPosition < position) {
                     (position + 1).coerceAtMost(items.lastIndex)
@@ -49,8 +54,10 @@ class IngredientCategoryAdapter(val recyclerView: RecyclerView, private val item
 
                 recyclerView.smoothScrollToPosition(toPosition)
                 currentSelectedPosition = position
+                onClick?.invoke(item)
                 notifyDataSetChanged()
             }
+
             if (position == currentSelectedPosition) {
                 binding.tvCategory.background =
                     ResourcesCompat.getDrawable(

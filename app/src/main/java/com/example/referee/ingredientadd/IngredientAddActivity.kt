@@ -13,8 +13,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
@@ -42,7 +44,21 @@ class IngredientAddActivity :
         IngredientCategoryAdapter(
             binding.rvCategories,
             IngredientCategoryType.values()
-        ).apply {
+        ) { type ->
+            viewModel.preSavedImageName ?: run {
+                val iconDrawable =
+                    ContextCompat.getDrawable(
+                        this@IngredientAddActivity,
+                        type.iconResourceId,
+                    )
+
+                val padding = resources.getInteger(R.integer.add_ingredient_placeholder_inset)
+                with(binding.ivPhoto) {
+                    setPadding(padding)
+                    setImageDrawable(iconDrawable)
+                }
+            }
+        }.apply {
             setHasStableIds(true)
         }
     }
@@ -67,6 +83,7 @@ class IngredientAddActivity :
             if (result.resultCode == RESULT_OK) {
                 val imageBitmap = result.data?.extras?.getParcelable("data", Bitmap::class.java)
                 viewModel.deletePreSavedImage()
+                binding.ivPhoto.setPadding(0)
                 binding.ivPhoto.setImageBitmap(imageBitmap)
                 val photoBitmap = binding.ivPhoto.drawable.toBitmap()
                 viewModel.saveImage(photoBitmap)
@@ -77,6 +94,7 @@ class IngredientAddActivity :
             if (result.resultCode == RESULT_OK) {
                 val imageUri = result.data?.data
                 imageUri?.let {
+                    binding.ivPhoto.setPadding(0)
                     binding.ivPhoto.setImageURI(it)
                     viewModel.deletePreSavedImage()
                     val photoBitmap = binding.ivPhoto.drawable.toBitmap()
