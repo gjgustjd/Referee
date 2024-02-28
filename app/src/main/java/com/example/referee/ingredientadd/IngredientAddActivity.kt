@@ -66,6 +66,7 @@ class IngredientAddActivity :
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 val imageBitmap = result.data?.extras?.getParcelable("data", Bitmap::class.java)
+                viewModel.deletePreSavedImage()
                 binding.ivPhoto.setImageBitmap(imageBitmap)
                 val photoBitmap = binding.ivPhoto.drawable.toBitmap()
                 viewModel.saveImage(photoBitmap)
@@ -77,6 +78,7 @@ class IngredientAddActivity :
                 val imageUri = result.data?.data
                 imageUri?.let {
                     binding.ivPhoto.setImageURI(it)
+                    viewModel.deletePreSavedImage()
                     val photoBitmap = binding.ivPhoto.drawable.toBitmap()
                     viewModel.saveImage(photoBitmap)
                 }
@@ -236,7 +238,7 @@ class IngredientAddActivity :
     override fun initOnBackPressedDispatcher() {
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                viewModel.dismissInsertIngredient()
+                viewModel.deletePreSavedImage()
                 finish()
             }
         }

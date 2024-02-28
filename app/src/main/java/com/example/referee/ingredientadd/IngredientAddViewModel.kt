@@ -1,7 +1,6 @@
 package com.example.referee.ingredientadd
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.RefereeApplication
@@ -93,7 +92,7 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
          }
      }
 
-    fun dismissInsertIngredient() {
+    fun deletePreSavedImage() {
         savedImageName?.let { imageName ->
             applicationScope.launch {
                 if (imageName.isCompleted) {
