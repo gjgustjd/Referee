@@ -123,6 +123,7 @@ class IngredientAddActivity :
         }
 
     override fun initViews() {
+        binding.etIngredientName.requestFocus()
         initUnitRecyclerView()
         initExpirationSpinner()
     }
