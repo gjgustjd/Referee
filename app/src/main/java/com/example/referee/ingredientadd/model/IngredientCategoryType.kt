@@ -14,5 +14,5 @@ enum class IngredientCategoryType(val categoryName:String,val iconResourceId:Int
     SAUCE("장류", R.drawable.ingredient_category_icon_sauces),
     SPICES("향신료", R.drawable.ingredient_category_icon_spices),
     OIL("기름", R.drawable.ingredient_category_icon_oil),
-    PROCESSED_FOOD("가공식품", R.drawable.ingredient_category_icon_diary_product)
+    PROCESSED_FOOD("가공식품", R.drawable.ingredient_category_icon_processed_product)
 }
