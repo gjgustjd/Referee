@@ -4,8 +4,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Rect
-import android.graphics.drawable.InsetDrawable
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -20,7 +20,6 @@ import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
-import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
@@ -76,8 +75,7 @@ class IngredientAddActivity :
                 val imageBitmap = result.data?.extras?.getParcelable("data", Bitmap::class.java)
                 viewModel.deletePreSavedImage()
                 binding.bitmap = imageBitmap
-                val photoBitmap = binding.ivPhoto.drawable.toBitmap()
-                viewModel.saveImage(photoBitmap)
+                viewModel.saveImage(imageBitmap)
             }
         }
     private val galleryActivityResult =
