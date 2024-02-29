@@ -47,18 +47,7 @@ class IngredientAddActivity :
             IngredientCategoryType.values()
         ) { type ->
             viewModel.preSavedImageName ?: run {
-                val padding = CommonUtil.pxToDp(
-                    this,
-                    resources.getDimension(R.dimen.add_ingredient_placeholder_inset).toInt()
-                )
-                val iconDrawable =
-                    ContextCompat.getDrawable(
-                        this@IngredientAddActivity,
-                        type.iconResourceId,
-                    )
-                val insetDrawable = InsetDrawable(iconDrawable, padding)
-
-                binding.ivPhoto.setImageDrawable(insetDrawable)
+                binding.category = type
             }
         }.apply {
             setHasStableIds(true)
@@ -85,8 +74,7 @@ class IngredientAddActivity :
             if (result.resultCode == RESULT_OK) {
                 val imageBitmap = result.data?.extras?.getParcelable("data", Bitmap::class.java)
                 viewModel.deletePreSavedImage()
-                binding.ivPhoto.setPadding(0)
-                binding.ivPhoto.setImageBitmap(imageBitmap)
+                binding.bitmap = imageBitmap
                 val photoBitmap = binding.ivPhoto.drawable.toBitmap()
                 viewModel.saveImage(photoBitmap)
             }

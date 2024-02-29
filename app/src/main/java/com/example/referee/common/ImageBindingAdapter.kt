@@ -40,6 +40,29 @@ object ImageBindingAdapter {
     }
 
     @JvmStatic
+    @BindingAdapter("glideBitmap","ingCategoryType")
+    fun setImage(view: ImageView, bitmap: Bitmap? = null, categoryType: IngredientCategoryType? = null) {
+        Glide.with(view.context)
+            .load(bitmap)
+            .thumbnail(0.1f)
+            .skipMemoryCache(true)
+            .apply {
+                val padding =
+                    view.context.resources.getDimension(R.dimen.ingredient_placeholder_inset)
+                        .toInt()
+                Log.i("paddingTest", padding.toString())
+                categoryType?.let {
+                    val drawable =
+                        ResourcesCompat.getDrawable(view.context.resources, it.iconResourceId, null)
+                    val insetDrawable =
+                        InsetDrawable(drawable, CommonUtil.pxToDp(view.context, padding))
+                    placeholder(insetDrawable)
+                }
+            }
+            .into(view)
+    }
+
+    @JvmStatic
     @BindingAdapter("ingCategoryType")
     fun setCategoryIcon(view: TextView, type: IngredientCategoryType) {
         val drawable = ContextCompat.getDrawable(view.context, type.iconResourceId)
