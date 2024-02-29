@@ -4,6 +4,4 @@
   <integer name="hide_loading_throttle_default_duration">1000</integer>
   <integer name="show_loading_throttle_default_duration">100</integer>
   <integer name="click_throttle_default_duration">1300</integer>
-  <integer name="add_ingredient_placeholder_inset">200</integer>
-  <integer name="ingredient_placeholder_inset">40</integer>
 </resources>

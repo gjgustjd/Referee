@@ -4,4 +4,6 @@
     <dimen name="view_under_label_margin_top">16dp</dimen>
     <dimen name="plain_text_size">14dp</dimen>
     <dimen name="drawable_icon_padding">5dp</dimen>
+    <dimen name="ingredient_placeholder_inset">20dp</dimen>
+    <dimen name="add_ingredient_placeholder_inset">30dp</dimen>
 </resources>

@@ -55,22 +55,12 @@ class IngredientsAdapter(
             binding.item = item
 
             item.imageBitmap ?: run {
+                val thumbnail = binding.ivThumbnail
+                val context = thumbnail.context
                 item.photoName?.let {
-                    Glide.with(binding.ivThumbnail.context)
-                        .clear(binding.ivThumbnail)
-                    binding.ivThumbnail.setPadding(0)
+                    Glide.with(context)
+                        .clear(thumbnail)
                     bindThumbFun(it, position)
-                } ?: run {
-                    val type =
-                        IngredientCategoryType.values().firstOrNull { it.ordinal == item.category }
-                    type?.let {
-                        Glide.with(binding.ivThumbnail.context)
-                            .load(type.iconResourceId)
-                            .into(binding.ivThumbnail)
-                        val padding =
-                            binding.ivThumbnail.context.resources.getInteger(R.integer.ingredient_placeholder_inset)
-                        binding.ivThumbnail.setPadding(padding)
-                    }
                 }
             }
         }

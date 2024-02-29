@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Rect
+import android.graphics.drawable.InsetDrawable
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ArrayAdapter
@@ -13,13 +14,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
+import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
@@ -46,17 +47,18 @@ class IngredientAddActivity :
             IngredientCategoryType.values()
         ) { type ->
             viewModel.preSavedImageName ?: run {
+                val padding = CommonUtil.pxToDp(
+                    this,
+                    resources.getDimension(R.dimen.add_ingredient_placeholder_inset).toInt()
+                )
                 val iconDrawable =
                     ContextCompat.getDrawable(
                         this@IngredientAddActivity,
                         type.iconResourceId,
                     )
+                val insetDrawable = InsetDrawable(iconDrawable, padding)
 
-                val padding = resources.getInteger(R.integer.add_ingredient_placeholder_inset)
-                with(binding.ivPhoto) {
-                    setPadding(padding)
-                    setImageDrawable(iconDrawable)
-                }
+                binding.ivPhoto.setImageDrawable(insetDrawable)
             }
         }.apply {
             setHasStableIds(true)
