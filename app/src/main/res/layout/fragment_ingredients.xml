@@ -19,14 +19,44 @@
             tools:listitem="@layout/item_ingredient" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_search"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/fabDelete"
+            app:layout_constraintEnd_toEndOf="@+id/fabDelete"
+            app:layout_constraintStart_toStartOf="@+id/fabDelete"
+            app:shapeAppearanceOverlay="@style/CustomShapeAppearance.FloatingActionButton"
+            tools:visibility="visible" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_trashbin"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/fabAddIngredient"
+            app:layout_constraintEnd_toEndOf="@+id/fabAddIngredient"
+            app:layout_constraintStart_toStartOf="@+id/fabAddIngredient"
+            app:shapeAppearanceOverlay="@style/CustomShapeAppearance.FloatingActionButton"
+            tools:visibility="visible" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAddIngredient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
             android:src="@drawable/ic_add"
+            app:layout_constraintHorizontal_bias="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:shapeAppearanceOverlay="@style/CustomShapeAppearance.FloatingActionButton" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
