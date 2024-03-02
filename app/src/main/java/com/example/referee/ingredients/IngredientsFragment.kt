@@ -109,6 +109,10 @@ class IngredientsFragment :
                 Log.i("FabTest","DeleteMenu")
                 viewModel.fabState.value = EventWrapper(IngredientFragFABState.None)
                 onMainFabLongClick()
+                ingredientAdapter?.apply {
+                    isDeleteMode = false
+                    notifyDataSetChanged()
+                }
             }
 
             else -> Unit
@@ -185,6 +189,10 @@ class IngredientsFragment :
                 binding.fabSearch.let {
                     it.startAnimation(scaleDownAnim)
                     it.hide()
+                }
+                ingredientAdapter?.apply {
+                    isDeleteMode = true
+                    notifyDataSetChanged()
                 }
             }
 
