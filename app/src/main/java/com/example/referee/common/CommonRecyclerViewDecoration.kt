@@ -10,7 +10,7 @@ class CommonRecyclerViewDecoration(
     private val rightMargin: Int = 0,
     private val bottomMargin: Int = 0,
     private val topMargin: Int = 0,
-    private val exceptIndex: Int = 0
+    private val exceptIndex: Int? = -1
 ) : ItemDecoration() {
     override fun getItemOffsets(
         outRect: Rect,
