@@ -3,6 +3,8 @@ package com.example.referee.ingredients
 import android.content.Intent
 import android.graphics.Rect
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,13 +36,30 @@ class IngredientsFragment :
             }
         }
     }
+
     override fun initView() {
         initRecyclerView()
     }
 
     override fun initListeners() {
-        binding.fabAddIngredient.setOnClickListener {
-            startActivity(Intent(requireActivity(), IngredientAddActivity::class.java))
+        with(binding.fabAddIngredient) {
+            setOnClickListener {
+                if (rotation == 0f) {
+                    startActivity(Intent(requireActivity(), IngredientAddActivity::class.java))
+                } else {
+                    onMainFabReClick()
+                }
+            }
+
+            setOnLongClickListener {
+                if (rotation == 0f) {
+                    onMainFabLongClick()
+                } else {
+                    onMainFabReClick()
+                }
+
+                true
+            }
         }
         viewModel.event.observe(requireActivity()) {
             when (it.getContentIfNotHandled()) {
@@ -59,6 +78,48 @@ class IngredientsFragment :
                     hideLoading()
                     ingredientAdapter?.bindThumbnail(event.bitmap, event.position)
                 }
+            }
+        }
+    }
+
+    private fun onMainFabLongClick() {
+        val scaleUpAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
+        val subFabArray = arrayOf(binding.fabDelete, binding.fabSearch)
+        val animDuration =
+            activity?.resources?.getInteger(R.integer.animation_default_duration)?.toLong() ?: 300L
+        with(binding.fabAddIngredient) {
+            animate().apply {
+                rotation(45f)
+                duration = animDuration
+                interpolator = DecelerateInterpolator()
+                start()
+            }
+
+            subFabArray.forEach { fab ->
+                fab.show()
+                fab.startAnimation(scaleUpAnim)
+            }
+        }
+    }
+
+    private fun onMainFabReClick() {
+        val subFabArray = arrayOf(binding.fabDelete, binding.fabSearch)
+        val animDuration =
+            activity?.resources?.getInteger(R.integer.animation_default_duration)?.toLong() ?: 300L
+        with(binding.fabAddIngredient) {
+            animate().apply {
+                rotation(0f)
+                duration = animDuration
+                interpolator = DecelerateInterpolator()
+                start()
+            }
+
+            val scaleAnim =
+                AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
+
+            subFabArray.forEach { fab ->
+                fab.startAnimation(scaleAnim)
+                fab.hide()
             }
         }
     }
