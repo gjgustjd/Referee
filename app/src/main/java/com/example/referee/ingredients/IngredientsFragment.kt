@@ -96,11 +96,11 @@ class IngredientsFragment :
         viewModel.fabState.observe(requireActivity()) {
             when (viewModel.fabState.value?.getContentIfNotHandled()) {
                 IngredientFragFABState.None -> {
-                    requireActivity().title = getString(R.string.ingredient_add_title)
+                    requireActivity().title = getString(R.string.navigation_menu_ingredient)
                 }
 
                 IngredientFragFABState.SubMenu -> {
-                    requireActivity().title = getString(R.string.ingredient_add_title)
+                    requireActivity().title = getString(R.string.navigation_menu_ingredient)
                 }
 
                 IngredientFragFABState.DeleteMenu -> {

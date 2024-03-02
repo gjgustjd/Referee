@@ -306,6 +306,7 @@ class IngredientAddActivity :
 
     private fun initItemInfo() {
        if(isEditing) {
+           title = getString(R.string.ingredient_edit_title)
            binding.etIngredientName.setText(editingIngredient?.name ?: "")
            editingIngredient?.photoName?.let { photo ->
                viewModel.getImageBitmap(photo)

@@ -22,6 +22,7 @@
 
 <!-- 식재료 추가 화면 -->
     <string name="ingredient_add_title">식재료 추가</string>
+    <string name="ingredient_edit_title">식재료 편집</string>
     <string name="ingredient_add_name">식재료명</string>
     <string name="ingredient_add_unit">단위</string>
     <string name="ingredient_add_photo">사진</string>
