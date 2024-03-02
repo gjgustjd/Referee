@@ -1,7 +1,7 @@
 package com.example.referee.ingredients
 
 import android.graphics.BitmapFactory
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
@@ -54,8 +54,17 @@ class IngredientsFragmentViewModel :
         }
     }
     fun removeIngredients(items: List<IngredientEntity>) {
-        viewModelScope.launch {
-            IngredientRepository.removeIngredients(items)
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = try {
+                Log.i("DeleteTest","removeIngredients items:$items")
+                IngredientRepository.removeIngredients(items)
+                EventWrapper(IngredientsEvent.DeleteIngredients.Success)
+            } catch (e: java.lang.Exception) {
+                Log.i("DeleteTest",e.toString())
+                EventWrapper(IngredientsEvent.DeleteIngredients.Failed)
+            }
+
+            _event.postValue(result)
         }
     }
 }

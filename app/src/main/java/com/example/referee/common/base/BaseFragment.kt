@@ -30,6 +30,11 @@ abstract class BaseFragment<T>(protected val layoutResourceId: Int) :
         return binding.root
     }
 
+    protected fun showToast(text:String) {
+        val baseActivity = activity as? BaseActivity<*>
+        baseActivity?.showToast(text)
+    }
+
     protected fun showLoading() {
         val baseActivity = activity as? BaseActivity<*>
         baseActivity?.showLoading()

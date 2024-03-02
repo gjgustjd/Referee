@@ -16,6 +16,7 @@ import com.example.referee.databinding.FragmentIngredientsBinding
 import com.example.referee.ingredientadd.IngredientAddActivity
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredients.model.IngredientFragFABState
+import com.example.referee.ingredients.model.IngredientsSelectableItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -55,6 +56,23 @@ class IngredientsFragment :
                     val event = it.peekContent() as IngredientsEvent.GetIngredients.Success
                     updateRecyclerView(event.ingredients)
                     hideLoading()
+                }
+
+                is IngredientsEvent.DeleteIngredients.Success -> {
+                    Log.i("DeleteTest","DeleteSuccess")
+
+                    hideLoading()
+                    showToast(getString(R.string.ingredient_delete_success_toast))
+                    val state = viewModel.fabState.value?.peekContent()
+
+                    if(state == IngredientFragFABState.DeleteMenu) {
+                        onMainFabClick()
+                    }
+                }
+
+                is IngredientsEvent.DeleteIngredients.Failed -> {
+                    hideLoading()
+                    showToast(getString(R.string.ingredient_delete_failed_toast))
                 }
 
                 else -> Unit
@@ -198,8 +216,10 @@ class IngredientsFragment :
 
             IngredientFragFABState.DeleteMenu -> {
                 Log.i("FabTest","DeleteMenu")
-                viewModel.fabState.value = EventWrapper(IngredientFragFABState.None)
-                onMainFabClick()
+                ingredientAdapter?.getSelectedItem()?.let { list ->
+                    showLoading()
+                    viewModel.removeIngredients(list)
+                }
             }
 
             else -> Unit
@@ -217,7 +237,7 @@ class IngredientsFragment :
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
         ingredientAdapter = IngredientsAdapter(
-            items
+            items.map { IngredientsSelectableItem(it) }
         ) { imageName, position ->
             showLoading()
             viewModel.getImageBitmap(imageName, position)
