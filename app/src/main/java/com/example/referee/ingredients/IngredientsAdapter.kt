@@ -1,7 +1,6 @@
 package com.example.referee.ingredients
 
 import android.graphics.Bitmap
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,18 +33,14 @@ class IngredientsAdapter(
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
-        Log.i(
-            "BindingTest onBindViewHolder ",
-            "position:$position imageName:${items[position].photoName}"
-        )
         holder.bind(position)
     }
 
+    override fun getItemId(position: Int): Long {
+        return items[position].id
+    }
+
     fun bindThumbnail(bitmap:Bitmap,position: Int) {
-        Log.i(
-            "BindingTest bindThumbnail",
-            "position:$position imageName:${items[position].photoName}"
-        )
         items[position].imageBitmap = bitmap
         notifyItemChanged(position)
     }

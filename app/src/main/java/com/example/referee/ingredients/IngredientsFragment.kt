@@ -221,7 +221,10 @@ class IngredientsFragment :
         ) { imageName, position ->
             showLoading()
             viewModel.getImageBitmap(imageName, position)
+        }.apply {
+            setHasStableIds(true)
         }
+
         binding.rvIngredients.adapter = ingredientAdapter
     }
 }
