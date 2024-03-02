@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.RefereeApplication
 import com.example.referee.common.base.BaseViewModel
+import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientRepository
 import com.example.referee.ingredients.model.IngredientFragFABState
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,17 @@ class IngredientsFragmentViewModel :
                 _bitmapFlow.emit(IngredientsEvent.IngredientBitmap(position, bitmap))
             } catch (e: java.lang.Exception) {
             }
+        }
+    }
+
+    fun removeIngredient(item:IngredientEntity) {
+        viewModelScope.launch {
+           IngredientRepository.removeIngredient(item)
+        }
+    }
+    fun removeIngredients(items: List<IngredientEntity>) {
+        viewModelScope.launch {
+            IngredientRepository.removeIngredients(items)
         }
     }
 }

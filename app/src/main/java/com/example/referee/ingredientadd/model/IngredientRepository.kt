@@ -15,6 +15,7 @@ object IngredientRepository {
     fun getIngredientsByName(name:String) = db.ingredientsDAO().getIngredientByName(name)
 
     fun removeIngredient(item: IngredientEntity) = db.ingredientsDAO().deleteIngredient(item)
+    fun removeIngredients(items: List<IngredientEntity>) = db.ingredientsDAO().deleteIngredients(items)
 
     fun updateIngredient(item: IngredientEntity) = db.ingredientsDAO().updateIngredient(item)
 }

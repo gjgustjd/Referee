@@ -10,5 +10,10 @@ sealed interface IngredientsEvent {
         object Failed : GetIngredients
     }
 
-     class IngredientBitmap(val position: Int, val bitmap: Bitmap) : IngredientsEvent
+    class IngredientBitmap(val position: Int, val bitmap: Bitmap) : IngredientsEvent
+
+    sealed interface DeleteIngredients : IngredientsEvent {
+        object Success : DeleteIngredients
+        object Failed : DeleteIngredients
+    }
 }
