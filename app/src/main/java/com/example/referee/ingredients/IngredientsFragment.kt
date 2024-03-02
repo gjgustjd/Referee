@@ -257,7 +257,8 @@ class IngredientsFragment :
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
         ingredientAdapter = IngredientsAdapter(
-            items.map { IngredientsSelectableItem(it) }.toMutableList()
+            items.map { IngredientsSelectableItem(it) }.toMutableList(),
+            ::editItem
         ) { imageName, position ->
             showLoading()
             viewModel.getImageBitmap(imageName, position)
@@ -266,5 +267,10 @@ class IngredientsFragment :
         }
 
         binding.rvIngredients.adapter = ingredientAdapter
+    }
+
+    private fun editItem(item: IngredientEntity) {
+        Log.i("EditTest","editItem:$item")
+        startActivity(IngredientAddActivity.newIntent(requireContext(), true, item))
     }
 }

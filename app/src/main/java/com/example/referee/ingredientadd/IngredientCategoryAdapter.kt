@@ -11,11 +11,11 @@ import com.example.referee.ingredientadd.model.IngredientCategoryType
 class IngredientCategoryAdapter(
     val recyclerView: RecyclerView,
     private val items: Array<IngredientCategoryType>,
-    private val onClick: ((type:IngredientCategoryType) -> Unit)? = null
+    private var currentSelectedPosition: Int = 0,
+    private val onClick: ((type:IngredientCategoryType) -> Unit)? = null,
 ) :
     RecyclerView.Adapter<IngredientCategoryAdapter.IngredientUnitViewHolder>() {
 
-    private var currentSelectedPosition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientUnitViewHolder {
         return IngredientUnitViewHolder(

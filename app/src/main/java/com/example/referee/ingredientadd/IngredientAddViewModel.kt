@@ -1,6 +1,7 @@
 package com.example.referee.ingredientadd
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.RefereeApplication
@@ -70,6 +71,45 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
         }
     }
 
+    fun editIngredient(
+        id:Long,
+        name: String,
+        unit: String,
+        prevPhotoName:String?,
+        expiration: IngredientExpirationUnit,
+        category: IngredientCategoryType
+    ) {
+        applicationScope.launch {
+            val result = try {
+                val photoName = withContext(Dispatchers.IO) {
+                    preSavedImageName?.await() ?: prevPhotoName
+                }
+                val entity =
+                    IngredientEntity(
+                        name,
+                        photoName,
+                        unit,
+                        expiration.days,
+                        category.ordinal
+                    ).apply {
+                        this.id = id
+                    }
+                val updateResult = withContext(Dispatchers.IO) {
+                    IngredientRepository.updateIngredient(entity)
+                }
+
+                if (updateResult > 0) {
+                    EventWrapper(IngredientAddEvent.UpdateSuccess)
+                } else {
+                    EventWrapper(IngredientAddEvent.UpdateFailed)
+                }
+            } catch (e: java.lang.Exception) {
+                EventWrapper(IngredientAddEvent.UpdateFailed)
+            }
+            _event.postValue(result)
+        }
+    }
+
      fun saveImage(bitmap: Bitmap?) {
          applicationScope.launch {
              preSavedImageName = async {
@@ -110,6 +150,18 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
         val file = File(storage, imageName)
         if (file.exists()) {
             file.delete()
+        }
+    }
+
+    fun getImageBitmap(imageName:String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val storage = RefereeApplication.instance.applicationContext.cacheDir
+                val path = "${storage}/$imageName"
+                val bitmap = BitmapFactory.decodeFile(path)
+                _event.postValue(EventWrapper(IngredientAddEvent.IngredientBitmap(bitmap)))
+            } catch (e: java.lang.Exception) {
+            }
         }
     }
 }

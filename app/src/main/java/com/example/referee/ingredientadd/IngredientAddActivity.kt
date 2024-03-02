@@ -1,5 +1,6 @@
 package com.example.referee.ingredientadd
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -22,6 +23,7 @@ import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
+import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
 import com.jakewharton.rxbinding4.view.clicks
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -29,12 +31,28 @@ import java.util.concurrent.TimeUnit
 
 class IngredientAddActivity :
     BaseActivity<ActivityAddIngredientBinding>(R.layout.activity_add_ingredient) {
+
+    companion object {
+        const val EXTRA_IS_EDIT_MODE = "EXTRA_IS_EDIT_MODE"
+        const val EXTRA_INGREDIENT = "EXTRA_INGREDIENT"
+
+        fun newIntent(context: Context, isEdit: Boolean, item: IngredientEntity): Intent {
+            return Intent(context, IngredientAddActivity::class.java).apply {
+                putExtra(EXTRA_IS_EDIT_MODE, isEdit)
+                putExtra(EXTRA_INGREDIENT, item)
+            }
+        }
+    }
+
     private val viewModel: IngredientAddViewModel by viewModels()
 
     private val unitsAdapter by lazy {
+        val unitArray = resources.getStringArray(R.array.ingredient_unit)
+        val selection = unitArray.indexOfFirst { it == editingIngredient?.unit }.coerceAtLeast(0)
         IngredientUnitAdapter(
             binding.rvUnits,
-            resources.getStringArray(R.array.ingredient_unit)
+            unitArray,
+            selection
         ).apply {
             setHasStableIds(true)
         }
@@ -43,7 +61,8 @@ class IngredientAddActivity :
         binding.category = IngredientCategoryType.MEAT
         IngredientCategoryAdapter(
             binding.rvCategories,
-            IngredientCategoryType.values()
+            IngredientCategoryType.values(),
+            editingIngredient?.category ?: 0
         ) { type ->
             viewModel.preSavedImageName ?: run {
                 binding.category = type
@@ -52,6 +71,9 @@ class IngredientAddActivity :
             setHasStableIds(true)
         }
     }
+
+    private var editingIngredient: IngredientEntity? = null
+    private var isEditing = false
 
     private fun getDecoration(lastIndex: Int): ItemDecoration {
         val margin = CommonUtil.pxToDp(
@@ -115,9 +137,11 @@ class IngredientAddActivity :
         }
 
     override fun initViews() {
+        initExtra()
         binding.etIngredientName.requestFocus()
         initUnitRecyclerView()
         initExpirationSpinner()
+        initItemInfo()
     }
 
     override fun initListeners() {
@@ -131,7 +155,20 @@ class IngredientAddActivity :
                 )
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    viewModel.isExistSameNameIngredient(etIngredientName.text.toString())
+                    if(isEditing) {
+                        editingIngredient?.let {
+                            val itemId = it.id
+                            val name = binding.etIngredientName.text.toString()
+                            val unit = unitsAdapter.getSelectedItemString()
+                            val expiration =
+                                IngredientExpirationUnit.fromString(binding.spExpiration.selectedItem as String)
+                            val photoName = editingIngredient?.photoName
+                            val category = categoriesAdapter.getSelectedItem()
+                            viewModel.editIngredient(itemId,name, unit, photoName, expiration, category)
+                        }
+                    } else {
+                        viewModel.isExistSameNameIngredient(etIngredientName.text.toString())
+                    }
                 }.apply {
                     compositeDisposable.add(this)
                 }
@@ -230,6 +267,22 @@ class IngredientAddActivity :
                     }
                 }
 
+                is IngredientAddEvent.IngredientBitmap -> {
+                    val event = it.peekContent() as IngredientAddEvent.IngredientBitmap
+
+                    binding.ivPhoto.setImageBitmap(event.bitmap)
+                }
+
+                is IngredientAddEvent.UpdateSuccess -> {
+                    finish()
+                    showToast(getString(R.string.ingredient_update_succeed_toast))
+                }
+
+                is IngredientAddEvent.UpdateFailed -> {
+                    finish()
+                    showToast(getString(R.string.ingredient_update_failed_toast))
+                }
+
                 else -> Unit
             }
         }
@@ -243,6 +296,25 @@ class IngredientAddActivity :
             }
         }
         onBackPressedDispatcher.addCallback(callback)
+    }
+
+    private fun initExtra() {
+        isEditing = intent.getBooleanExtra(EXTRA_IS_EDIT_MODE, false)
+        editingIngredient =
+            intent.getSerializableExtra(EXTRA_INGREDIENT, IngredientEntity::class.java)
+    }
+
+    private fun initItemInfo() {
+       if(isEditing) {
+           binding.etIngredientName.setText(editingIngredient?.name ?: "")
+           editingIngredient?.photoName?.let { photo ->
+               viewModel.getImageBitmap(photo)
+           }
+           val expPosition = IngredientExpirationUnit.values()
+               .indexOfFirst { it.days == editingIngredient?.expiration }.coerceAtLeast(0)
+           binding.spExpiration.setSelection(expPosition)
+           binding.rvUnits
+       }
     }
 
     private fun checkPermissionAndRequestForActivityResult(
@@ -299,5 +371,4 @@ class IngredientAddActivity :
             addItemDecoration(getDecoration(IngredientCategoryType.values().lastIndex))
         }
     }
-
 }

@@ -25,5 +25,5 @@ interface IngredientsDAO {
     fun deleteIngredients(items: List<IngredientEntity>)
 
     @Update
-    fun updateIngredient(item:IngredientEntity)
+    fun updateIngredient(item:IngredientEntity):Int
 }

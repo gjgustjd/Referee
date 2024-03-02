@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "ingredients")
 data class IngredientEntity(
@@ -12,7 +13,11 @@ data class IngredientEntity(
     val unit: String,
     val expiration: Int,
     val category: Int? = null,
-) {
-    @PrimaryKey(autoGenerate = true) var id: Long = 0
-    @Ignore var imageBitmap: Bitmap? = null
+) : Serializable {
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0
+
+    @Ignore
+    @Transient
+    var imageBitmap: Bitmap? = null
 }

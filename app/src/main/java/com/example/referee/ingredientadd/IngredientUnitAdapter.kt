@@ -7,10 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
 import com.example.referee.databinding.ItemIngredientsUnitBinding
 
-class IngredientUnitAdapter(private val recyclerView: RecyclerView, private val items: Array<String>) :
+class IngredientUnitAdapter(
+    private val recyclerView: RecyclerView,
+    private val items: Array<String>,
+    private var currentSelectedPosition:Int = 0
+) :
     RecyclerView.Adapter<IngredientUnitAdapter.IngredientUnitViewHolder>() {
 
-    private var currentSelectedPosition = 0
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientUnitViewHolder {
         return IngredientUnitViewHolder(
