@@ -1,15 +1,14 @@
 package com.example.referee.ingredients
 
 import android.content.Intent
-import android.graphics.Rect
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
+import com.example.referee.common.CommonRecyclerViewDecoration
+import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentIngredientsBinding
 import com.example.referee.ingredientadd.IngredientAddActivity
@@ -23,18 +22,20 @@ class IngredientsFragment :
     private val viewModel by activityViewModels<IngredientsFragmentViewModel>()
     private var ingredientAdapter: IngredientsAdapter? = null
     private val decoration by lazy {
-        object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(
-                outRect: Rect,
-                view: View,
-                parent: RecyclerView,
-                state: RecyclerView.State
-            ) {
-                outRect.right = 30
-                outRect.left = 30
-                outRect.bottom = 30
-            }
-        }
+        val margin = CommonUtil.pxToDp(
+            requireContext(),
+            resources.getDimension(R.dimen.decorator_default_margin).toInt()
+        )
+
+        CommonRecyclerViewDecoration(
+            rightMargin = margin,
+            leftMargin = margin,
+            bottomMargin = margin
+        )
+    }
+    private val subFabArray by lazy { arrayOf(binding.fabDelete, binding.fabSearch) }
+    private val animDuration by lazy {
+        resources.getInteger(R.integer.animation_default_duration).toLong() ?: 300L
     }
 
     override fun initView() {
@@ -84,9 +85,6 @@ class IngredientsFragment :
 
     private fun onMainFabLongClick() {
         val scaleUpAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
-        val subFabArray = arrayOf(binding.fabDelete, binding.fabSearch)
-        val animDuration =
-            activity?.resources?.getInteger(R.integer.animation_default_duration)?.toLong() ?: 300L
         with(binding.fabAddIngredient) {
             animate().apply {
                 rotation(45f)
@@ -103,9 +101,7 @@ class IngredientsFragment :
     }
 
     private fun onMainFabReClick() {
-        val subFabArray = arrayOf(binding.fabDelete, binding.fabSearch)
-        val animDuration =
-            activity?.resources?.getInteger(R.integer.animation_default_duration)?.toLong() ?: 300L
+        val scaleDownAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
         with(binding.fabAddIngredient) {
             animate().apply {
                 rotation(0f)
@@ -114,11 +110,8 @@ class IngredientsFragment :
                 start()
             }
 
-            val scaleAnim =
-                AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
-
             subFabArray.forEach { fab ->
-                fab.startAnimation(scaleAnim)
+                fab.startAnimation(scaleDownAnim)
                 fab.hide()
             }
         }

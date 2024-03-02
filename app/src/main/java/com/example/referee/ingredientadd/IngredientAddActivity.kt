@@ -3,10 +3,7 @@ package com.example.referee.ingredientadd
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Rect
 import android.provider.MediaStore
-import android.util.Log
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -18,8 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.example.referee.R
+import com.example.referee.common.CommonRecyclerViewDecoration
+import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
@@ -54,19 +53,12 @@ class IngredientAddActivity :
         }
     }
 
-    private fun getDecoration(lastIndex: Int) = object : RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(
-            outRect: Rect,
-            view: View,
-            parent: RecyclerView,
-            state: RecyclerView.State
-        ) {
-            val position = parent.getChildAdapterPosition(view)
-
-            if (position != lastIndex) {
-                outRect.right = 30
-            }
-        }
+    private fun getDecoration(lastIndex: Int): ItemDecoration {
+        val margin = CommonUtil.pxToDp(
+            this,
+            resources.getDimension(R.dimen.decorator_default_margin).toInt()
+        )
+        return CommonRecyclerViewDecoration(rightMargin = margin, exceptIndex = lastIndex)
     }
 
     private val cameraActivityResult =
