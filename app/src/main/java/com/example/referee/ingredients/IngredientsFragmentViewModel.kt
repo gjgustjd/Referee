@@ -11,27 +11,25 @@ import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientRepository
 import com.example.referee.ingredients.model.IngredientFragFABState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 class IngredientsFragmentViewModel :
     BaseViewModel<IngredientsEvent>() {
 
-    private var _bitmapFlow: MutableSharedFlow<IngredientsEvent.IngredientBitmap?> =
-        MutableSharedFlow(0)
-    val bitmapFlow: SharedFlow<IngredientsEvent.IngredientBitmap?> = _bitmapFlow
     val fabState =
         MutableLiveData<EventWrapper<IngredientFragFABState>>(EventWrapper(IngredientFragFABState.None))
 
     fun getIngredientsList() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                Log.i("DeleteTest", "getIngredientList")
                 IngredientRepository.getIngredientsList().collect { ingredients ->
-                    _event.postValue(EventWrapper(IngredientsEvent.GetIngredients.Success(ingredients)))
+                    _sharedFlow.emit(EventWrapper(IngredientsEvent.GetIngredients.Success(ingredients)))
+                    Log.i("DeleteTest", "getIngredientList emit")
                 }
             } catch (e: Exception) {
-                _event.postValue(EventWrapper(IngredientsEvent.GetIngredients.Failed))
+                Log.i("DeleteTest", "getIngredientList failed")
+                _sharedFlow.emit(EventWrapper(IngredientsEvent.GetIngredients.Failed))
             }
         }
     }
@@ -42,7 +40,7 @@ class IngredientsFragmentViewModel :
                 val storage = RefereeApplication.instance.applicationContext.cacheDir
                 val path = "${storage}/$imageName"
                 val bitmap = BitmapFactory.decodeFile(path)
-                _bitmapFlow.emit(IngredientsEvent.IngredientBitmap(position, bitmap))
+                _sharedFlow.emit(EventWrapper(IngredientsEvent.IngredientBitmap(position, bitmap)))
             } catch (e: java.lang.Exception) {
             }
         }
@@ -64,7 +62,7 @@ class IngredientsFragmentViewModel :
                 EventWrapper(IngredientsEvent.DeleteIngredients.Failed)
             }
 
-            _event.postValue(result)
+            _sharedFlow.emit(result)
         }
     }
 }

@@ -50,39 +50,42 @@ class IngredientsFragment :
     }
 
     override fun initListeners() {
-        viewModel.event.observe(requireActivity()) {
-            when (it.getContentIfNotHandled()) {
-                is IngredientsEvent.GetIngredients.Success -> {
-                    val event = it.peekContent() as IngredientsEvent.GetIngredients.Success
-                    updateRecyclerView(event.ingredients)
-                    hideLoading()
-                }
-
-                is IngredientsEvent.DeleteIngredients.Success -> {
-                    Log.i("DeleteTest","DeleteSuccess")
-
-                    hideLoading()
-                    showToast(getString(R.string.ingredient_delete_success_toast))
-                    val state = viewModel.fabState.value?.peekContent()
-
-                    if(state == IngredientFragFABState.DeleteMenu) {
-                        onMainFabClick()
+        lifecycleScope.launch {
+            Log.i("DeleteTest", "sharedFlow observe")
+            viewModel.sharedFlow.collect {
+                Log.i("DeleteTest", "sharedFlow collect")
+                when (it.getContentIfNotHandled()) {
+                    is IngredientsEvent.GetIngredients.Success -> {
+                        val event = it.peekContent() as IngredientsEvent.GetIngredients.Success
+                        updateRecyclerView(event.ingredients)
+                        hideLoading()
                     }
-                }
 
-                is IngredientsEvent.DeleteIngredients.Failed -> {
-                    hideLoading()
-                    showToast(getString(R.string.ingredient_delete_failed_toast))
-                }
+                    is IngredientsEvent.DeleteIngredients.Success -> {
+                        Log.i("DeleteTest", "DeleteSuccess")
 
-                else -> Unit
-            }
-        }
-        lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.bitmapFlow.collect { event ->
-                event?.let {
-                    hideLoading()
-                    ingredientAdapter?.bindThumbnail(event.bitmap, event.position)
+                        hideLoading()
+                        showToast(getString(R.string.ingredient_delete_success_toast))
+                        val state = viewModel.fabState.value?.peekContent()
+
+                        if (state == IngredientFragFABState.DeleteMenu) {
+                            onMainFabClick()
+                        }
+                    }
+
+                    is IngredientsEvent.DeleteIngredients.Failed -> {
+                        hideLoading()
+                        showToast(getString(R.string.ingredient_delete_failed_toast))
+                    }
+
+                    is IngredientsEvent.IngredientBitmap -> {
+                        val event = it.peekContent() as IngredientsEvent.IngredientBitmap
+
+                        hideLoading()
+                        ingredientAdapter?.bindThumbnail(event.bitmap, event.position)
+                    }
+
+                    else -> Unit
                 }
             }
         }

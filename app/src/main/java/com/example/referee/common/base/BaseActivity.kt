@@ -23,10 +23,10 @@ abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActi
         PublishSubject.create()
     private lateinit var loadingRequestObserver: Disposable
 
-    protected fun showToast(text:String) {
+    fun showToast(text:String) {
         Toast.makeText(this,text,Toast.LENGTH_SHORT).show()
     }
-    protected var progressDialog: ProgressDialog? = null
+    var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
