@@ -47,8 +47,15 @@ class IngredientsFragmentViewModel :
     }
 
     fun removeIngredient(item:IngredientEntity) {
-        viewModelScope.launch {
-           IngredientRepository.removeIngredient(item)
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = try {
+                IngredientRepository.removeIngredient(item)
+                EventWrapper(IngredientsEvent.DeleteIngredients.Success)
+            } catch (e:java.lang.Exception) {
+                EventWrapper(IngredientsEvent.DeleteIngredients.Failed)
+            }
+
+            _sharedFlow.emit(result)
         }
     }
     fun removeIngredients(items: List<IngredientEntity>) {

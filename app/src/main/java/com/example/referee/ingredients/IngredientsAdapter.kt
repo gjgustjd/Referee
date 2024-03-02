@@ -15,7 +15,7 @@ import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredients.model.IngredientsSelectableItem
 
 class IngredientsAdapter(
-    private val items: List<IngredientsSelectableItem>,
+    private val items: MutableList<IngredientsSelectableItem>,
     private val bindThumbFun: (imageName: String, position: Int) -> Unit
 ) :
     RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
@@ -31,6 +31,8 @@ class IngredientsAdapter(
             )
         )
     }
+
+    fun getItems() = items.map { it.entity }
 
     override fun getItemCount() = items.size
 

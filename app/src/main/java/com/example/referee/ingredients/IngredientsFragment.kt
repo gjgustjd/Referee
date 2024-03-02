@@ -6,22 +6,24 @@ import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
 import com.example.referee.common.EventWrapper
+import com.example.referee.common.ItemTouchHelperListener
 import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentIngredientsBinding
 import com.example.referee.ingredientadd.IngredientAddActivity
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredients.model.IngredientFragFABState
+import com.example.referee.ingredients.model.IngredientItemTouchHelperCallback
 import com.example.referee.ingredients.model.IngredientsSelectableItem
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class IngredientsFragment :
-    BaseFragment<FragmentIngredientsBinding>(R.layout.fragment_ingredients) {
+    BaseFragment<FragmentIngredientsBinding>(R.layout.fragment_ingredients),ItemTouchHelperListener {
 
     private val viewModel by activityViewModels<IngredientsFragmentViewModel>()
     private var ingredientAdapter: IngredientsAdapter? = null
@@ -37,6 +39,7 @@ class IngredientsFragment :
             bottomMargin = margin
         )
     }
+    lateinit var itemTouchHelper: ItemTouchHelper
     private val subFabArray by lazy { arrayOf(binding.fabDelete, binding.fabSearch) }
     private val animDuration by lazy {
         resources.getInteger(R.integer.animation_default_duration).toLong()
@@ -110,6 +113,13 @@ class IngredientsFragment :
 
                 else -> Unit
             }
+        }
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean = false
+    override fun onItemSwipe(position: Int) {
+        ingredientAdapter?.getItems()?.get(position)?.let {item->
+            viewModel.removeIngredient(item)
         }
     }
     fun onMainFabClick() {
@@ -230,6 +240,8 @@ class IngredientsFragment :
     }
 
     private fun initRecyclerView() {
+        itemTouchHelper = ItemTouchHelper(IngredientItemTouchHelperCallback(this))
+        itemTouchHelper.attachToRecyclerView(binding.rvIngredients)
         with(binding.rvIngredients) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(decoration)
@@ -240,7 +252,7 @@ class IngredientsFragment :
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
         ingredientAdapter = IngredientsAdapter(
-            items.map { IngredientsSelectableItem(it) }
+            items.map { IngredientsSelectableItem(it) }.toMutableList()
         ) { imageName, position ->
             showLoading()
             viewModel.getImageBitmap(imageName, position)
