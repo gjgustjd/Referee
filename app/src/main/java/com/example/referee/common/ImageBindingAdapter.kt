@@ -11,6 +11,9 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.referee.R
 import com.example.referee.ingredientadd.model.IngredientCategoryType
+import com.example.referee.ingredients.model.IngredientFragFABState
+import com.example.referee.ingredients.model.IngredientsFABType
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 object ImageBindingAdapter {
 
@@ -76,5 +79,43 @@ object ImageBindingAdapter {
             val drawable = ContextCompat.getDrawable(view.context, type.iconResourceId)
             view.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("fabState","fabType")
+    fun setFabIcon(view:FloatingActionButton,state:IngredientFragFABState,type:IngredientsFABType) {
+        Log.i("FabTest","setFabIcon")
+        Log.i("FabTest",type.toString())
+        Log.i("FabTest",state.toString())
+        val resources = view.resources
+        val resId = when (type) {
+            IngredientsFABType.MAIN_FAB -> {
+                when (state) {
+                    IngredientFragFABState.None, IngredientFragFABState.SubMenu -> {
+                        R.drawable.ic_add
+                    }
+
+                    else -> {
+                        R.drawable.ic_undo
+                    }
+                }
+            }
+
+            IngredientsFABType.SUB_FIRST_FAB -> {
+                when (state) {
+                    IngredientFragFABState.None,IngredientFragFABState.SubMenu -> R.drawable.ic_trashbin
+                    IngredientFragFABState.DeleteMenu -> R.drawable.ic_trash_check
+
+                    else -> return
+                }
+            }
+
+            IngredientsFABType.SUB_SECOND_FAB -> {
+                R.drawable.ic_search
+            }
+        }
+
+        val drawable = ResourcesCompat.getDrawable(resources, resId, null)
+        view.setImageDrawable(drawable)
     }
 }

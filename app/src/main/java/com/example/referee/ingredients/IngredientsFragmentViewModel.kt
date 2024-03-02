@@ -1,11 +1,14 @@
 package com.example.referee.ingredients
 
 import android.graphics.BitmapFactory
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.RefereeApplication
 import com.example.referee.common.base.BaseViewModel
 import com.example.referee.ingredientadd.model.IngredientRepository
+import com.example.referee.ingredients.model.IngredientFragFABState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -17,6 +20,9 @@ class IngredientsFragmentViewModel :
     private var _bitmapFlow: MutableSharedFlow<IngredientsEvent.IngredientBitmap?> =
         MutableSharedFlow(0)
     val bitmapFlow: SharedFlow<IngredientsEvent.IngredientBitmap?> = _bitmapFlow
+    private var _fabState =
+        MutableLiveData<IngredientFragFABState>(IngredientFragFABState.None)
+    val fabState = _fabState
 
     fun getIngredientsList() {
         viewModelScope.launch(Dispatchers.IO) {

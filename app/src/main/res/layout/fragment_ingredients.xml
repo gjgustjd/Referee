@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.example.referee.ingredients.model.IngredientsFABType" />
+
+        <variable
+            name="viewModel"
+            type="com.example.referee.ingredients.IngredientsFragmentViewModel" />
+
+        <variable
+            name="fragment"
+            type="com.example.referee.ingredients.IngredientsFragment" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,8 +39,10 @@
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:backgroundTint="@color/white"
-            android:src="@drawable/ic_search"
+            tools:src="@drawable/ic_search"
             android:visibility="gone"
+            app:fabState='@{viewModel.fabState}'
+            app:fabType="@{IngredientsFABType.SUB_SECOND_FAB}"
             app:layout_constraintBottom_toTopOf="@id/fabDelete"
             app:layout_constraintEnd_toEndOf="@+id/fabDelete"
             app:layout_constraintStart_toStartOf="@+id/fabDelete"
@@ -39,8 +55,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:backgroundTint="@color/white"
-            android:src="@drawable/ic_trashbin"
+            android:onClick='@{()->fragment.onDeleteFabClick()}'
+            tools:src="@drawable/ic_trashbin"
             android:visibility="gone"
+            app:fabState='@{viewModel.fabState}'
+            app:fabType="@{IngredientsFABType.SUB_FIRST_FAB}"
             app:layout_constraintBottom_toTopOf="@id/fabAddIngredient"
             app:layout_constraintEnd_toEndOf="@+id/fabAddIngredient"
             app:layout_constraintStart_toStartOf="@+id/fabAddIngredient"
@@ -52,10 +71,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_add"
-            app:layout_constraintHorizontal_bias="1"
+            android:onClick='@{()->fragment.onMainFabClick()}'
+            android:onLongClick='@{()->fragment.onMainFabLongClick()}'
+            tools:src="@drawable/ic_add"
+            app:fabState='@{viewModel.fabState}'
+            app:fabType="@{IngredientsFABType.MAIN_FAB}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toStartOf="parent"
             app:shapeAppearanceOverlay="@style/CustomShapeAppearance.FloatingActionButton" />
     </androidx.constraintlayout.widget.ConstraintLayout>
