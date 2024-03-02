@@ -20,9 +20,8 @@ class IngredientsFragmentViewModel :
     private var _bitmapFlow: MutableSharedFlow<IngredientsEvent.IngredientBitmap?> =
         MutableSharedFlow(0)
     val bitmapFlow: SharedFlow<IngredientsEvent.IngredientBitmap?> = _bitmapFlow
-    private var _fabState =
-        MutableLiveData<IngredientFragFABState>(IngredientFragFABState.None)
-    val fabState = _fabState
+    val fabState =
+        MutableLiveData<EventWrapper<IngredientFragFABState>>(EventWrapper(IngredientFragFABState.None))
 
     fun getIngredientsList() {
         viewModelScope.launch(Dispatchers.IO) {

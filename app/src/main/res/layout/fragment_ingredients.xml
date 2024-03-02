@@ -41,7 +41,7 @@
             android:backgroundTint="@color/white"
             tools:src="@drawable/ic_search"
             android:visibility="gone"
-            app:fabState='@{viewModel.fabState}'
+            app:fabState='@{viewModel.fabState.peekContent()}'
             app:fabType="@{IngredientsFABType.SUB_SECOND_FAB}"
             app:layout_constraintBottom_toTopOf="@id/fabDelete"
             app:layout_constraintEnd_toEndOf="@+id/fabDelete"
@@ -58,7 +58,7 @@
             android:onClick='@{()->fragment.onDeleteFabClick()}'
             tools:src="@drawable/ic_trashbin"
             android:visibility="gone"
-            app:fabState='@{viewModel.fabState}'
+            app:fabState='@{viewModel.fabState.peekContent()}'
             app:fabType="@{IngredientsFABType.SUB_FIRST_FAB}"
             app:layout_constraintBottom_toTopOf="@id/fabAddIngredient"
             app:layout_constraintEnd_toEndOf="@+id/fabAddIngredient"
@@ -74,7 +74,7 @@
             android:onClick='@{()->fragment.onMainFabClick()}'
             android:onLongClick='@{()->fragment.onMainFabLongClick()}'
             tools:src="@drawable/ic_add"
-            app:fabState='@{viewModel.fabState}'
+            app:fabState='@{viewModel.fabState.peekContent()}'
             app:fabType="@{IngredientsFABType.MAIN_FAB}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -70,7 +70,7 @@ class IngredientsFragment :
         }
 
         viewModel.fabState.observe(requireActivity()) {
-            when (viewModel.fabState.value) {
+            when (viewModel.fabState.value?.getContentIfNotHandled()) {
                 IngredientFragFABState.None -> {
                     requireActivity().title = getString(R.string.ingredient_add_title)
                 }
@@ -94,7 +94,7 @@ class IngredientsFragment :
     fun onMainFabClick() {
         Log.i("FabTest","onMainFabClick")
         Log.i("FabTest","value:${viewModel.fabState.value}")
-        when (viewModel.fabState.value) {
+        when (viewModel.fabState.value?.peekContent()) {
             IngredientFragFABState.None -> {
                 Log.i("FabTest","None")
                 startActivity(Intent(requireActivity(), IngredientAddActivity::class.java))
@@ -107,7 +107,7 @@ class IngredientsFragment :
 
             is IngredientFragFABState.DeleteMenu -> {
                 Log.i("FabTest","DeleteMenu")
-                viewModel.fabState.value = IngredientFragFABState.None
+                viewModel.fabState.value = EventWrapper(IngredientFragFABState.None)
                 onMainFabLongClick()
             }
 
@@ -117,7 +117,7 @@ class IngredientsFragment :
 
     fun onMainFabLongClick():Boolean {
         Log.i("FabTest","onMainFabLongClick")
-        when (viewModel.fabState.value) {
+        when (viewModel.fabState.value?.peekContent()) {
             IngredientFragFABState.None -> {
                 Log.i("FabTest","None")
                 val scaleUpAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
@@ -135,7 +135,7 @@ class IngredientsFragment :
                     }
                 }
 
-                viewModel.fabState.value = IngredientFragFABState.SubMenu
+                viewModel.fabState.value = EventWrapper(IngredientFragFABState.SubMenu)
             }
 
             IngredientFragFABState.SubMenu -> {
@@ -166,7 +166,7 @@ class IngredientsFragment :
                 fab.hide()
             }
         }
-        viewModel.fabState.value = IngredientFragFABState.None
+        viewModel.fabState.value = EventWrapper(IngredientFragFABState.None)
     }
 
     fun onDeleteFabClick() {
@@ -175,12 +175,12 @@ class IngredientsFragment :
             AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
         val scaleDownAnim =
             AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
-        when (viewModel.fabState.value) {
+        when (viewModel.fabState.value?.peekContent()) {
             IngredientFragFABState.SubMenu -> {
                 Log.i("FabTest","SubMenu")
                 binding.fabAddIngredient.rotation = 0f
                 activity?.title = getString(R.string.ingredient_delete_title)
-                viewModel.fabState.value = IngredientFragFABState.DeleteMenu
+                viewModel.fabState.value = EventWrapper(IngredientFragFABState.DeleteMenu)
                 binding.fabAddIngredient.startAnimation(scaleUpAnim)
                 binding.fabSearch.let {
                     it.startAnimation(scaleDownAnim)
@@ -190,6 +190,8 @@ class IngredientsFragment :
 
             IngredientFragFABState.DeleteMenu -> {
                 Log.i("FabTest","DeleteMenu")
+                viewModel.fabState.value = EventWrapper(IngredientFragFABState.None)
+                onMainFabClick()
             }
 
             else -> Unit
