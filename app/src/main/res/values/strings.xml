@@ -18,6 +18,7 @@
     <string name="ingredient_search_title">식재료 검색</string>
     <string name="ingredient_delete_success_toast">식재료 삭제에 성공하였습니다.</string>
     <string name="ingredient_delete_failed_toast">식재료 삭제에 실패하였습니다.</string>
+    <string name="ingredient_delete_empty_toast">삭제할 식재료를 선택해주세요.</string>
 
 <!-- 식재료 추가 화면 -->
     <string name="ingredient_add_title">식재료 추가</string>

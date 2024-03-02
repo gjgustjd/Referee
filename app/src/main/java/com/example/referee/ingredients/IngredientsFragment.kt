@@ -230,6 +230,11 @@ class IngredientsFragment :
             IngredientFragFABState.DeleteMenu -> {
                 Log.i("FabTest","DeleteMenu")
                 ingredientAdapter?.getSelectedItem()?.let { list ->
+                    list.ifEmpty {
+                        showToast(getString(R.string.ingredient_delete_empty_toast))
+                       return@let
+                    }
+
                     showLoading()
                     viewModel.removeIngredients(list)
                 }
