@@ -3,14 +3,14 @@ package com.example.referee.ingredients
 import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
-import androidx.core.view.setPadding
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.referee.R
 import com.example.referee.databinding.ItemIngredientBinding
-import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientEntity
 
 class IngredientsAdapter(
@@ -18,6 +18,8 @@ class IngredientsAdapter(
     private val bindThumbFun: (imageName: String, position: Int) -> Unit
 ) :
     RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
+
+    var isDeleteMode = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
         return IngredientViewHolder(
@@ -62,6 +64,19 @@ class IngredientsAdapter(
                         .clear(thumbnail)
                     bindThumbFun(it, position)
                 }
+            }
+
+            with(binding.cbIsDelete) {
+                val anim: Animation
+                visibility = if (isDeleteMode) {
+                    anim = AnimationUtils.loadAnimation(context, R.anim.scale_up)
+                    View.VISIBLE
+                } else {
+                    anim = AnimationUtils.loadAnimation(context, R.anim.scale_down)
+                    View.GONE
+                }
+
+                startAnimation(anim)
             }
         }
     }
