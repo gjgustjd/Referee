@@ -2,20 +2,48 @@ package com.example.referee.common
 
 import android.graphics.Bitmap
 import android.graphics.drawable.InsetDrawable
-import android.util.Log
+import android.os.Environment
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.referee.R
 import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredients.model.IngredientFragFABState
 import com.example.referee.ingredients.model.IngredientsFABType
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.File
 
 object ImageBindingAdapter {
+
+    @JvmStatic
+    @BindingAdapter("imageName","ingCategoryType")
+    fun setImageByName(view: ImageView, imageName: String? = null,categoryType: Int?=null) {
+        val storage = RefereeApplication.instance.applicationContext.cacheDir
+        val imagePath = File(storage,imageName)
+        Glide
+            .with(view.context)
+            .load(imagePath)
+            .thumbnail(0.1f)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .apply {
+                val padding =
+                    view.context.resources.getDimension(R.dimen.ingredient_placeholder_inset)
+                        .toInt()
+                Environment.getStorageDirectory()
+                val drawable = categoryType?.let {
+                    IngredientCategoryType.fromInt(it)?.let { type ->
+                        ResourcesCompat.getDrawable(view.context.resources, type.iconResourceId,null)
+                    }
+                }
+                val insetDrawable =
+                    InsetDrawable(drawable, CommonUtil.pxToDp(view.context, padding))
+                placeholder(insetDrawable)
+            }.into(view)
+    }
 
     @JvmStatic
     @BindingAdapter("glideBitmap","ingCategoryType")
@@ -29,7 +57,6 @@ object ImageBindingAdapter {
                 val padding =
                     view.context.resources.getDimension(R.dimen.ingredient_placeholder_inset)
                         .toInt()
-                Log.i("paddingTest",padding.toString())
                 val drawable = categoryType?.let {
                     IngredientCategoryType.fromInt(it)?.let { type ->
                         ResourcesCompat.getDrawable(view.context.resources, type.iconResourceId,null)
@@ -53,7 +80,6 @@ object ImageBindingAdapter {
                 val padding =
                     view.context.resources.getDimension(R.dimen.ingredient_placeholder_inset)
                         .toInt()
-                Log.i("paddingTest", padding.toString())
                 categoryType?.let {
                     val drawable =
                         ResourcesCompat.getDrawable(view.context.resources, it.iconResourceId, null)
@@ -84,9 +110,6 @@ object ImageBindingAdapter {
     @JvmStatic
     @BindingAdapter("fabState","fabType")
     fun setFabIcon(view:FloatingActionButton,state:IngredientFragFABState,type:IngredientsFABType) {
-        Log.i("FabTest","setFabIcon")
-        Log.i("FabTest",type.toString())
-        Log.i("FabTest",state.toString())
         val resources = view.resources
         val resId = when (type) {
             IngredientsFABType.MAIN_FAB -> {

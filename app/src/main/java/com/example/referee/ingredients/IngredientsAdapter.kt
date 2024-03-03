@@ -66,6 +66,7 @@ class IngredientsAdapter(
                 true
             }
 
+
             item.entity.imageBitmap ?: run {
                 val thumbnail = binding.ivThumbnail
                 val context = thumbnail.context

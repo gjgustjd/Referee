@@ -23,7 +23,7 @@
             android:id="@+id/ivThumbnail"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            app:glideBitmap='@{item.imageBitmap}'
+            app:imageName='@{item.photoName}'
             app:ingCategoryType='@{item.category}'
             android:src="@drawable/ingredient_photo_default_inset"
             app:layout_constraintBottom_toBottomOf="parent"
