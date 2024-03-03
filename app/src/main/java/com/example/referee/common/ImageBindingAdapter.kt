@@ -23,7 +23,7 @@ object ImageBindingAdapter {
         Glide
             .with(view.context)
             .load(bitmap)
-            .thumbnail(0.1f)
+            .thumbnail(0.5f)
             .skipMemoryCache(true)
             .apply {
                 val padding =
@@ -47,8 +47,8 @@ object ImageBindingAdapter {
     fun setImage(view: ImageView, bitmap: Bitmap? = null, categoryType: IngredientCategoryType? = null) {
         Glide.with(view.context)
             .load(bitmap)
-            .thumbnail(0.1f)
             .skipMemoryCache(true)
+            .thumbnail(0.5f)
             .apply {
                 val padding =
                     view.context.resources.getDimension(R.dimen.ingredient_placeholder_inset)

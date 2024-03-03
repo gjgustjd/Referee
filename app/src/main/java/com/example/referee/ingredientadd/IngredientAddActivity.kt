@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.provider.MediaStore
+import android.transition.Transition
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -138,7 +139,28 @@ class IngredientAddActivity :
 
     override fun initViews() {
         initExtra()
-        binding.etIngredientName.requestFocus()
+        window.sharedElementEnterTransition.addListener(object : Transition.TransitionListener {
+            override fun onTransitionStart(transition: Transition?) {
+                // 전환 애니메이션이 시작될 때 호출됩니다.
+            }
+
+            override fun onTransitionEnd(transition: Transition?) {
+                binding.etIngredientName.requestFocus()
+                // 전환 애니메이션이 끝날 때 호출됩니다. 여기서 필요한 작업을 수행하세요.
+            }
+
+            override fun onTransitionCancel(transition: Transition?) {
+                // 전환 애니메이션이 취소될 때 호출됩니다.
+            }
+
+            override fun onTransitionPause(transition: Transition?) {
+                // 전환 애니메이션이 일시 중지될 때 호출됩니다.
+            }
+
+            override fun onTransitionResume(transition: Transition?) {
+                // 전환 애니메이션이 재개될 때 호출됩니다.
+            }
+        })
         initUnitRecyclerView()
         initExpirationSpinner()
         initItemInfo()

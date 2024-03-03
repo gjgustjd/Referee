@@ -16,7 +16,7 @@ import com.example.referee.ingredients.model.IngredientsSelectableItem
 
 class IngredientsAdapter(
     private val items: MutableList<IngredientsSelectableItem>,
-    private val editFun: (item: IngredientEntity) -> Unit,
+    private val editFun: (item: IngredientEntity,sharedView:View) -> Unit,
     private val bindThumbFun: (imageName: String, position: Int) -> Unit
 ) :
     RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
@@ -62,7 +62,7 @@ class IngredientsAdapter(
 
             binding.root.setOnLongClickListener {
                 Log.i("EditTest","longClicked")
-                editFun(item.entity)
+                editFun(item.entity,binding.ivThumbnail)
                 true
             }
 

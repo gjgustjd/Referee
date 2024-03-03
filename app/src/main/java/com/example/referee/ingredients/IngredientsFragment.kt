@@ -1,7 +1,9 @@
 package com.example.referee.ingredients
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.util.Log
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.activityViewModels
@@ -269,8 +271,16 @@ class IngredientsFragment :
         binding.rvIngredients.adapter = ingredientAdapter
     }
 
-    private fun editItem(item: IngredientEntity) {
-        Log.i("EditTest","editItem:$item")
-        startActivity(IngredientAddActivity.newIntent(requireContext(), true, item))
+    private fun editItem(item: IngredientEntity, sharedView: View) {
+        Log.i("EditTest", "editItem:$item")
+        startActivity(
+            IngredientAddActivity.newIntent(requireContext(), true, item),
+            ActivityOptions.makeSceneTransitionAnimation(
+                requireActivity(),
+                sharedView,
+                sharedView.transitionName
+            ).toBundle()
+        )
+
     }
 }

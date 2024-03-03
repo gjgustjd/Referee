@@ -7,25 +7,27 @@
 
         <variable
             name="item"
-            type="com.example.referee.ingredientadd.model.IngredientEntity"/>
+            type="com.example.referee.ingredientadd.model.IngredientEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_ingredient_item_background"
-        android:foreground="?attr/selectableItemBackground"
         android:clickable="true"
         android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
         android:padding="10dp">
 
         <ImageView
             android:id="@+id/ivThumbnail"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:src="@drawable/ingredient_photo_default_inset"
+            android:transitionName="ingredientImage"
+            android:scaleType="fitCenter"
             app:glideBitmap='@{item.imageBitmap}'
             app:ingCategoryType='@{item.category}'
-            android:src="@drawable/ingredient_photo_default_inset"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +47,7 @@
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@+id/ivThumbnail"
             app:layout_constraintTop_toTopOf="@+id/ivThumbnail"
-            tools:text="식재료명"/>
+            tools:text="식재료명" />
 
         <TextView
             android:id="@+id/tvUnit"
@@ -74,14 +76,14 @@
             android:id="@+id/cbIsDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:minWidth="0dp"
             android:minHeight="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
