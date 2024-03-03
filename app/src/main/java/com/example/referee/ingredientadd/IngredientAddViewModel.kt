@@ -1,9 +1,6 @@
 package com.example.referee.ingredientadd
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Log
-import androidx.compose.ui.graphics.vector.addPathNodes
 import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.RefereeApplication
@@ -152,20 +149,6 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
         val file = File(storage, imageName)
         if (file.exists()) {
             file.delete()
-        }
-    }
-
-    fun getImageBitmap(imageName:String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val storage = RefereeApplication.instance.applicationContext.cacheDir
-                storage.path
-                Log.i("PathTest","path:${storage}")
-                val path = "${storage}/$imageName"
-                val bitmap = BitmapFactory.decodeFile(path)
-                _event.postValue(EventWrapper(IngredientAddEvent.IngredientBitmap(bitmap)))
-            } catch (e: java.lang.Exception) {
-            }
         }
     }
 }

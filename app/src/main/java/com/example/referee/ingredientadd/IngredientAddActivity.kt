@@ -306,15 +306,11 @@ class IngredientAddActivity :
 
     private fun initItemInfo() {
        if(isEditing) {
+           binding.editingIngredient = editingIngredient
            title = getString(R.string.ingredient_edit_title)
-           binding.etIngredientName.setText(editingIngredient?.name ?: "")
-           editingIngredient?.photoName?.let { photo ->
-               viewModel.getImageBitmap(photo)
-           }
            val expPosition = IngredientExpirationUnit.values()
                .indexOfFirst { it.days == editingIngredient?.expiration }.coerceAtLeast(0)
            binding.spExpiration.setSelection(expPosition)
-           binding.rvUnits
        }
     }
 

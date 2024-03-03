@@ -23,6 +23,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:imageName='@{item.photoName}'
+            app:glideBitmap="@{null}"
             app:ingCategoryType='@{item.category}'
             android:src="@drawable/ingredient_photo_default_inset"
             app:layout_constraintBottom_toBottomOf="parent"
