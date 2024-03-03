@@ -16,8 +16,7 @@ import com.example.referee.ingredients.model.IngredientsSelectableItem
 
 class IngredientsAdapter(
     private val items: MutableList<IngredientsSelectableItem>,
-    private val editFun: (item: IngredientEntity) -> Unit,
-    private val bindThumbFun: (imageName: String, position: Int) -> Unit
+    private val editFun: (item: IngredientEntity) -> Unit
 ) :
     RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
 
@@ -45,11 +44,6 @@ class IngredientsAdapter(
         return items[position].entity.id
     }
 
-    fun bindThumbnail(bitmap:Bitmap,position: Int) {
-        items[position].entity.imageBitmap = bitmap
-        notifyItemChanged(position)
-    }
-
     fun getSelectedItem(): List<IngredientEntity> {
         return items.filter { it.isSelected }.map { it.entity }
     }
@@ -66,14 +60,12 @@ class IngredientsAdapter(
                 true
             }
 
-
             item.entity.imageBitmap ?: run {
                 val thumbnail = binding.ivThumbnail
                 val context = thumbnail.context
                 item.entity.photoName?.let {
                     Glide.with(context)
                         .clear(thumbnail)
-                    bindThumbFun(it, position)
                 }
             }
 

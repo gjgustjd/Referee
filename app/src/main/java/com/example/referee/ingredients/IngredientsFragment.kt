@@ -81,13 +81,6 @@ class IngredientsFragment :
                         showToast(getString(R.string.ingredient_delete_failed_toast))
                     }
 
-                    is IngredientsEvent.IngredientBitmap -> {
-                        val event = it.peekContent() as IngredientsEvent.IngredientBitmap
-
-                        hideLoading()
-                        ingredientAdapter?.bindThumbnail(event.bitmap, event.position)
-                    }
-
                     else -> Unit
                 }
             }
@@ -259,10 +252,7 @@ class IngredientsFragment :
         ingredientAdapter = IngredientsAdapter(
             items.map { IngredientsSelectableItem(it) }.toMutableList(),
             ::editItem
-        ) { imageName, position ->
-            showLoading()
-            viewModel.getImageBitmap(imageName, position)
-        }.apply {
+        ).apply {
             setHasStableIds(true)
         }
 
