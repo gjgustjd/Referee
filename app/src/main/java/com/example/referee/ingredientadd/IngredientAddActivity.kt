@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.provider.MediaStore
 import android.transition.Transition
+import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -70,6 +72,25 @@ class IngredientAddActivity :
             }
         }.apply {
             setHasStableIds(true)
+        }
+    }
+
+    private val transitionAnimListener by lazy {
+        object : Transition.TransitionListener {
+            override fun onTransitionStart(transition: Transition?) = Unit
+            override fun onTransitionCancel(transition: Transition?) = Unit
+            override fun onTransitionPause(transition: Transition?) = Unit
+            override fun onTransitionResume(transition: Transition?) = Unit
+
+            override fun onTransitionEnd(transition: Transition?) {
+                with(binding.etIngredientName) {
+                    requestFocus()
+                    setSelection(text.length)
+                    val inputMethodManager =
+                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                }
+            }
         }
     }
 
@@ -139,28 +160,6 @@ class IngredientAddActivity :
 
     override fun initViews() {
         initExtra()
-        window.sharedElementEnterTransition.addListener(object : Transition.TransitionListener {
-            override fun onTransitionStart(transition: Transition?) {
-                // 전환 애니메이션이 시작될 때 호출됩니다.
-            }
-
-            override fun onTransitionEnd(transition: Transition?) {
-                binding.etIngredientName.requestFocus()
-                // 전환 애니메이션이 끝날 때 호출됩니다. 여기서 필요한 작업을 수행하세요.
-            }
-
-            override fun onTransitionCancel(transition: Transition?) {
-                // 전환 애니메이션이 취소될 때 호출됩니다.
-            }
-
-            override fun onTransitionPause(transition: Transition?) {
-                // 전환 애니메이션이 일시 중지될 때 호출됩니다.
-            }
-
-            override fun onTransitionResume(transition: Transition?) {
-                // 전환 애니메이션이 재개될 때 호출됩니다.
-            }
-        })
         initUnitRecyclerView()
         initExpirationSpinner()
         initItemInfo()
@@ -169,6 +168,7 @@ class IngredientAddActivity :
     override fun initListeners() {
         super.initListeners()
 
+        window.sharedElementEnterTransition.addListener(transitionAnimListener)
         with(binding) {
             btnConfirm.clicks()
                 .throttleFirst(
@@ -186,7 +186,16 @@ class IngredientAddActivity :
                                 IngredientExpirationUnit.fromString(binding.spExpiration.selectedItem as String)
                             val photoName = editingIngredient?.photoName
                             val category = categoriesAdapter.getSelectedItem()
-                            viewModel.editIngredient(itemId,name, unit, photoName, expiration, category)
+                            viewModel.editIngredient(
+                                itemId,
+                                name,
+                                unit,
+                                photoName,
+                                expiration,
+                                category
+                            ).let { job ->
+                                showLoading(job::cancel)
+                            }
                         }
                     } else {
                         viewModel.isExistSameNameIngredient(etIngredientName.text.toString())
@@ -296,11 +305,13 @@ class IngredientAddActivity :
                 }
 
                 is IngredientAddEvent.UpdateSuccess -> {
+                    hideLoading()
                     finish()
                     showToast(getString(R.string.ingredient_update_succeed_toast))
                 }
 
                 is IngredientAddEvent.UpdateFailed -> {
+                    hideLoading()
                     finish()
                     showToast(getString(R.string.ingredient_update_failed_toast))
                 }

@@ -77,8 +77,7 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
         prevPhotoName:String?,
         expiration: IngredientExpirationUnit,
         category: IngredientCategoryType
-    ) {
-        applicationScope.launch {
+    ) = applicationScope.launch {
             val result = try {
                 val photoName = withContext(Dispatchers.IO) {
                     preSavedImageName?.await() ?: prevPhotoName
@@ -107,7 +106,6 @@ class IngredientAddViewModel : BaseViewModel<IngredientAddEvent>() {
             }
             _event.postValue(result)
         }
-    }
 
      fun saveImage(bitmap: Bitmap?) {
          applicationScope.launch {
