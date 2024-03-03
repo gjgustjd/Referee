@@ -314,7 +314,7 @@ class IngredientAddActivity :
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 viewModel.deletePreSavedImage()
-                finish()
+                finishAfterTransition()
             }
         }
         onBackPressedDispatcher.addCallback(callback)
