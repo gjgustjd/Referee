@@ -1,11 +1,9 @@
 package com.example.referee.ingredients
 
-import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
-import com.example.referee.common.RefereeApplication
 import com.example.referee.common.base.BaseViewModel
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientRepository
@@ -30,18 +28,6 @@ class IngredientsFragmentViewModel :
             } catch (e: Exception) {
                 Log.i("DeleteTest", "getIngredientList failed")
                 _sharedFlow.emit(EventWrapper(IngredientsEvent.GetIngredients.Failed))
-            }
-        }
-    }
-
-    fun getImageBitmap(imageName:String,position:Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val storage = RefereeApplication.instance.applicationContext.cacheDir
-                val path = "${storage}/$imageName"
-                val bitmap = BitmapFactory.decodeFile(path)
-                _sharedFlow.emit(EventWrapper(IngredientsEvent.IngredientBitmap(position, bitmap)))
-            } catch (e: java.lang.Exception) {
             }
         }
     }

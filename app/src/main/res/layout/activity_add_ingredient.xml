@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="editingIngredient"
+            type="com.example.referee.ingredientadd.model.IngredientEntity"/>
         <variable
             name="bitmap"
             type="android.graphics.Bitmap" />
@@ -43,8 +45,9 @@
                 <EditText
                     android:id="@+id/etIngredientName"
                     style="@style/inputEditText"
-                    android:nextFocusDown="@id/ivPhoto"
+                    android:text='@{editingIngredient.name}'
                     android:singleLine="true"
+                    android:nextFocusDown="@id/ivPhoto"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvName"
@@ -67,6 +70,7 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/ingredient_photo_default_inset"
                     android:transitionName="ingredientImage"
+                    app:imageName='@{editingIngredient.photoName}'
                     app:glideBitmap='@{bitmap}'
                     app:ingCategoryType='@{category}'
                     app:layout_constraintEnd_toEndOf="parent"
