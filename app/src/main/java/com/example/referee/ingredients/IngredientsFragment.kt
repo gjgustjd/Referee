@@ -262,7 +262,7 @@ class IngredientsFragment :
     }
 
     private fun editItem(item: IngredientEntity, sharedView: View) {
-        Log.i("EditTest", "editItem:$item")
+        sharedView.transitionName = "ingredientImage"
         startActivity(
             IngredientAddActivity.newIntent(requireContext(), true, item),
             ActivityOptions.makeSceneTransitionAnimation(
@@ -271,6 +271,5 @@ class IngredientsFragment :
                 sharedView.transitionName
             ).toBundle()
         )
-
     }
 }
