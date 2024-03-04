@@ -103,4 +103,7 @@ dependencies {
 
     // 필요한 API를 찾아서 추가
     implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
+
+    //ViewPager
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
 }
