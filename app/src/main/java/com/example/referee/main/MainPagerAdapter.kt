@@ -15,4 +15,6 @@ class MainPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapte
     override fun getItemCount(): Int = fragments.size
 
     override fun createFragment(position: Int): BaseFragment<*> = fragments[position]
+
+    fun getBaseFragment(position: Int) = fragments[position]
 }

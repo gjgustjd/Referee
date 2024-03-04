@@ -260,7 +260,7 @@ class IngredientAddActivity :
                         Toast.LENGTH_SHORT
                     ).show()
                     hideLoading()
-                    finish()
+                    finishAfterTransition()
                 }
 
                 IngredientAddEvent.InsertFailed -> {
@@ -306,13 +306,13 @@ class IngredientAddActivity :
 
                 is IngredientAddEvent.UpdateSuccess -> {
                     hideLoading()
-                    finish()
+                    finishAfterTransition()
                     showToast(getString(R.string.ingredient_update_succeed_toast))
                 }
 
                 is IngredientAddEvent.UpdateFailed -> {
                     hideLoading()
-                    finish()
+                    finishAfterTransition()
                     showToast(getString(R.string.ingredient_update_failed_toast))
                 }
 

@@ -1,5 +1,6 @@
 package com.example.referee.common.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,8 @@ abstract class BaseFragment<T>(protected val layoutResourceId: Int) :
         binding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
         return binding.root
     }
+
+    open fun onActivityReenter(resultCode: Int, data: Intent?) = Unit
 
     protected fun showToast(text:String) {
         val baseActivity = activity as? BaseActivity<*>

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
+import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -117,6 +118,14 @@ class IngredientsFragment :
             viewModel.removeIngredient(item)
         }
     }
+
+    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+        super.onActivityReenter(resultCode, data)
+        Log.i("TransitionTest","fragment onActivityReenter")
+        postponeEnterTransition()
+        Log.i("TransitionTest","fragment postponeEnterTransition")
+    }
+
     fun onMainFabClick() {
         Log.i("FabTest","onMainFabClick")
         Log.i("FabTest","value:${viewModel.fabState.value}")
@@ -251,6 +260,17 @@ class IngredientsFragment :
     }
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
+        val newItemPosition = if ((ingredientAdapter?.getItems()?.lastIndex ?: 0) < items.size) {
+            Log.i(
+                "TransitionTest",
+                "prevItem lastIndex:${ingredientAdapter?.getItems()?.lastIndex}"
+            )
+            Log.i("TransitionTest", "newItem lastIndex:${items.lastIndex}")
+            items.lastIndex
+        } else {
+            null
+        }
+
         ingredientAdapter = IngredientsAdapter(
             items.map { IngredientsSelectableItem(it) }.toMutableList(),
             ::editItem
@@ -259,6 +279,13 @@ class IngredientsFragment :
         }
 
         binding.rvIngredients.adapter = ingredientAdapter
+
+        newItemPosition?.let {
+            val target = binding.rvIngredients.findViewHolderForAdapterPosition(it)?.itemView?.findViewById<ImageView>(R.id.ivThumbnail)
+            target?.transitionName = "ingredientImage"
+        }
+        startPostponedEnterTransition()
+        Log.i("TransitionTest", "startPostponedEnterTransition")
     }
 
     private fun editItem(item: IngredientEntity, sharedView: View) {
