@@ -7,7 +7,7 @@ import com.example.referee.databinding.FragmentFridgeBinding
 
 class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fridge) {
 
-    override fun initView() = Unit
+    override fun initViews() = Unit
     override fun initListeners() = Unit
 
     companion object {

@@ -13,12 +13,12 @@ abstract class BaseFragment<T>(protected val layoutResourceId: Int) :
     Fragment() where T : ViewDataBinding {
 
     protected lateinit var binding: T
-    abstract fun initView()
+    abstract fun initViews()
     abstract fun initListeners()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
+        initViews()
         initListeners()
     }
 
@@ -38,9 +38,9 @@ abstract class BaseFragment<T>(protected val layoutResourceId: Int) :
         baseActivity?.showToast(text)
     }
 
-    protected fun showLoading() {
+    protected fun showLoading(onBackPressed: (() -> Unit)? = null) {
         val baseActivity = activity as? BaseActivity<*>
-        baseActivity?.showLoading()
+        baseActivity?.showLoading(onBackPressed)
     }
 
     protected fun hideLoading() {

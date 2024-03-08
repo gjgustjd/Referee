@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActivity() where T : ViewDataBinding {
 
     protected lateinit var binding: T
-    protected val compositeDisposable = CompositeDisposable()
+    val compositeDisposable = CompositeDisposable()
     private val hideLoadingRequestSubject: PublishSubject<CommonEvent.HideLoading> =
         PublishSubject.create()
     private val showLoadingRequestSubject: PublishSubject<CommonEvent.ShowLoading> =

@@ -48,7 +48,7 @@ class IngredientsFragment :
         resources.getInteger(R.integer.animation_default_duration).toLong()
     }
 
-    override fun initView() {
+    override fun initViews() {
         initRecyclerView()
         binding.viewModel = viewModel
         binding.fragment = this
