@@ -55,10 +55,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             return@setOnItemSelectedListener true
         }
     }
-
-    override fun onActivityReenter(resultCode: Int, data: Intent?) {
-        super.onActivityReenter(resultCode, data)
-        Log.i("TransitionTest","activity onActivityReenter")
-        vpAdapter.getBaseFragment(binding.vpMain.currentItem).onActivityReenter(resultCode, data)
-    }
 }
