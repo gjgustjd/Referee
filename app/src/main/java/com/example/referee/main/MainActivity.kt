@@ -1,7 +1,5 @@
 package com.example.referee.main
 
-import android.content.Intent
-import android.util.Log
 import androidx.viewpager2.widget.ViewPager2
 import com.example.referee.R
 import com.example.referee.common.base.BaseActivity
