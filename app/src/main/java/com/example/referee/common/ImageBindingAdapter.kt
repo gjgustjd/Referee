@@ -25,13 +25,12 @@ import java.io.File
 object ImageBindingAdapter {
 
     @JvmStatic
-    @BindingAdapter("imageName", "glideBitmap", "ingCategoryType","startAnimOnLoadFinished")
+    @BindingAdapter("imageName", "glideBitmap", "ingCategoryType")
     fun setImageByName(
         view: ImageView,
         imageName: String? = null,
         bitmap: Bitmap? = null,
         categoryType: IngredientCategoryType? = null,
-        startAnimOnLoadFinished: Boolean = false
     ) {
         val source = imageName?.let {
             val storage = RefereeApplication.instance.applicationContext.cacheDir
@@ -58,32 +57,29 @@ object ImageBindingAdapter {
                             InsetDrawable(drawable, CommonUtil.pxToDp(view.context, padding))
                         placeholder(insetDrawable)
                     }
-                    if(startAnimOnLoadFinished) {
-                        listener(
-                        object :RequestListener<Drawable> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                ((view.context) as Activity).startPostponedEnterTransition()
-                                return false
-                            }
+                    listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            ((view.context) as Activity).startPostponedEnterTransition()
+                            Logger.i()
+                            return false
+                        }
 
-                            override fun onResourceReady(
-                                resource: Drawable?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                dataSource: DataSource?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                ((view.context) as Activity).startPostponedEnterTransition()
-                                Logger.i("")
-                                return false
-                            }
-                        })
-                    }
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            Logger.i()
+                            return false
+                        }
+                    })
                 }.into(view)
         }
     }
@@ -102,7 +98,7 @@ object ImageBindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("glideBitmap","ingCategoryType")
+    @BindingAdapter("glideBitmap", "ingCategoryType")
     fun setImage(view: ImageView, bitmap: Bitmap? = null, categoryType: Int? = null) {
         categoryType?.let {
             setImage(view, bitmap, IngredientCategoryType.fromInt(it))
@@ -110,8 +106,12 @@ object ImageBindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("glideBitmap","ingCategoryType")
-    fun setImage(view: ImageView, bitmap: Bitmap? = null, categoryType: IngredientCategoryType? = null) {
+    @BindingAdapter("glideBitmap", "ingCategoryType")
+    fun setImage(
+        view: ImageView,
+        bitmap: Bitmap? = null,
+        categoryType: IngredientCategoryType? = null
+    ) {
         Glide.with(view.context)
             .load(bitmap)
             .thumbnail(0.3f)
@@ -147,8 +147,12 @@ object ImageBindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("fabState","fabType")
-    fun setFabIcon(view:FloatingActionButton,state:IngredientFragFABState,type:IngredientsFABType) {
+    @BindingAdapter("fabState", "fabType")
+    fun setFabIcon(
+        view: FloatingActionButton,
+        state: IngredientFragFABState,
+        type: IngredientsFABType
+    ) {
         val resources = view.resources
         val resId = when (type) {
             IngredientsFABType.MAIN_FAB -> {
@@ -165,7 +169,7 @@ object ImageBindingAdapter {
 
             IngredientsFABType.SUB_FIRST_FAB -> {
                 when (state) {
-                    IngredientFragFABState.None,IngredientFragFABState.SubMenu -> R.drawable.ic_trashbin
+                    IngredientFragFABState.None, IngredientFragFABState.SubMenu -> R.drawable.ic_trashbin
                     IngredientFragFABState.DeleteMenu -> R.drawable.ic_trash_check
 
                     else -> return
