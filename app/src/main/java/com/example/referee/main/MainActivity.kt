@@ -1,7 +1,9 @@
 package com.example.referee.main
 
+import android.content.Intent
 import androidx.viewpager2.widget.ViewPager2
 import com.example.referee.R
+import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityMainBinding
 
@@ -52,5 +54,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
             return@setOnItemSelectedListener true
         }
+    }
+
+    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+        super.onActivityReenter(resultCode, data)
+        val baseFragment = vpAdapter.getBaseFragment(binding.vpMain.currentItem)
+        baseFragment.onActivityReenter(resultCode,data)
+        Logger.i()
     }
 }
