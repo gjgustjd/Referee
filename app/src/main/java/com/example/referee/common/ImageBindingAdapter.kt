@@ -1,5 +1,6 @@
 package com.example.referee.common
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -24,13 +25,15 @@ import java.io.File
 
 object ImageBindingAdapter {
 
+    @SuppressLint("CheckResult")
     @JvmStatic
-    @BindingAdapter("imageName", "glideBitmap", "ingCategoryType")
+    @BindingAdapter("imageName", "glideBitmap", "ingCategoryType", "startPostponedTransition")
     fun setImageByName(
         view: ImageView,
         imageName: String? = null,
         bitmap: Bitmap? = null,
         categoryType: IngredientCategoryType? = null,
+        startPostponedTransition: Boolean? = null
     ) {
         val source = imageName?.let {
             val storage = RefereeApplication.instance.applicationContext.cacheDir
@@ -57,31 +60,50 @@ object ImageBindingAdapter {
                             InsetDrawable(drawable, CommonUtil.pxToDp(view.context, padding))
                         placeholder(insetDrawable)
                     }
-                    listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            ((view.context) as Activity).startPostponedEnterTransition()
-                            Logger.i()
-                            return false
-                        }
 
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            dataSource: DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            Logger.i()
-                            return false
-                        }
-                    })
+                    if(startPostponedTransition == true) {
+                        listener(object : RequestListener<Drawable> {
+                            override fun onLoadFailed(
+                                e: GlideException?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                ((view.context) as Activity).startPostponedEnterTransition()
+                                Logger.i()
+                                return false
+                            }
+
+                            override fun onResourceReady(
+                                resource: Drawable?,
+                                model: Any?,
+                                target: Target<Drawable>?,
+                                dataSource: DataSource?,
+                                isFirstResource: Boolean
+                            ): Boolean {
+                                ((view.context) as? Activity)?.startPostponedEnterTransition()
+                                Logger.i()
+                                return false
+                            }
+                        })
+                    }
                 }.into(view)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("imageName", "glideBitmap", "ingCategoryType", "startPostponedTransition")
+    fun setImageByName(
+        view: ImageView,
+        imageName: String? = null,
+        bitmap: Bitmap? = null,
+        categoryType: Int? = null,
+        startPostponedTransition: Boolean? = null,
+
+        ) {
+        setImageByName(view, imageName, bitmap, categoryType?.let {
+            IngredientCategoryType.fromInt(it)
+        }, startPostponedTransition)
     }
 
     @JvmStatic

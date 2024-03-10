@@ -1,12 +1,13 @@
 package com.example.referee.ingredients
 
-import android.app.ActivityOptions
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
-import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -16,6 +17,7 @@ import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.ItemTouchHelperListener
+import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentIngredientsBinding
 import com.example.referee.ingredientadd.IngredientAddActivity
@@ -26,7 +28,11 @@ import com.example.referee.ingredients.model.IngredientsSelectableItem
 import kotlinx.coroutines.launch
 
 class IngredientsFragment :
-    BaseFragment<FragmentIngredientsBinding>(R.layout.fragment_ingredients),ItemTouchHelperListener {
+    BaseFragment<FragmentIngredientsBinding>(R.layout.fragment_ingredients),
+    ItemTouchHelperListener {
+    companion object {
+        const val EXTRA_INGREDIENT_ID = "EXTRA_INGREDIENT_ID"
+    }
 
     private val viewModel by activityViewModels<IngredientsFragmentViewModel>()
     private var ingredientAdapter: IngredientsAdapter? = null
@@ -47,6 +53,23 @@ class IngredientsFragment :
     private val animDuration by lazy {
         resources.getInteger(R.integer.animation_default_duration).toLong()
     }
+    private var updatedItemId: Int? = null
+    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        }
+
+    override fun onActivityReenter(resultCode: Int, data: Intent?) {
+        super.onActivityReenter(resultCode, data)
+        if(resultCode == RESULT_OK) {
+            data?.getIntExtra(EXTRA_INGREDIENT_ID,-1)?.let {
+                if (it > 0) {
+                    updatedItemId = it
+                    activity?.postponeEnterTransition()
+                    Logger.i("updateItemId:$updatedItemId")
+                }
+            }
+        }
+    }
 
     override fun initViews() {
         initRecyclerView()
@@ -60,8 +83,10 @@ class IngredientsFragment :
             Log.i("DeleteTest", "sharedFlow observe")
             viewModel.sharedFlow.collect {
                 Log.i("DeleteTest", "sharedFlow collect")
+                Logger.i()
                 when (it.getContentIfNotHandled()) {
                     is IngredientsEvent.GetIngredients.Success -> {
+                        Logger.i("getIngredients")
                         val event = it.peekContent() as IngredientsEvent.GetIngredients.Success
                         updateRecyclerView(event.ingredients)
                         hideLoading()
@@ -114,34 +139,27 @@ class IngredientsFragment :
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean = false
     override fun onItemSwipe(position: Int) {
-        ingredientAdapter?.getItems()?.get(position)?.let {item->
+        ingredientAdapter?.getItems()?.get(position)?.let { item ->
             viewModel.removeIngredient(item)
         }
     }
 
-    override fun onActivityReenter(resultCode: Int, data: Intent?) {
-        super.onActivityReenter(resultCode, data)
-        Log.i("TransitionTest","fragment onActivityReenter")
-        postponeEnterTransition()
-        Log.i("TransitionTest","fragment postponeEnterTransition")
-    }
-
     fun onMainFabClick() {
-        Log.i("FabTest","onMainFabClick")
-        Log.i("FabTest","value:${viewModel.fabState.value}")
+        Log.i("FabTest", "onMainFabClick")
+        Log.i("FabTest", "value:${viewModel.fabState.value}")
         when (viewModel.fabState.value?.peekContent()) {
             IngredientFragFABState.None -> {
-                Log.i("FabTest","None")
+                Log.i("FabTest", "None")
                 startActivity(Intent(requireActivity(), IngredientAddActivity::class.java))
             }
 
             IngredientFragFABState.SubMenu -> {
-                Log.i("FabTest","SubMenu")
+                Log.i("FabTest", "SubMenu")
                 onMainFabReClick()
             }
 
             is IngredientFragFABState.DeleteMenu -> {
-                Log.i("FabTest","DeleteMenu")
+                Log.i("FabTest", "DeleteMenu")
                 viewModel.fabState.value = EventWrapper(IngredientFragFABState.None)
                 onMainFabLongClick()
                 ingredientAdapter?.apply {
@@ -154,11 +172,11 @@ class IngredientsFragment :
         }
     }
 
-    fun onMainFabLongClick():Boolean {
-        Log.i("FabTest","onMainFabLongClick")
+    fun onMainFabLongClick(): Boolean {
+        Log.i("FabTest", "onMainFabLongClick")
         when (viewModel.fabState.value?.peekContent()) {
             IngredientFragFABState.None -> {
-                Log.i("FabTest","None")
+                Log.i("FabTest", "None")
                 val scaleUpAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
                 with(binding.fabAddIngredient) {
                     animate().apply {
@@ -178,7 +196,7 @@ class IngredientsFragment :
             }
 
             IngredientFragFABState.SubMenu -> {
-                Log.i("FabTest","SubMenu")
+                Log.i("FabTest", "SubMenu")
                 onMainFabReClick()
             }
 
@@ -189,7 +207,7 @@ class IngredientsFragment :
     }
 
     private fun onMainFabReClick() {
-        Log.i("FabTest","onMainFabReClick")
+        Log.i("FabTest", "onMainFabReClick")
         val scaleDownAnim =
             AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
         with(binding.fabAddIngredient) {
@@ -209,14 +227,14 @@ class IngredientsFragment :
     }
 
     fun onDeleteFabClick() {
-        Log.i("FabTest","onDeleteFabClick")
+        Log.i("FabTest", "onDeleteFabClick")
         val scaleUpAnim =
             AnimationUtils.loadAnimation(requireContext(), R.anim.scale_up)
         val scaleDownAnim =
             AnimationUtils.loadAnimation(requireContext(), R.anim.scale_down)
         when (viewModel.fabState.value?.peekContent()) {
             IngredientFragFABState.SubMenu -> {
-                Log.i("FabTest","SubMenu")
+                Log.i("FabTest", "SubMenu")
                 binding.fabAddIngredient.rotation = 0f
                 activity?.title = getString(R.string.ingredient_delete_title)
                 viewModel.fabState.value = EventWrapper(IngredientFragFABState.DeleteMenu)
@@ -232,11 +250,11 @@ class IngredientsFragment :
             }
 
             IngredientFragFABState.DeleteMenu -> {
-                Log.i("FabTest","DeleteMenu")
+                Log.i("FabTest", "DeleteMenu")
                 ingredientAdapter?.getSelectedItem()?.let { list ->
                     list.ifEmpty {
                         showToast(getString(R.string.ingredient_delete_empty_toast))
-                       return@let
+                        return@let
                     }
 
                     showLoading()
@@ -260,43 +278,43 @@ class IngredientsFragment :
     }
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
-        val newItemPosition = if ((ingredientAdapter?.getItems()?.lastIndex ?: 0) < items.size) {
-            Log.i(
-                "TransitionTest",
-                "prevItem lastIndex:${ingredientAdapter?.getItems()?.lastIndex}"
-            )
-            Log.i("TransitionTest", "newItem lastIndex:${items.lastIndex}")
+        val updatePosition = if ((ingredientAdapter?.getItems()?.lastIndex ?: 0) < items.size) {
+            Logger.i("newItem")
             items.lastIndex
         } else {
-            null
+            updatedItemId?.let { updateId ->
+                Logger.i("updateItem")
+                val position =
+                    ingredientAdapter?.getItems()?.indexOfFirst { it.id.toInt() == updateId }
+                if (position != null && position < 0) {
+                    null
+                } else {
+                    position
+                }
+            }
         }
 
         ingredientAdapter = IngredientsAdapter(
             items.map { IngredientsSelectableItem(it) }.toMutableList(),
+            updatePosition,
             ::editItem
         ).apply {
             setHasStableIds(true)
         }
 
         binding.rvIngredients.adapter = ingredientAdapter
-
-        newItemPosition?.let {
-            val target = binding.rvIngredients.findViewHolderForAdapterPosition(it)?.itemView?.findViewById<ImageView>(R.id.ivThumbnail)
-            target?.transitionName = "ingredientImage"
-        }
-        startPostponedEnterTransition()
-        Log.i("TransitionTest", "startPostponedEnterTransition")
     }
 
     private fun editItem(item: IngredientEntity, sharedView: View) {
         sharedView.transitionName = "ingredientImage"
-        startActivity(
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            requireActivity(),
+            sharedView,
+            sharedView.transitionName
+        )
+        activityResultLauncher.launch(
             IngredientAddActivity.newIntent(requireContext(), true, item),
-            ActivityOptions.makeSceneTransitionAnimation(
-                requireActivity(),
-                sharedView,
-                sharedView.transitionName
-            ).toBundle()
+            options
         )
     }
 }

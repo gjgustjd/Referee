@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.provider.MediaStore
 import android.transition.Transition
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -28,6 +27,7 @@ import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientExpirationUnit
+import com.example.referee.ingredients.IngredientsFragment
 import com.jakewharton.rxbinding4.view.clicks
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.concurrent.TimeUnit
@@ -306,13 +306,17 @@ class IngredientAddActivity :
 
                 is IngredientAddEvent.UpdateSuccess -> {
                     hideLoading()
-                    finishAfterTransition()
+                    editingIngredient?.id?.toInt()?.let { id ->
+                        setResultItemId(id)
+                    }
+                    supportFinishAfterTransition()
                     showToast(getString(R.string.ingredient_update_succeed_toast))
                 }
 
                 is IngredientAddEvent.UpdateFailed -> {
                     hideLoading()
-                    finishAfterTransition()
+                    setResult(RESULT_CANCELED)
+                    supportFinishAfterTransition()
                     showToast(getString(R.string.ingredient_update_failed_toast))
                 }
 
@@ -325,7 +329,8 @@ class IngredientAddActivity :
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 viewModel.deletePreSavedImage()
-                finishAfterTransition()
+                setResult(RESULT_OK)
+                supportFinishAfterTransition()
             }
         }
         onBackPressedDispatcher.addCallback(callback)
@@ -400,5 +405,15 @@ class IngredientAddActivity :
             adapter = categoriesAdapter
             addItemDecoration(getDecoration(IngredientCategoryType.values().lastIndex))
         }
+    }
+
+    private fun setResultItemId(id: Int) {
+        val data = Intent().apply {
+            putExtra(
+                IngredientsFragment.EXTRA_INGREDIENT_ID,
+                id
+            )
+        }
+        setResult(RESULT_OK, data)
     }
 }

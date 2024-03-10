@@ -1,6 +1,6 @@
 package com.example.referee.ingredients
 
-import android.graphics.Bitmap
+import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +10,14 @@ import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.referee.R
+import com.example.referee.common.Logger
 import com.example.referee.databinding.ItemIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredients.model.IngredientsSelectableItem
 
 class IngredientsAdapter(
     private val items: MutableList<IngredientsSelectableItem>,
+    private var updatedPosition: Int? = null,
     private val editFun: (item: IngredientEntity,sharedView:View) -> Unit,
 ) :
     RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
@@ -86,6 +88,13 @@ class IngredientsAdapter(
                 }
 
                 startAnimation(anim)
+            }
+
+            if(position == updatedPosition) {
+                binding.ivThumbnail.transitionName = "ingredientImage"
+                binding.isResumeTranstion = true
+                updatedPosition = null
+                Logger.i("updatedPosition:$position")
             }
         }
     }
