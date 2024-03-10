@@ -7,11 +7,11 @@ class Logger {
 
     companion object {
         private const val TAG = "RefereeLogger"
-        fun i(message: String, prefix: String? = null) {
+        fun i(message: String? = null, prefix: String? = null) {
             Log.i(TAG, getDecoratedLog(prefix, message))
         }
 
-        private fun getDecoratedLog(prefix: String? = null, message: String):String {
+        private fun getDecoratedLog(prefix: String? = null, message: String?=null):String {
             val level = 5
             val ste: StackTraceElement = Thread.currentThread().stackTrace[level]
             val fileName = ste.fileName.replace(".java", "")
@@ -25,7 +25,10 @@ class Logger {
                 append(fileName)
                 append("::")
                 append(methodName)
-                append("($fileName:$lineNumber) :$message")
+                append("($fileName:$lineNumber)")
+                message?.let {
+                     append(":$message")
+                }
             }
             return sb.toString()
         }
