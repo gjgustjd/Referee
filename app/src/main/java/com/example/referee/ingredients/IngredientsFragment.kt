@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +24,9 @@ import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredients.model.IngredientFragFABState
 import com.example.referee.ingredients.model.IngredientItemTouchHelperCallback
 import com.example.referee.ingredients.model.IngredientsSelectableItem
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class IngredientsFragment :
@@ -54,17 +56,18 @@ class IngredientsFragment :
         resources.getInteger(R.integer.animation_default_duration).toLong()
     }
     private var updatedItemId: Int? = null
-    private val activityResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        }
+    private var observeEventJob:Job? = null
+
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
         super.onActivityReenter(resultCode, data)
+        Logger.i()
         if(resultCode == RESULT_OK) {
             data?.getIntExtra(EXTRA_INGREDIENT_ID,-1)?.let {
                 if (it > 0) {
                     updatedItemId = it
                     activity?.postponeEnterTransition()
+                    assignAndStartObserveJob()
                     Logger.i("updateItemId:$updatedItemId")
                 }
             }
@@ -79,41 +82,7 @@ class IngredientsFragment :
     }
 
     override fun initListeners() {
-        lifecycleScope.launch {
-            Log.i("DeleteTest", "sharedFlow observe")
-            viewModel.sharedFlow.collect {
-                Log.i("DeleteTest", "sharedFlow collect")
-                Logger.i()
-                when (it.getContentIfNotHandled()) {
-                    is IngredientsEvent.GetIngredients.Success -> {
-                        Logger.i("getIngredients")
-                        val event = it.peekContent() as IngredientsEvent.GetIngredients.Success
-                        updateRecyclerView(event.ingredients)
-                        hideLoading()
-                    }
-
-                    is IngredientsEvent.DeleteIngredients.Success -> {
-                        Log.i("DeleteTest", "DeleteSuccess")
-
-                        hideLoading()
-                        showToast(getString(R.string.ingredient_delete_success_toast))
-                        val state = viewModel.fabState.value?.peekContent()
-
-                        if (state == IngredientFragFABState.DeleteMenu) {
-                            onMainFabClick()
-                        }
-                    }
-
-                    is IngredientsEvent.DeleteIngredients.Failed -> {
-                        hideLoading()
-                        showToast(getString(R.string.ingredient_delete_failed_toast))
-                    }
-
-                    else -> Unit
-                }
-            }
-        }
-
+        assignAndStartObserveJob()
         viewModel.fabState.observe(requireActivity()) {
             when (viewModel.fabState.value?.getContentIfNotHandled()) {
                 IngredientFragFABState.None -> {
@@ -278,7 +247,7 @@ class IngredientsFragment :
     }
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
-        val updatePosition = if ((ingredientAdapter?.getItems()?.lastIndex ?: 0) < items.size) {
+        val updatePosition = if ((ingredientAdapter?.getItems()?.size ?: 0) < items.size) {
             Logger.i("newItem")
             items.lastIndex
         } else {
@@ -286,6 +255,7 @@ class IngredientsFragment :
                 Logger.i("updateItem")
                 val position =
                     ingredientAdapter?.getItems()?.indexOfFirst { it.id.toInt() == updateId }
+
                 if (position != null && position < 0) {
                     null
                 } else {
@@ -312,9 +282,49 @@ class IngredientsFragment :
             sharedView,
             sharedView.transitionName
         )
-        activityResultLauncher.launch(
+        startActivity(
             IngredientAddActivity.newIntent(requireContext(), true, item),
-            options
+            options.toBundle()
         )
+        /* 공유 요소 전환 애니메이션 동기화를 위한 구독 일시 중지 */
+        observeEventJob?.cancel()
+    }
+
+    private fun assignAndStartObserveJob() {
+        observeEventJob = null
+        observeEventJob = lifecycleScope.launch(context = Dispatchers.Main + Job(), start = CoroutineStart.LAZY) {
+            Logger.i()
+            viewModel.sharedFlow.collect {
+                Logger.i()
+                when (it.getContentIfNotHandled()) {
+                    is IngredientsEvent.GetIngredients.Success -> {
+                        Logger.i("getIngredients")
+                        val event = it.peekContent() as IngredientsEvent.GetIngredients.Success
+                        updateRecyclerView(event.ingredients)
+                        hideLoading()
+                    }
+
+                    is IngredientsEvent.DeleteIngredients.Success -> {
+                        hideLoading()
+                        showToast(getString(R.string.ingredient_delete_success_toast))
+                        val state = viewModel.fabState.value?.peekContent()
+
+                        if (state == IngredientFragFABState.DeleteMenu) {
+                            onMainFabClick()
+                        }
+                    }
+
+                    is IngredientsEvent.DeleteIngredients.Failed -> {
+                        hideLoading()
+                        showToast(getString(R.string.ingredient_delete_failed_toast))
+                    }
+
+                    else -> Unit
+                }
+            }
+        }.apply {
+            invokeOnCompletion { Logger.i() }
+        }
+        observeEventJob?.start()
     }
 }

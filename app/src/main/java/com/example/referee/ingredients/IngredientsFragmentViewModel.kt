@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.referee.common.EventWrapper
+import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseViewModel
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientRepository
@@ -20,13 +21,11 @@ class IngredientsFragmentViewModel :
     fun getIngredientsList() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.i("DeleteTest", "getIngredientList")
                 IngredientRepository.getIngredientsList().collect { ingredients ->
                     _sharedFlow.emit(EventWrapper(IngredientsEvent.GetIngredients.Success(ingredients)))
-                    Log.i("DeleteTest", "getIngredientList emit")
+                    Logger.i()
                 }
             } catch (e: Exception) {
-                Log.i("DeleteTest", "getIngredientList failed")
                 _sharedFlow.emit(EventWrapper(IngredientsEvent.GetIngredients.Failed))
             }
         }

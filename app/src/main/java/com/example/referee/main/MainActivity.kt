@@ -58,8 +58,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
         super.onActivityReenter(resultCode, data)
+        Logger.i()
         val baseFragment = vpAdapter.getBaseFragment(binding.vpMain.currentItem)
         baseFragment.onActivityReenter(resultCode,data)
-        Logger.i()
     }
 }
