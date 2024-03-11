@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
+import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityAddIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientCategoryType
@@ -89,6 +90,7 @@ class IngredientAddActivity :
                     val inputMethodManager =
                         getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                    Logger.i()
                 }
             }
         }
@@ -200,6 +202,12 @@ class IngredientAddActivity :
                     } else {
                         viewModel.isExistSameNameIngredient(etIngredientName.text.toString())
                     }
+                    window.sharedElementEnterTransition.removeListener(transitionAnimListener)
+                    (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                        .hideSoftInputFromWindow(
+                            currentFocus?.windowToken,
+                            InputMethodManager.HIDE_NOT_ALWAYS
+                        )
                 }.apply {
                     compositeDisposable.add(this)
                 }
