@@ -349,6 +349,10 @@ class IngredientAddActivity :
         isEditing = intent.getBooleanExtra(EXTRA_IS_EDIT_MODE, false)
         editingIngredient =
             intent.getSerializableExtra(EXTRA_INGREDIENT, IngredientEntity::class.java)
+        editingIngredient?.photoName?.let {
+            postponeEnterTransition()
+            Logger.i("postponeEnterTransition")
+        }
     }
 
     private fun initItemInfo() {

@@ -73,7 +73,7 @@
                     app:imageName='@{editingIngredient.photoName}'
                     app:glideBitmap='@{bitmap}'
                     app:ingCategoryType='@{category}'
-                    app:startPostponedTransition='@{false}'
+                    app:startPostponedTransition='@{editingIngredient.photoName != null}'
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvImage" />
