@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
@@ -34,6 +35,7 @@ class IngredientsFragment :
     ItemTouchHelperListener {
     companion object {
         const val EXTRA_INGREDIENT_ID = "EXTRA_INGREDIENT_ID"
+        const val EXTRA_ADDED_ITEM="EXTRA_ADDED_ITEM"
     }
 
     private val viewModel by activityViewModels<IngredientsFragmentViewModel>()
@@ -70,6 +72,12 @@ class IngredientsFragment :
                     assignAndStartObserveJob()
                     Logger.i("updateItemId:$updatedItemId")
                 }
+            } ?: run {
+                if (data?.getBooleanExtra(EXTRA_ADDED_ITEM,false) == true) {
+                    activity?.postponeEnterTransition()
+                }
+
+                assignAndStartObserveJob()
             }
         }
     }
@@ -119,7 +127,10 @@ class IngredientsFragment :
         when (viewModel.fabState.value?.peekContent()) {
             IngredientFragFABState.None -> {
                 Log.i("FabTest", "None")
-                startActivity(Intent(requireActivity(), IngredientAddActivity::class.java))
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity())
+                startActivity(Intent(requireActivity(), IngredientAddActivity::class.java),options.toBundle())
+                /* 공유 요소 전환 애니메이션 동기화를 위한 구독 일시 중지 */
+                observeEventJob?.cancel()
             }
 
             IngredientFragFABState.SubMenu -> {
@@ -249,6 +260,11 @@ class IngredientsFragment :
     private fun updateRecyclerView(items: List<IngredientEntity>) {
         val updatePosition = if ((ingredientAdapter?.getItems()?.size ?: 0) < items.size) {
             Logger.i("newItem")
+            binding.rvIngredients.layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.VERTICAL,
+                false
+            ).apply { stackFromEnd = true }
             items.lastIndex
         } else {
             updatedItemId?.let { updateId ->
@@ -273,6 +289,7 @@ class IngredientsFragment :
         }
 
         binding.rvIngredients.adapter = ingredientAdapter
+//        binding.rvIngredients.scrollToPosition(items.lastIndex)
     }
 
     private fun editItem(item: IngredientEntity, sharedView: View) {

@@ -268,7 +268,8 @@ class IngredientAddActivity :
                         Toast.LENGTH_SHORT
                     ).show()
                     hideLoading()
-                    finishAfterTransition()
+                    setResultAddedItem()
+                    supportFinishAfterTransition()
                 }
 
                 IngredientAddEvent.InsertFailed -> {
@@ -420,6 +421,16 @@ class IngredientAddActivity :
             putExtra(
                 IngredientsFragment.EXTRA_INGREDIENT_ID,
                 id
+            )
+        }
+        setResult(RESULT_OK, data)
+    }
+
+    private fun setResultAddedItem() {
+        val data = Intent().apply {
+            putExtra(
+                IngredientsFragment.EXTRA_ADDED_ITEM,
+                true
             )
         }
         setResult(RESULT_OK, data)
