@@ -90,6 +90,8 @@ object ImageBindingAdapter {
                         }
                     })
                 }.into(view)
+        }?: run {
+            ((view.context) as Activity).startPostponedEnterTransition()
         }
     }
 
