@@ -72,6 +72,7 @@ class IngredientsFragment :
                 } else {
                     if (data.getBooleanExtra(EXTRA_ADDED_ITEM,false)) {
                         Logger.i("added_item")
+                        binding.fabAddIngredient.transitionName = null
                         activity?.postponeEnterTransition()
                     }
                 }
@@ -126,8 +127,16 @@ class IngredientsFragment :
         when (viewModel.fabState.value?.peekContent()) {
             IngredientFragFABState.None -> {
                 Log.i("FabTest", "None")
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity())
-                startActivity(Intent(requireActivity(), IngredientAddActivity::class.java),options.toBundle())
+                binding.fabAddIngredient.transitionName = "ingredientImage"
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    requireActivity(),
+                    binding.fabAddIngredient,
+                    binding.fabAddIngredient.transitionName
+                )
+                startActivity(
+                    Intent(requireActivity(), IngredientAddActivity::class.java),
+                    options.toBundle()
+                )
                 /* 공유 요소 전환 애니메이션 동기화를 위한 구독 일시 중지 */
                 observeEventJob?.cancel()
             }
