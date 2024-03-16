@@ -52,6 +52,14 @@ class IngredientsAdapter(
     inner class IngredientViewHolder(val binding: ItemIngredientBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
+            Logger.i("position:$position")
+            if(position == updatedPosition) {
+                binding.ivThumbnail.transitionName = "ingredientImage"
+                binding.isResumeTranstion = true
+                updatedPosition = null
+                Logger.i("updatedPosition:$position")
+            }
+
             val item = items[position]
             binding.item = item.entity
 
@@ -87,13 +95,6 @@ class IngredientsAdapter(
                 }
 
                 startAnimation(anim)
-            }
-
-            if(position == updatedPosition) {
-                binding.ivThumbnail.transitionName = "ingredientImage"
-                binding.isResumeTranstion = true
-                updatedPosition = null
-                Logger.i("updatedPosition:$position")
             }
         }
     }

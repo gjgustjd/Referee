@@ -11,7 +11,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
@@ -69,17 +68,17 @@ class IngredientsFragment :
                 if (it > 0) {
                     updatedItemId = it
                     activity?.postponeEnterTransition()
-                    assignAndStartObserveJob()
                     Logger.i("updateItemId:$updatedItemId")
+                } else {
+                    if (data.getBooleanExtra(EXTRA_ADDED_ITEM,false)) {
+                        Logger.i("added_item")
+                        activity?.postponeEnterTransition()
+                    }
                 }
-            } ?: run {
-                if (data?.getBooleanExtra(EXTRA_ADDED_ITEM,false) == true) {
-                    activity?.postponeEnterTransition()
-                }
-
-                assignAndStartObserveJob()
             }
         }
+
+        assignAndStartObserveJob()
     }
 
     override fun initViews() {
@@ -258,6 +257,7 @@ class IngredientsFragment :
     }
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
+        Logger.i()
         val updatePosition = if ((ingredientAdapter?.getItems()?.size ?: 0) < items.size) {
             Logger.i("newItem")
             binding.rvIngredients.layoutManager = LinearLayoutManager(
@@ -267,6 +267,11 @@ class IngredientsFragment :
             ).apply { stackFromEnd = true }
             items.lastIndex
         } else {
+            binding.rvIngredients.layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.VERTICAL,
+                false
+            ).apply { stackFromEnd = false }
             updatedItemId?.let { updateId ->
                 Logger.i("updateItem")
                 val position =
@@ -288,8 +293,11 @@ class IngredientsFragment :
             setHasStableIds(true)
         }
 
+        updatePosition?.let {
+            binding.rvIngredients.scrollToPosition(it)
+        }
+
         binding.rvIngredients.adapter = ingredientAdapter
-//        binding.rvIngredients.scrollToPosition(items.lastIndex)
     }
 
     private fun editItem(item: IngredientEntity, sharedView: View) {

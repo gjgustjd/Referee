@@ -61,32 +61,34 @@ object ImageBindingAdapter {
                         placeholder(insetDrawable)
                     }
 
-                    if(startPostponedTransition == true) {
-                        listener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
+                    listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            if (startPostponedTransition == true) {
                                 ((view.context) as Activity).startPostponedEnterTransition()
-                                Logger.i()
-                                return false
                             }
+                            Logger.i()
+                            return false
+                        }
 
-                            override fun onResourceReady(
-                                resource: Drawable?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                dataSource: DataSource?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                ((view.context) as? Activity)?.startPostponedEnterTransition()
-                                Logger.i()
-                                return false
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            if (startPostponedTransition == true) {
+                                ((view.context) as Activity).startPostponedEnterTransition()
                             }
-                        })
-                    }
+//                            Logger.i()
+                            return false
+                        }
+                    })
                 }.into(view)
         }
     }
