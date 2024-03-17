@@ -5,23 +5,27 @@ import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.referee.R
+import com.example.referee.common.base.BaseRecyclerAdapter
 import com.example.referee.databinding.ItemIngredientsUnitBinding
 
 class IngredientUnitAdapter(
     private val recyclerView: RecyclerView,
-    private val items: Array<String>,
-    private var currentSelectedPosition:Int = 0
+    items: Array<String>,
+    private var currentSelectedPosition: Int = 0
 ) :
-    RecyclerView.Adapter<IngredientUnitAdapter.IngredientUnitViewHolder>() {
-
-
+    BaseRecyclerAdapter<String, IngredientUnitAdapter.IngredientUnitViewHolder>(
+        arrayListOf<String>().apply { addAll(items) }
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientUnitViewHolder {
         return IngredientUnitViewHolder(
             ItemIngredientsUnitBinding.inflate(
                 LayoutInflater.from(
                     parent.context
-                ), parent,false )
+                ),
+                parent,
+                false
+            )
         )
     }
 
@@ -31,6 +35,21 @@ class IngredientUnitAdapter(
         holder.bind(position)
     }
 
+    override fun onBindViewHolder(
+        holder: IngredientUnitViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        payloads.onEach {
+            when (it) {
+                PAYLOAD_SELECT_ITEM -> {
+                    holder.setBackground()
+                }
+            }
+        }.ifEmpty {
+            holder.bind(position)
+        }
+    }
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
@@ -51,17 +70,29 @@ class IngredientUnitAdapter(
                 }
 
                 recyclerView.smoothScrollToPosition(toPosition)
+                val prevSelectedPosition = currentSelectedPosition
                 currentSelectedPosition = position
-                notifyDataSetChanged()
+                notifyItemChanged(prevSelectedPosition, PAYLOAD_SELECT_ITEM)
+                notifyItemChanged(position, PAYLOAD_SELECT_ITEM)
             }
-            if(position == currentSelectedPosition) {
-                binding.tvUnit.background =
-                    ResourcesCompat.getDrawable(recyclerView.context.resources,R.drawable.shape_ingredient_unit_background_enabled,null)
 
-            } else {
-                binding.tvUnit.background =
-                    ResourcesCompat.getDrawable(recyclerView.context.resources,R.drawable.shape_ingredient_unit_background,null)
-            }
+            setBackground()
+        }
+
+        fun setBackground() {
+            val resId =
+                if (adapterPosition == currentSelectedPosition) {
+                    R.drawable.shape_ingredient_unit_background_enabled
+
+                } else {
+                    R.drawable.shape_ingredient_unit_background
+                }
+            binding.tvUnit.background =
+                ResourcesCompat.getDrawable(
+                    recyclerView.context.resources,
+                    resId,
+                    null
+                )
         }
     }
 }

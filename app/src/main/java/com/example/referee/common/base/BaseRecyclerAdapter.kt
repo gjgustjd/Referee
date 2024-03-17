@@ -1,12 +1,15 @@
 package com.example.referee.common.base
 
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseRecyclerAdapter<T, VH : RecyclerView.ViewHolder, B : ViewDataBinding>(
-    private val items: ArrayList<T>
+abstract class BaseRecyclerAdapter<T, VH : RecyclerView.ViewHolder>(
+    protected val items: ArrayList<T>
 ) :
     RecyclerView.Adapter<VH>() {
+
+    companion object {
+        const val PAYLOAD_SELECT_ITEM = "PAYLOAD_SELECT_ITEM"
+    }
 
     protected fun getItems(): List<T>{
         return items.toList()
