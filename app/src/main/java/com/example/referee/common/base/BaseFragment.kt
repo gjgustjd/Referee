@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 
-abstract class BaseFragment<T>(protected val layoutResourceId: Int) :
+abstract class BaseFragment<T>(private val layoutResourceId: Int) :
     Fragment() where T : ViewDataBinding {
 
     protected lateinit var binding: T

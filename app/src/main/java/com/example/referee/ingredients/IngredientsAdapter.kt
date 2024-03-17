@@ -1,26 +1,43 @@
 package com.example.referee.ingredients
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.referee.R
 import com.example.referee.common.Logger
+import com.example.referee.common.base.BaseDiffUtilRecyclerAdapter
 import com.example.referee.databinding.ItemIngredientBinding
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredients.model.IngredientsSelectableItem
 
 class IngredientsAdapter(
-    private val items: MutableList<IngredientsSelectableItem>,
-    private var updatedPosition: Int? = null,
-    private val editFun: (item: IngredientEntity,sharedView:View) -> Unit,
-) :
-    RecyclerView.Adapter<IngredientsAdapter.IngredientViewHolder>() {
+    private val context: Context,
+    private val editFun: (item: IngredientEntity, sharedView: View) -> Unit,
+) : BaseDiffUtilRecyclerAdapter<IngredientsSelectableItem, IngredientsAdapter.IngredientViewHolder>(
+     object : DiffUtil.ItemCallback<IngredientsSelectableItem>() {
+        override fun areItemsTheSame(
+            oldItem: IngredientsSelectableItem,
+            newItem: IngredientsSelectableItem
+        ): Boolean {
+            return oldItem.entity.id == newItem.entity.id
+        }
 
+        override fun areContentsTheSame(
+            oldItem: IngredientsSelectableItem,
+            newItem: IngredientsSelectableItem
+        ): Boolean {
+            return oldItem.entity == newItem.entity
+        }
+    }
+) {
+    private var updatedPosition: Int? = null
     var isDeleteMode = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
@@ -33,20 +50,34 @@ class IngredientsAdapter(
         )
     }
 
-    fun getItems() = items.map { it.entity }
-
-    override fun getItemCount() = items.size
+    fun getItems() = currentList.map { it.entity }
 
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         holder.bind(position)
     }
 
     override fun getItemId(position: Int): Long {
-        return items[position].entity.id
+        return getItem(position).entity.id
     }
 
     fun getSelectedItem(): List<IngredientEntity> {
-        return items.filter { it.isSelected }.map { it.entity }
+        return currentList.filter { it.isSelected }.map { it.entity }
+    }
+
+    fun submitList(list: List<IngredientsSelectableItem>, updatedPosition: Int? = null) {
+        this.updatedPosition = updatedPosition
+        super.submitList(list)
+    }
+
+    override fun onCurrentListChanged(
+        previousList: MutableList<IngredientsSelectableItem>,
+        currentList: MutableList<IngredientsSelectableItem>
+    ) {
+        updatedPosition?.let {
+            if (previousList == currentList) {
+                notifyItemChanged(it)
+            }
+        }
     }
 
     inner class IngredientViewHolder(val binding: ItemIngredientBinding) :
@@ -60,7 +91,7 @@ class IngredientsAdapter(
                 Logger.i("updatedPosition:$position")
             }
 
-            val item = items[position]
+            val item = getItem(position)
             binding.item = item.entity
 
             binding.root.setOnLongClickListener {
@@ -80,7 +111,7 @@ class IngredientsAdapter(
 
             with(binding.cbIsDelete) {
                 setOnCheckedChangeListener { _, isChecked ->
-                    items[position].isSelected = isChecked
+                    getItem(position).isSelected = isChecked
                     Log.i("DeleteTest",isChecked.toString())
                 }
 

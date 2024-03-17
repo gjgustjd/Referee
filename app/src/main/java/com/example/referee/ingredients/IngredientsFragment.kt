@@ -153,6 +153,7 @@ class IngredientsFragment :
                 ingredientAdapter?.apply {
                     isDeleteMode = false
                     notifyDataSetChanged()
+                    Logger.i()
                 }
             }
 
@@ -234,6 +235,7 @@ class IngredientsFragment :
                 ingredientAdapter?.apply {
                     isDeleteMode = true
                     notifyDataSetChanged()
+                    Logger.i()
                 }
             }
 
@@ -267,20 +269,10 @@ class IngredientsFragment :
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
         Logger.i()
-        val updatePosition = if ((ingredientAdapter?.getItems()?.size ?: 0) < items.size) {
+        val updatePosition = if ((ingredientAdapter?.itemCount ?: 0) < items.size) {
             Logger.i("newItem")
-            binding.rvIngredients.layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.VERTICAL,
-                false
-            ).apply { stackFromEnd = true }
             items.lastIndex
         } else {
-            binding.rvIngredients.layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.VERTICAL,
-                false
-            ).apply { stackFromEnd = false }
             updatedItemId?.let { updateId ->
                 Logger.i("updateItem")
                 val position =
@@ -294,19 +286,37 @@ class IngredientsFragment :
             }
         }
 
-        ingredientAdapter = IngredientsAdapter(
-            items.map { IngredientsSelectableItem(it) }.toMutableList(),
-            updatePosition,
-            ::editItem
-        ).apply {
-            setHasStableIds(true)
+        ingredientAdapter?.run {
+            submitList(
+                items.map { IngredientsSelectableItem(it) }.toMutableList(),
+                updatePosition
+            )
+            Logger.i("adapter is not null")
+        } ?: run {
+            ingredientAdapter = IngredientsAdapter(
+                requireContext(),
+                ::editItem
+            ).apply {
+                setHasStableIds(true)
+                submitList(
+                    items.map { IngredientsSelectableItem(it) }.toMutableList(),
+                    updatePosition
+                )
+            }
+            with(binding.rvIngredients) {
+                layoutManager = LinearLayoutManager(
+                    context,
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+                adapter = ingredientAdapter
+            }
+            Logger.i("adapter is null")
         }
 
         updatePosition?.let {
             binding.rvIngredients.scrollToPosition(it)
         }
-
-        binding.rvIngredients.adapter = ingredientAdapter
     }
 
     private fun editItem(item: IngredientEntity, sharedView: View) {
