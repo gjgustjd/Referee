@@ -153,6 +153,7 @@ class IngredientsAdapter(
             ingType: IngredientCategoryType,
             restartTransition: Boolean
         ) {
+            Logger.i()
             val storage = RefereeApplication.instance.applicationContext.cacheDir
             val source = imageName?.let {
                 File(storage, imageName)
@@ -182,15 +183,16 @@ class IngredientsAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         if (restartTransition) {
-                            view.post {
-                                ((view.context) as Activity).startPostponedEnterTransition()
-                                view.transitionName = null
-                                updatedPosition = null
+                            if(adapterPosition ==updatedPosition) {
+                                view.post {
+                                    ((view.context) as Activity).startPostponedEnterTransition()
+                                    view.transitionName = null
+                                    updatedPosition = null
+                                }
                             }
                         }
 
-                        Logger.i("$adapterPosition")
-                        return false
+                        return true
                     }
 
                     override fun onResourceReady(
@@ -201,14 +203,14 @@ class IngredientsAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         if (restartTransition) {
-                            view.post {
-                                ((view.context) as Activity).startPostponedEnterTransition()
-                                view.transitionName = null
-                                updatedPosition = null
+                            if(adapterPosition ==updatedPosition) {
+                                view.post {
+                                    ((view.context) as Activity).startPostponedEnterTransition()
+                                    view.transitionName = null
+                                    updatedPosition = null
+                                }
                             }
                         }
-
-                        Logger.i()
                         return false
                     }
                 })
