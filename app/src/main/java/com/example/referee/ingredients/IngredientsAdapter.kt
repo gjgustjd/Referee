@@ -1,6 +1,5 @@
 package com.example.referee.ingredients
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +17,8 @@ import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredients.model.IngredientsSelectableItem
 
 class IngredientsAdapter(
-    private val context: Context,
     private val editFun: (item: IngredientEntity, sharedView: View) -> Unit,
+    private val onItemChangeCompleted: (() -> Unit)? = null
 ) : BaseDiffUtilRecyclerAdapter<IngredientsSelectableItem, IngredientsAdapter.IngredientViewHolder>(
      object : DiffUtil.ItemCallback<IngredientsSelectableItem>() {
         override fun areItemsTheSame(
@@ -73,11 +72,13 @@ class IngredientsAdapter(
         previousList: MutableList<IngredientsSelectableItem>,
         currentList: MutableList<IngredientsSelectableItem>
     ) {
+        Logger.i()
         updatedPosition?.let {
             if (previousList == currentList) {
                 notifyItemChanged(it)
             }
         }
+        onItemChangeCompleted?.invoke()
     }
 
     inner class IngredientViewHolder(val binding: ItemIngredientBinding) :

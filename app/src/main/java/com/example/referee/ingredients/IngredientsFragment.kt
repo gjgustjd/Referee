@@ -294,9 +294,15 @@ class IngredientsFragment :
             Logger.i("adapter is not null")
         } ?: run {
             ingredientAdapter = IngredientsAdapter(
-                requireContext(),
                 ::editItem
-            ).apply {
+            ) {
+                binding.rvIngredients.post {
+                    updatePosition?.let {
+                        binding.rvIngredients.scrollToPosition(it)
+                        Logger.i("scroll to position")
+                    }
+                }
+            }.apply {
                 setHasStableIds(true)
                 submitList(
                     items.map { IngredientsSelectableItem(it) }.toMutableList(),
@@ -312,10 +318,6 @@ class IngredientsFragment :
                 adapter = ingredientAdapter
             }
             Logger.i("adapter is null")
-        }
-
-        updatePosition?.let {
-            binding.rvIngredients.scrollToPosition(it)
         }
     }
 

@@ -85,7 +85,8 @@ object ImageBindingAdapter {
                             if (startPostponedTransition == true) {
                                 ((view.context) as Activity).startPostponedEnterTransition()
                             }
-//                            Logger.i()
+
+                            Logger.i()
                             return false
                         }
                     })
