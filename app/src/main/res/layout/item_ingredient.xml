@@ -7,10 +7,6 @@
         <variable
             name="item"
             type="com.example.referee.ingredientadd.model.IngredientEntity" />
-
-        <variable
-            name="isResumeTranstion"
-            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,10 +24,6 @@
             android:layout_height="80dp"
             android:src="@drawable/ingredient_photo_default_inset"
             android:scaleType="fitCenter"
-            app:imageName='@{item.photoName}'
-            app:glideBitmap="@{null}"
-            app:ingCategoryType='@{item.category}'
-            app:startPostponedTransition='@{isResumeTranstion}'
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

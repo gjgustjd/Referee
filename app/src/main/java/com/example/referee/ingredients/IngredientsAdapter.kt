@@ -1,24 +1,37 @@
 package com.example.referee.ingredients
 
+import android.app.Activity
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.InsetDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.referee.R
+import com.example.referee.common.CommonUtil
 import com.example.referee.common.Logger
+import com.example.referee.common.RefereeApplication
 import com.example.referee.common.base.BaseDiffUtilRecyclerAdapter
 import com.example.referee.databinding.ItemIngredientBinding
+import com.example.referee.ingredientadd.model.IngredientCategoryType
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredients.model.IngredientsSelectableItem
+import java.io.File
 
 class IngredientsAdapter(
     private val editFun: (item: IngredientEntity, sharedView: View) -> Unit,
-    private val onItemChangeCompleted: (() -> Unit)? = null
+    private val onItemChangeCompleted: ((position:Int) -> Unit)? = null
 ) : BaseDiffUtilRecyclerAdapter<IngredientsSelectableItem, IngredientsAdapter.IngredientViewHolder>(
      object : DiffUtil.ItemCallback<IngredientsSelectableItem>() {
         override fun areItemsTheSame(
@@ -66,6 +79,7 @@ class IngredientsAdapter(
     fun submitList(list: List<IngredientsSelectableItem>, updatedPosition: Int? = null) {
         this.updatedPosition = updatedPosition
         super.submitList(list)
+        Logger.i("newUpdatedPosition:$updatedPosition")
     }
 
     override fun onCurrentListChanged(
@@ -77,37 +91,40 @@ class IngredientsAdapter(
             if (previousList == currentList) {
                 notifyItemChanged(it)
             }
+
+            onItemChangeCompleted?.invoke(it)
         }
-        onItemChangeCompleted?.invoke()
     }
 
     inner class IngredientViewHolder(val binding: ItemIngredientBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
+            Logger.i("updatePosition:$updatedPosition")
             Logger.i("position:$position")
+            var restartTransition = false
             if(position == updatedPosition) {
                 binding.ivThumbnail.transitionName = "ingredientImage"
-                binding.isResumeTranstion = true
-                updatedPosition = null
-                Logger.i("updatedPosition:$position")
+                restartTransition = true
+                Logger.i("transitionName updated")
             }
 
             val item = getItem(position)
             binding.item = item.entity
+            item.entity.category?.let { category ->
+                IngredientCategoryType.fromInt(category)?.let {
+                    bindImage(
+                        binding.ivThumbnail,
+                        item.entity.photoName,
+                        it,
+                        restartTransition
+                    )
+                }
+            }
 
             binding.root.setOnLongClickListener {
                 Log.i("EditTest","longClicked")
                 editFun(item.entity,binding.ivThumbnail)
                 true
-            }
-
-            item.entity.imageBitmap ?: run {
-                val thumbnail = binding.ivThumbnail
-                val context = thumbnail.context
-                item.entity.photoName?.let {
-                    Glide.with(context)
-                        .clear(thumbnail)
-                }
             }
 
             with(binding.cbIsDelete) {
@@ -128,6 +145,75 @@ class IngredientsAdapter(
 
                 startAnimation(anim)
             }
+        }
+
+        fun bindImage(
+            view: ImageView,
+            imageName: String? = null,
+            ingType: IngredientCategoryType,
+            restartTransition: Boolean
+        ) {
+            val storage = RefereeApplication.instance.applicationContext.cacheDir
+            val source = imageName?.let {
+                File(storage, imageName)
+            }
+            val padding =
+                view.context.resources.getDimension(R.dimen.ingredient_placeholder_inset)
+                    .toInt()
+            val drawable =
+                ResourcesCompat.getDrawable(
+                    view.context.resources,
+                    ingType.iconResourceId,
+                    null
+                )
+            val insetDrawable =
+                InsetDrawable(drawable, CommonUtil.pxToDp(view.context, padding))
+
+            Glide
+                .with(view.context)
+                .load(source)
+                .thumbnail(0.3f)
+                .skipMemoryCache(true)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        if (restartTransition) {
+                            view.post {
+                                ((view.context) as Activity).startPostponedEnterTransition()
+                                view.transitionName = null
+                                updatedPosition = null
+                            }
+                        }
+
+                        Logger.i("$adapterPosition")
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        if (restartTransition) {
+                            view.post {
+                                ((view.context) as Activity).startPostponedEnterTransition()
+                                view.transitionName = null
+                                updatedPosition = null
+                            }
+                        }
+
+                        Logger.i()
+                        return false
+                    }
+                })
+                .placeholder(insetDrawable)
+                .into(view)
         }
     }
 }

@@ -269,7 +269,7 @@ class IngredientsFragment :
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
         Logger.i()
-        val updatePosition = if ((ingredientAdapter?.itemCount ?: 0) < items.size) {
+        val updatePosition:Int? = if ((ingredientAdapter?.itemCount ?: 0) < items.size) {
             Logger.i("newItem")
             items.lastIndex
         } else {
@@ -295,12 +295,9 @@ class IngredientsFragment :
         } ?: run {
             ingredientAdapter = IngredientsAdapter(
                 ::editItem
-            ) {
+            ) { position ->
                 binding.rvIngredients.post {
-                    updatePosition?.let {
-                        binding.rvIngredients.scrollToPosition(it)
-                        Logger.i("scroll to position")
-                    }
+                    binding.rvIngredients.scrollToPosition(position)
                 }
             }.apply {
                 setHasStableIds(true)
