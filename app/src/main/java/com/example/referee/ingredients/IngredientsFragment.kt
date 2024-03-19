@@ -2,6 +2,7 @@ package com.example.referee.ingredients
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.transition.Transition
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -52,7 +53,7 @@ class IngredientsFragment :
             bottomMargin = margin
         )
     }
-    lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var itemTouchHelper: ItemTouchHelper
     private val subFabArray by lazy { arrayOf(binding.fabDelete, binding.fabSearch) }
     private val animDuration by lazy {
         resources.getInteger(R.integer.animation_default_duration).toLong()
@@ -60,10 +61,38 @@ class IngredientsFragment :
     private var updatedItemId: Int? = null
     private var observeEventJob:Job? = null
 
+    private val reenterTransitionListener by lazy {
+        object : Transition.TransitionListener {
+            override fun onTransitionStart(transition: Transition?) = Unit
+            override fun onTransitionCancel(transition: Transition?) = Unit
+            override fun onTransitionPause(transition: Transition?) = Unit
+            override fun onTransitionResume(transition: Transition?) = Unit
+            override fun onTransitionEnd(transition: Transition?) {
+                binding.fabAddIngredient.transitionName = null
+                ingredientAdapter?.updatedPosition?.let { position ->
+                    val viewHolder =
+                        (binding.rvIngredients.findViewHolderForAdapterPosition(position) as? IngredientsAdapter.IngredientViewHolder)
+                    viewHolder?.run {
+                        binding.ivThumbnail.transitionName = null
+                        Logger.i(binding.tvName.text.toString())
+                        Logger.i()
+                    }
+
+                    ingredientAdapter?.resetUpdatePosition()
+                }
+                Logger.i()
+
+                transition?.removeListener(this)
+            }
+        }
+    }
 
     override fun onActivityReenter(resultCode: Int, data: Intent?) {
         super.onActivityReenter(resultCode, data)
         Logger.i()
+
+        activity?.window?.sharedElementReenterTransition?.addListener(reenterTransitionListener)
+
         if(resultCode == RESULT_OK) {
             data?.getIntExtra(EXTRA_INGREDIENT_ID,-1)?.let {
                 if (it > 0) {
@@ -270,7 +299,7 @@ class IngredientsFragment :
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {
         Logger.i()
-        val updatePosition:Int? = if ((ingredientAdapter?.itemCount ?: 0) < items.size) {
+        val updatePosition = if ((ingredientAdapter?.itemCount ?: 0) < items.size) {
             Logger.i("newItem")
             items.lastIndex
         } else {

@@ -50,7 +50,8 @@ class IngredientsAdapter(
         }
     }
 ) {
-    private var updatedPosition: Int? = null
+    var updatedPosition: Int? = null
+        private set
     var isDeleteMode = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientViewHolder {
@@ -73,16 +74,6 @@ class IngredientsAdapter(
         return getItem(position).entity.id
     }
 
-    fun getSelectedItem(): List<IngredientEntity> {
-        return currentList.filter { it.isSelected }.map { it.entity }
-    }
-
-    fun submitList(list: List<IngredientsSelectableItem>, updatedPosition: Int? = null) {
-        this.updatedPosition = updatedPosition
-        super.submitList(list)
-        Logger.i("newUpdatedPosition:$updatedPosition")
-    }
-
     override fun onCurrentListChanged(
         previousList: MutableList<IngredientsSelectableItem>,
         currentList: MutableList<IngredientsSelectableItem>
@@ -95,6 +86,20 @@ class IngredientsAdapter(
 
             onItemChangeCompleted?.invoke(it)
         }
+    }
+
+    fun getSelectedItem(): List<IngredientEntity> {
+        return currentList.filter { it.isSelected }.map { it.entity }
+    }
+
+    fun submitList(list: List<IngredientsSelectableItem>, updatedPosition: Int? = null) {
+        this.updatedPosition = updatedPosition
+        super.submitList(list)
+        Logger.i("newUpdatedPosition:$updatedPosition")
+    }
+
+    fun resetUpdatePosition() {
+        updatedPosition = null
     }
 
     inner class IngredientViewHolder(val binding: ItemIngredientBinding) :
@@ -148,7 +153,7 @@ class IngredientsAdapter(
             }
         }
 
-        fun bindImage(
+        private fun bindImage(
             view: ImageView,
             imageName: String? = null,
             ingType: IngredientCategoryType,
@@ -184,11 +189,9 @@ class IngredientsAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         if (restartTransition) {
-                            if(adapterPosition ==updatedPosition) {
+                            if (adapterPosition == updatedPosition) {
                                 view.post {
                                     ((view.context) as Activity).startPostponedEnterTransition()
-                                    view.transitionName = null
-                                    updatedPosition = null
                                 }
                             }
                         }
@@ -204,11 +207,9 @@ class IngredientsAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         if (restartTransition) {
-                            if(adapterPosition ==updatedPosition) {
+                            if (adapterPosition == updatedPosition) {
                                 view.post {
                                     ((view.context) as Activity).startPostponedEnterTransition()
-                                    view.transitionName = null
-                                    updatedPosition = null
                                 }
                             }
                         }
