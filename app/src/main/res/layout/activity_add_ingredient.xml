@@ -69,7 +69,6 @@
                     android:background="@color/white"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ingredient_photo_default_inset"
-                    android:transitionName="ingredientImage"
                     app:imageName='@{editingIngredient.photoName}'
                     app:glideBitmap='@{bitmap}'
                     app:ingCategoryType='@{category}'

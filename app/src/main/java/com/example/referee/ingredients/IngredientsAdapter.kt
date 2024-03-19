@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.referee.R
 import com.example.referee.common.CommonUtil
+import com.example.referee.common.Const
 import com.example.referee.common.Logger
 import com.example.referee.common.RefereeApplication
 import com.example.referee.common.base.BaseDiffUtilRecyclerAdapter
@@ -103,7 +104,7 @@ class IngredientsAdapter(
             Logger.i("position:$position")
             var restartTransition = false
             if(position == updatedPosition) {
-                binding.ivThumbnail.transitionName = "ingredientImage"
+                binding.ivThumbnail.transitionName = Const.TRANSITION_NAME_INGREDIENT_IMAGE
                 restartTransition = true
                 Logger.i("transitionName updated")
             }

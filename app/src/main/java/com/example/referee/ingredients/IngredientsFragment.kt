@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
+import com.example.referee.common.Const
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.ItemTouchHelperListener
 import com.example.referee.common.Logger
@@ -127,7 +128,7 @@ class IngredientsFragment :
         when (viewModel.fabState.value?.peekContent()) {
             IngredientFragFABState.None -> {
                 Log.i("FabTest", "None")
-                binding.fabAddIngredient.transitionName = "ingredientImage"
+                binding.fabAddIngredient.transitionName = Const.TRANSITION_NAME_INGREDIENT_IMAGE
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     requireActivity(),
                     binding.fabAddIngredient,
@@ -319,7 +320,7 @@ class IngredientsFragment :
     }
 
     private fun editItem(item: IngredientEntity, sharedView: View) {
-        sharedView.transitionName = "ingredientImage"
+        sharedView.transitionName = Const.TRANSITION_NAME_INGREDIENT_IMAGE
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
             requireActivity(),
             sharedView,

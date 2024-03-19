@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
+import com.example.referee.common.Const
 import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityAddIngredientBinding
@@ -161,6 +162,7 @@ class IngredientAddActivity :
         }
 
     override fun initViews() {
+        initImage()
         initExtra()
         initUnitRecyclerView()
         initExpirationSpinner()
@@ -343,6 +345,10 @@ class IngredientAddActivity :
             }
         }
         onBackPressedDispatcher.addCallback(callback)
+    }
+
+    private fun initImage() {
+        binding.ivPhoto.transitionName = Const.TRANSITION_NAME_INGREDIENT_IMAGE
     }
 
     private fun initExtra() {
