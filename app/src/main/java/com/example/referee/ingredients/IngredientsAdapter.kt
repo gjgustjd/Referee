@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
@@ -159,7 +160,8 @@ class IngredientsAdapter(
             ingType: IngredientCategoryType,
             restartTransition: Boolean
         ) {
-            Logger.i()
+            Logger.i("position:$adapterPosition")
+            Logger.i("category:$ingType")
             val storage = RefereeApplication.instance.applicationContext.cacheDir
             val source = imageName?.let {
                 File(storage, imageName)
@@ -175,49 +177,55 @@ class IngredientsAdapter(
                 )
             val insetDrawable =
                 InsetDrawable(drawable, CommonUtil.pxToDp(view.context, padding))
-
-            Glide
-                .with(view.context)
-                .load(source)
-                .thumbnail(0.3f)
-                .skipMemoryCache(true)
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        if (restartTransition) {
-                            if (adapterPosition == updatedPosition) {
-                                view.post {
-                                    ((view.context) as Activity).startPostponedEnterTransition()
+            source?.let {
+                Glide
+                    .with(view.context)
+                    .load(source)
+                    .thumbnail(0.3f)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            if (restartTransition) {
+                                if (adapterPosition == updatedPosition) {
+                                    view.post {
+                                        ((view.context) as Activity).startPostponedEnterTransition()
+                                    }
                                 }
                             }
+
+                            return true
                         }
 
-                        return true
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        if (restartTransition) {
-                            if (adapterPosition == updatedPosition) {
-                                view.post {
-                                    ((view.context) as Activity).startPostponedEnterTransition()
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            if (restartTransition) {
+                                if (adapterPosition == updatedPosition) {
+                                    view.post {
+                                        ((view.context) as Activity).startPostponedEnterTransition()
+                                    }
                                 }
                             }
+
+                            return false
                         }
-                        return false
-                    }
-                })
-                .placeholder(insetDrawable)
-                .into(view)
+                    })
+                    .into(view)
+            }?:run {
+                view.post {
+                    binding.ivThumbnail.setImageDrawable(insetDrawable)
+                    ((view.context) as Activity).startPostponedEnterTransition()
+                }
+            }
         }
     }
 }
