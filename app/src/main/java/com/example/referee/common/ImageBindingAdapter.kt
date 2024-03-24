@@ -39,61 +39,57 @@ object ImageBindingAdapter {
             val storage = RefereeApplication.instance.applicationContext.cacheDir
             File(storage, it)
         } ?: bitmap
-        source?.let {
-            Glide
-                .with(view.context)
-                .load(source)
-                .thumbnail(0.3f)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .apply {
-                    categoryType?.let {
-                        val padding =
-                            view.context.resources.getDimension(R.dimen.ingredient_placeholder_inset)
-                                .toInt()
-                        val drawable =
-                            ResourcesCompat.getDrawable(
-                                view.context.resources,
-                                it.iconResourceId,
-                                null
-                            )
-                        val insetDrawable =
-                            InsetDrawable(drawable, CommonUtil.pxToDp(view.context, padding))
-                        placeholder(insetDrawable)
+        Glide
+            .with(view.context)
+            .load(source)
+            .thumbnail(0.3f)
+            .skipMemoryCache(true)
+            .apply {
+                categoryType?.let {
+                    val padding =
+                        view.context.resources.getDimension(R.dimen.ingredient_placeholder_inset)
+                            .toInt()
+                    val drawable =
+                        ResourcesCompat.getDrawable(
+                            view.context.resources,
+                            it.iconResourceId,
+                            null
+                        )
+                    val insetDrawable =
+                        InsetDrawable(drawable, CommonUtil.pxToDp(view.context, padding))
+                    placeholder(insetDrawable)
+                }
+
+                listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        if (startPostponedTransition == true) {
+                            ((view.context) as Activity).startPostponedEnterTransition()
+                        }
+                        Logger.i()
+                        return false
                     }
 
-                    listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            if (startPostponedTransition == true) {
-                                ((view.context) as Activity).startPostponedEnterTransition()
-                            }
-                            Logger.i()
-                            return false
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        if (startPostponedTransition == true) {
+                            ((view.context) as Activity).startPostponedEnterTransition()
                         }
 
-                        override fun onResourceReady(
-                            resource: Drawable?,
-                            model: Any?,
-                            target: Target<Drawable>?,
-                            dataSource: DataSource?,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            if (startPostponedTransition == true) {
-                                ((view.context) as Activity).startPostponedEnterTransition()
-                            }
-
-                            Logger.i()
-                            return false
-                        }
-                    })
-                }.into(view)
-        }?: run {
-            ((view.context) as Activity).startPostponedEnterTransition()
-        }
+                        Logger.i()
+                        return false
+                    }
+                })
+            }.into(view)
     }
 
     @JvmStatic

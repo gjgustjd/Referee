@@ -63,7 +63,10 @@ class IngredientAddActivity :
         }
     }
     private val categoriesAdapter by lazy {
-        binding.category = IngredientCategoryType.MEAT
+        val editingCategory = editingIngredient?.category?.let {
+            IngredientCategoryType.fromInt(it)
+        }
+        binding.category = editingCategory ?:IngredientCategoryType.MEAT
         IngredientCategoryAdapter(
             binding.rvCategories,
             IngredientCategoryType.values(),
