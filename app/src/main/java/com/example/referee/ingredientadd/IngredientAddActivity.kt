@@ -80,6 +80,14 @@ class IngredientAddActivity :
         }
     }
 
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            viewModel.deletePreSavedImage()
+            setResult(RESULT_OK)
+            supportFinishAfterTransition()
+        }
+    }
+
     private val transitionAnimListener by lazy {
         object : Transition.TransitionListener {
             override fun onTransitionStart(transition: Transition?) = Unit
@@ -94,6 +102,7 @@ class IngredientAddActivity :
                     val inputMethodManager =
                         getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+                    onBackPressedDispatcher.addCallback(onBackPressedCallback)
                     Logger.i()
                 }
             }
@@ -341,12 +350,9 @@ class IngredientAddActivity :
 
     override fun initOnBackPressedDispatcher() {
         val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                viewModel.deletePreSavedImage()
-                setResult(RESULT_OK)
-                supportFinishAfterTransition()
-            }
+            override fun handleOnBackPressed() = Unit
         }
+
         onBackPressedDispatcher.addCallback(callback)
     }
 
