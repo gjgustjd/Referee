@@ -7,15 +7,16 @@ import com.example.referee.databinding.FragmentFridgeBinding
 
 class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fridge) {
 
-    override fun initViews() = Unit
-    override fun initListeners() = Unit
-
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance() =
             FridgeFragment().apply {
                 arguments = Bundle().apply {
                 }
             }
     }
+
+    override fun initViews() {
+    }
+    override fun initListeners() = Unit
 }

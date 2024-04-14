@@ -52,4 +52,7 @@
         <item>ml</item>
         <item>l</item>
     </string-array>
+
+<!-- 냉장고 화면   -->
+    <string name="fridge_empty_list">냉장고가 비었습니다.</string>
 </resources>
