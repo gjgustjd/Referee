@@ -9,13 +9,13 @@ object IngredientRepository {
         RefereeDataBase.getInstance(application)
     }
 
-    fun insertIngredient(item: IngredientEntity) = db.ingredientsDAO().insertIngredient(item)
+    fun insertIngredient(item: IngredientEntity) = db.ingredientsDAO().insert(item)
 
     fun getIngredientsList() = db.ingredientsDAO().getIngredientList()
     fun getIngredientsByName(name:String) = db.ingredientsDAO().getIngredientByName(name)
 
-    fun removeIngredient(item: IngredientEntity) = db.ingredientsDAO().deleteIngredient(item)
-    fun removeIngredients(items: List<IngredientEntity>) = db.ingredientsDAO().deleteIngredients(items)
+    fun removeIngredient(item: IngredientEntity) = db.ingredientsDAO().delete(item)
+    fun removeIngredients(items: List<IngredientEntity>) = db.ingredientsDAO().deleteList(items)
 
-    fun updateIngredient(item: IngredientEntity) = db.ingredientsDAO().updateIngredient(item)
+    fun updateIngredient(item: IngredientEntity) = db.ingredientsDAO().update(item)
 }

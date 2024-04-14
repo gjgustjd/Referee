@@ -4,10 +4,12 @@ import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.referee.fridge.model.FridgeIngredientEntity
+import com.example.referee.fridge.model.FridgeDAO
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientsDAO
 
-@Database(entities = [IngredientEntity::class], version = 5)
+@Database(entities = [IngredientEntity::class, FridgeIngredientEntity::class], version = 6)
 abstract class RefereeDataBase : RoomDatabase() {
     companion object {
         private var instance: RefereeDataBase? = null
@@ -26,5 +28,5 @@ abstract class RefereeDataBase : RoomDatabase() {
     }
 
     abstract fun ingredientsDAO():IngredientsDAO
-
+    abstract fun fridgeDAO():FridgeDAO
 }
