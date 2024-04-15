@@ -1,7 +1,9 @@
-package com.example.referee.network
+package com.example.referee.network.model.mediawiki
 
+import com.example.referee.network.LinkUtils
 import com.example.referee.network.model.mediawiki.List.MediaWikiSearchListVO
 import com.example.referee.network.model.mediawiki.SIngle.MediaWikiPageVO
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -15,8 +17,8 @@ interface MediaWikiApi {
     }
 
     @GET("$PATH&$FORMAT_JSON&$PROP&$REDIRECTS")
-    fun searchAndGetIngredientPage(@Query("titles") title: String): MediaWikiPageVO
+    fun searchAndGetIngredientPage(@Query("titles") title: String): Single<MediaWikiPageVO>
 
     @GET("$PATH&$LIST_SEARCH")
-    fun searchIngredientResults(@Query("srsearch") keyword: String): MediaWikiSearchListVO
+    fun searchIngredientResults(@Query("srsearch") keyword: String): Single<MediaWikiSearchListVO>
 }
