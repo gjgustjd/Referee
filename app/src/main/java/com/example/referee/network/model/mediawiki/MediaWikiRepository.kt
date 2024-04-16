@@ -7,9 +7,15 @@ import io.reactivex.schedulers.Schedulers
 
 object MediaWikiRepository {
 
-    fun getSinglePage(title:String) =
+    fun getSinglePageByTitle(title:String) =
         MediaWikiApiUtil.getMediaWikiAPI()
-            .searchAndGetIngredientPage(title)
+            .searchAndGetIngredientPageByTitle(title)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+
+    fun getSinglePageById(pageId:String) =
+        MediaWikiApiUtil.getMediaWikiAPI()
+            .searchPageByPageId(pageId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 

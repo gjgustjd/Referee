@@ -17,7 +17,10 @@ interface MediaWikiApi {
     }
 
     @GET("$PATH&$FORMAT_JSON&$PROP&$REDIRECTS")
-    fun searchAndGetIngredientPage(@Query("titles") title: String): Single<MediaWikiPageVO>
+    fun searchAndGetIngredientPageByTitle(@Query("titles") title: String): Single<MediaWikiPageVO>
+
+    @GET("$PATH&$FORMAT_JSON&$PROP")
+    fun searchPageByPageId(@Query("pageIds") pageId: String): Single<MediaWikiPageVO>
 
     @GET("$PATH&$LIST_SEARCH")
     fun searchIngredientResults(@Query("srsearch") keyword: String): Single<MediaWikiSearchListVO>

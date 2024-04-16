@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.referee.common.EventWrapper
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -14,4 +16,15 @@ open class BaseViewModel<T> : ViewModel() {
 
     protected var _sharedFlow = MutableSharedFlow<EventWrapper<T>>(SHARED_FLOW_REPLAY_COUNT)
     val sharedFlow: SharedFlow<EventWrapper<T>> = _sharedFlow
+
+    private val compositeDisposable = CompositeDisposable()
+
+    fun Disposable.addDisposable() {
+        compositeDisposable.add(this)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
+    }
 }

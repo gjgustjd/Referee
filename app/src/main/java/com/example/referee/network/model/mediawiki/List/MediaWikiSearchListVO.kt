@@ -6,6 +6,6 @@ import com.google.gson.annotations.SerializedName
 data class MediaWikiSearchListVO(
     @SerializedName("batchcomplete") val batchcomplete: String,
     @SerializedName("continue") val continueInfo:ContinueInfo,
-    @SerializedName("query") val query: MediaWIkiListQuery,
+    @SerializedName("query") val query: MediaWikiListQuery,
     @SerializedName("warnings") val warnings: MediaWikiWarnings? = null
 )
