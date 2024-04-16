@@ -1,12 +1,65 @@
 package com.example.referee.fridge
 
+import androidx.activity.viewModels
+import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivitySearchIngredientsBinding
+import com.example.referee.fridge.model.SearchIngredientsEvent
 
 class SearchIngredientsActivity :
     BaseActivity<ActivitySearchIngredientsBinding>(R.layout.activity_search_ingredients) {
 
+    private val viewModel:SearchIngredientsViewModel by viewModels()
+    private val searchAdapter by lazy {
+        SearchIngredientsAdapter()
+    }
+
     override fun initViews() {
+        initRecyclerView()
+    }
+
+    override fun initListeners() {
+        super.initListeners()
+        binding.etKeyword.addTextChangedListener { }
+        binding.btnConfirm.setOnClickListener {
+            viewModel.searchIngredients(binding.etKeyword.text.toString())
+        }
+        viewModel.event.observe(this) {
+            if(!it.hasBeenHandled) {
+                when(it.peekContent()) {
+                    is SearchIngredientsEvent.SearchSuccess -> {
+                        val result =
+                            (it.peekContent() as SearchIngredientsEvent.SearchSuccess).result
+                        searchAdapter.submitList(result)
+                    }
+
+                    is SearchIngredientsEvent.SearchFailed -> {
+
+                    }
+
+                    is SearchIngredientsEvent.PageSuccess -> {
+
+                    }
+
+                    is SearchIngredientsEvent.PageFailed -> {
+
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initRecyclerView() {
+        binding.rvSearchResults.apply {
+            adapter = searchAdapter
+            layoutManager =
+                LinearLayoutManager(
+                    this@SearchIngredientsActivity,
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+        }
     }
 }
