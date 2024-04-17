@@ -15,7 +15,9 @@ class SearchIngredientsActivity :
 
     private val viewModel:SearchIngredientsViewModel by viewModels()
     private val searchAdapter by lazy {
-        SearchIngredientsAdapter()
+        SearchIngredientsAdapter { _, title ->
+            startActivity(IngredientPageActivity.newIntent(this@SearchIngredientsActivity, title))
+        }
     }
     private val decoration by lazy {
         val margin = CommonUtil.pxToDp(

@@ -15,7 +15,7 @@
         <include
             android:id="@+id/viewTopBar"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             layout="@layout/view_common_top_bar"
             app:title='@{title}'
             app:layout_constraintStart_toStartOf="parent"

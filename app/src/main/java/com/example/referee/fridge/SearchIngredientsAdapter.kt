@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.referee.common.base.BaseDiffUtilRecyclerAdapter
 import com.example.referee.databinding.ItemSearchIngredientBinding
 import com.example.referee.network.model.mediawiki.List.Search
 
-class SearchIngredientsAdapter :
+class SearchIngredientsAdapter(private val onItemClick: ((position: Int, title: String) -> Unit)? = null) :
     BaseDiffUtilRecyclerAdapter<Search, SearchIngredientsAdapter.SearchIngredientViewHolder>(
         object : DiffUtil.ItemCallback<Search>() {
             override fun areItemsTheSame(
@@ -42,6 +41,9 @@ class SearchIngredientsAdapter :
                 val item = getItem(position)
                 binding.tvName.text = item.title
                 binding.tvDesc.text = item.snippet
+                binding.root.setOnClickListener {
+                    onItemClick?.invoke(adapterPosition, item.title)
+                }
             }
     }
 }
