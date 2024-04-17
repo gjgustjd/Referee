@@ -36,6 +36,7 @@ class SearchIngredientsActivity :
         super.initListeners()
         binding.etKeyword.addTextChangedListener { }
         binding.btnConfirm.setOnClickListener {
+            showLoading()
             viewModel.searchIngredients(binding.etKeyword.text.toString())
         }
         viewModel.event.observe(this) {
@@ -45,18 +46,19 @@ class SearchIngredientsActivity :
                         val result =
                             (it.peekContent() as SearchIngredientsEvent.SearchSuccess).result
                         searchAdapter.submitList(result)
+                        hideLoading()
                     }
 
                     is SearchIngredientsEvent.SearchFailed -> {
-
+                        hideLoading()
                     }
 
                     is SearchIngredientsEvent.PageSuccess -> {
-
+                        hideLoading()
                     }
 
                     is SearchIngredientsEvent.PageFailed -> {
-
+                        hideLoading()
                     }
                 }
             }
