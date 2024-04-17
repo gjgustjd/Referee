@@ -9,7 +9,7 @@ import retrofit2.http.Query
 
 interface MediaWikiApi {
     companion object {
-        const val PATH = "${LinkUtils.MEDIAWIKI_URL}api.php?action=query"
+        const val PATH = "${LinkUtils.MEDIAWIKI_API_REQUEST_HOST}api.php?action=query"
         const val PROP = "prop=pageimages|extracts"
         const val REDIRECTS = "redirects"
         const val FORMAT_JSON = "format=json"

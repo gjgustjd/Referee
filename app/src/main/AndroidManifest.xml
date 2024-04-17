@@ -36,6 +36,10 @@
         <activity android:name=".fridge.SearchIngredientsActivity"
             android:label="@string/fridge_ingredient_search_title"
             android:theme="@style/Theme.Referee"/>
+        <activity
+            android:name=".fridge.IngredientPageActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Referee.NoActionBar" />
     </application>
 
 </manifest>

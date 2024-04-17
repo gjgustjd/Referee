@@ -24,7 +24,7 @@ object MediaWikiApiUtil {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl(LinkUtils.MEDIAWIKI_URL)
+            .baseUrl(LinkUtils.MEDIAWIKI_API_REQUEST_HOST)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

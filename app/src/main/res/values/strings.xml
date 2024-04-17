@@ -57,4 +57,6 @@
     <string name="fridge_empty_list">냉장고가 비었습니다.</string>
     <string name="fridge_ingredient_search_title">식재료 검색</string>
     <string name="fridge_ingredient_search_hint">식재료 이름을 입력하세요.</string>
+    <string name="fridge_add_ingredient_to_fridge">냉장고에 추가하기</string>
+
 </resources>
