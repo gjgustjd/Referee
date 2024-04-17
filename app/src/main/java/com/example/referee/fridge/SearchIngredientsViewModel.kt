@@ -1,8 +1,10 @@
 package com.example.referee.fridge
 
+import com.example.referee.common.CommonUtil
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.base.BaseViewModel
 import com.example.referee.fridge.model.SearchIngredientsEvent
+import com.example.referee.network.model.mediawiki.List.Search
 import com.example.referee.network.model.mediawiki.MediaWikiRepository
 
 class SearchIngredientsViewModel : BaseViewModel<SearchIngredientsEvent>() {
@@ -10,8 +12,9 @@ class SearchIngredientsViewModel : BaseViewModel<SearchIngredientsEvent>() {
     fun searchIngredients(keyword: String) {
         MediaWikiRepository.searchAndGetResults(keyword)
             .subscribe({
+                val rawStringResult = it.query.searchResults.removeHtmlTags()
                 _event.value =
-                    EventWrapper(SearchIngredientsEvent.SearchSuccess(it.query.searchResults))
+                    EventWrapper(SearchIngredientsEvent.SearchSuccess(rawStringResult))
             }, {
                 _event.value = EventWrapper(SearchIngredientsEvent.SearchFailed)
             }).addDisposable()
@@ -26,5 +29,11 @@ class SearchIngredientsViewModel : BaseViewModel<SearchIngredientsEvent>() {
             }, {
                 _event.value = EventWrapper(SearchIngredientsEvent.PageFailed)
             }).addDisposable()
+    }
+
+    private fun List<Search>.removeHtmlTags(): List<Search> {
+        return this.onEach {
+            it.snippet = CommonUtil.decodeHtmlEntities(it.snippet.replace(Regex("<[^>]*>"), ""))
+        }
     }
 }

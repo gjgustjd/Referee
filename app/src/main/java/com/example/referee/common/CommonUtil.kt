@@ -16,4 +16,14 @@ object CommonUtil {
         val dp = (px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT)).roundToInt();
         return dp
     }
+
+    fun decodeHtmlEntities(html: String): String {
+        return html
+            .replace("&lt;", "<")
+            .replace("&gt;", ">")
+            .replace("&amp;", "&")
+            .replace("&quot;", "\"")
+            .replace("&apos;", "'")
+        // 추가적인 엔티티가 필요하다면 여기에 더 매핑을 추가하세요.
+    }
 }

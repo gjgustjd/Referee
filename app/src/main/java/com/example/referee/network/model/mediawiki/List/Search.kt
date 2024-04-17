@@ -8,6 +8,6 @@ data class Search(
     @SerializedName("pageid") val pageid: Int,
     @SerializedName("size") val size: Int,
     @SerializedName("wordcount") val wordcount: Int,
-    @SerializedName("snippet") val snippet: String,
+    @SerializedName("snippet") var snippet: String,
     @SerializedName("timestamp") val timestamp: String,
 )
