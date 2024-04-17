@@ -4,6 +4,8 @@ import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
+import com.example.referee.common.CommonRecyclerViewDecoration
+import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivitySearchIngredientsBinding
 import com.example.referee.fridge.model.SearchIngredientsEvent
@@ -14,6 +16,16 @@ class SearchIngredientsActivity :
     private val viewModel:SearchIngredientsViewModel by viewModels()
     private val searchAdapter by lazy {
         SearchIngredientsAdapter()
+    }
+    private val decoration by lazy {
+        val margin = CommonUtil.pxToDp(
+            this,
+            resources.getDimension(R.dimen.decorator_default_margin).toInt()
+        )
+
+        CommonRecyclerViewDecoration(
+            bottomMargin = margin
+        )
     }
 
     override fun initViews() {
@@ -60,6 +72,7 @@ class SearchIngredientsActivity :
                     LinearLayoutManager.VERTICAL,
                     false
                 )
+            addItemDecoration(decoration)
         }
     }
 }

@@ -10,13 +10,12 @@
         android:clickable="true"
         android:elevation="4dp"
         android:foreground="?attr/selectableItemBackground"
-        android:padding="10dp">
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:drawablePadding="@dimen/drawable_icon_padding"
             android:textSize="16dp"
             android:textStyle="bold"
@@ -29,6 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintVertical_bias="0"
