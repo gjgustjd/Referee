@@ -212,10 +212,35 @@ object ImageBindingAdapter {
     @BindingAdapter("imageUrl")
     fun loadImageUrl(
         view:ImageView,
-        url:String
+        url: String? = null
     ) {
-        Glide.with(view.context)
-            .load(url)
-            .into(view)
+        url?.let {
+            Glide.with(view.context)
+                .load(it)
+                .addListener(object :RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Logger.i(e.toString())
+                        Logger.i(url)
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Logger.i()
+                        return false
+                    }
+                })
+                .into(view)
+        }
     }
 }

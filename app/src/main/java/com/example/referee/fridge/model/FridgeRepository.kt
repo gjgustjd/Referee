@@ -6,4 +6,6 @@ object FridgeRepository: BaseLocalRepository() {
 
     fun insertIngredientToFridge(entity: FridgeIngredientEntity) =
         db.fridgeDAO().insert(entity)
+
+    fun getFridgeItems() = db.fridgeDAO().getFridgeIngredients()
 }

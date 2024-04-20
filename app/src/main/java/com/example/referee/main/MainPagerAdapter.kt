@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.referee.common.ContainerFragment
 import com.example.referee.common.base.BaseFragment
+import com.example.referee.fridge.FridgeFragment
 import com.example.referee.ingredients.IngredientsFragment
 
 class MainPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
