@@ -67,12 +67,11 @@ class IngredientPageActivity :
             val dataIntent = Intent()
             val name = binding.title
             val snippet = intent.extras?.getString(EXTRA_INGREDIENT_SNIPPET)
-            val thumbnailUrl = "${LinkUtils.MEDIAWIKI_PAGE_URL}${name}#/media/파일:${pageimage}"
             name?.let {
                 val entity = FridgeIngredientEntity(
                     name = it,
                     description = snippet,
-                    thumbnailUrl = thumbnailUrl
+                    thumbnailUrl = pageimage
                 )
                 dataIntent.putExtra(EXTRA_RESULT_INGREDIENT_DATA, entity)
             }
@@ -94,7 +93,7 @@ class IngredientPageActivity :
             when (it.getContentIfNotHandled()) {
                 is SearchIngredientsEvent.PageSuccess -> {
                     val page = (it.peekContent() as SearchIngredientsEvent.PageSuccess).page
-                    pageimage = page.pageimage
+                    pageimage = page.thumbnail.source
                 }
 
                 else -> {
