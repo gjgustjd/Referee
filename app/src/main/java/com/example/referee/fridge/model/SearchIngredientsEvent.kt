@@ -8,4 +8,6 @@ sealed interface SearchIngredientsEvent {
     object SearchFailed : SearchIngredientsEvent
     class PageSuccess(val page: MediaWikiPage) : SearchIngredientsEvent
     object PageFailed : SearchIngredientsEvent
+    object InsertFridgeIngredientSuccess:SearchIngredientsEvent
+    object InsertFridgeIngredientFailure:SearchIngredientsEvent
 }

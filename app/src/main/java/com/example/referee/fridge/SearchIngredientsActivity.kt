@@ -1,23 +1,44 @@
 package com.example.referee.fridge
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
+import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivitySearchIngredientsBinding
 import com.example.referee.fridge.ingredientpage.IngredientPageActivity
+import com.example.referee.fridge.ingredientpage.IngredientPageActivity.Companion.EXTRA_RESULT_INGREDIENT_DATA
+import com.example.referee.fridge.model.FridgeIngredientEntity
 import com.example.referee.fridge.model.SearchIngredientsEvent
 
 class SearchIngredientsActivity :
     BaseActivity<ActivitySearchIngredientsBinding>(R.layout.activity_search_ingredients) {
 
     private val viewModel:SearchIngredientsViewModel by viewModels()
+    private val pageActivityLauncher:ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+       if(it.resultCode == RESULT_OK) {
+           it.data?.getParcelableExtra(
+               EXTRA_RESULT_INGREDIENT_DATA,
+               FridgeIngredientEntity::class.java
+           )?.let { entity ->
+               viewModel.insertIngredientToFridge(entity)
+           }
+       }
+    }
     private val searchAdapter by lazy {
         SearchIngredientsAdapter { _, title ->
-            startActivity(IngredientPageActivity.newIntent(this@SearchIngredientsActivity, title))
+            pageActivityLauncher.launch(
+                IngredientPageActivity.newIntent(
+                    this@SearchIngredientsActivity,
+                    title
+                )
+            )
         }
     }
     private val decoration by lazy {
@@ -62,6 +83,18 @@ class SearchIngredientsActivity :
 
                     is SearchIngredientsEvent.PageFailed -> {
                         hideLoading()
+                    }
+
+                    is SearchIngredientsEvent.InsertFridgeIngredientSuccess -> {
+                        hideLoading()
+                        showToast(getString(R.string.fridge_add_ingredient_success_toast))
+                        finish()
+                    }
+
+                    is SearchIngredientsEvent.InsertFridgeIngredientFailure -> {
+                        hideLoading()
+                        showToast(getString(R.string.fridge_add_ingredient_failed_toast))
+                        finish()
                     }
                 }
             }

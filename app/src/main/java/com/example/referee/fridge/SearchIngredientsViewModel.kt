@@ -1,11 +1,17 @@
 package com.example.referee.fridge
 
+import androidx.lifecycle.viewModelScope
 import com.example.referee.common.CommonUtil
 import com.example.referee.common.EventWrapper
 import com.example.referee.common.base.BaseViewModel
+import com.example.referee.fridge.model.FridgeIngredientEntity
+import com.example.referee.fridge.model.FridgeRepository
 import com.example.referee.fridge.model.SearchIngredientsEvent
 import com.example.referee.network.model.mediawiki.List.Search
 import com.example.referee.network.model.mediawiki.MediaWikiRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SearchIngredientsViewModel : BaseViewModel<SearchIngredientsEvent>() {
 
@@ -29,6 +35,22 @@ class SearchIngredientsViewModel : BaseViewModel<SearchIngredientsEvent>() {
             }, {
                 _event.value = EventWrapper(SearchIngredientsEvent.PageFailed)
             }).addDisposable()
+    }
+
+    fun insertIngredientToFridge(entity: FridgeIngredientEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = withContext(Dispatchers.IO) {
+                FridgeRepository.insertIngredientToFridge(entity) > 0
+            }
+
+            _event.postValue(
+                if (result) {
+                    EventWrapper(SearchIngredientsEvent.InsertFridgeIngredientSuccess)
+                } else {
+                    EventWrapper(SearchIngredientsEvent.InsertFridgeIngredientFailure)
+                }
+            )
+        }
     }
 
     private fun List<Search>.removeHtmlTags(): List<Search> {

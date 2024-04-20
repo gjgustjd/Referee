@@ -58,5 +58,6 @@
     <string name="fridge_ingredient_search_title">식재료 검색</string>
     <string name="fridge_ingredient_search_hint">식재료 이름을 입력하세요.</string>
     <string name="fridge_add_ingredient_to_fridge">냉장고에 추가하기</string>
-
+    <string name="fridge_add_ingredient_success_toast">식재료를 냉장고에 추가하였습니다.</string>
+    <string name="fridge_add_ingredient_failed_toast">식재료를 냉장고에 추가하는데에 실패했습니다.</string>
 </resources>

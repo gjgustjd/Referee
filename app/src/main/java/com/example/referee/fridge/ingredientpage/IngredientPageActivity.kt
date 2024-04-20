@@ -7,6 +7,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.example.referee.R
+import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityIngredientWebPageBinding
 import com.example.referee.fridge.model.FridgeIngredientEntity
@@ -56,8 +57,7 @@ class IngredientPageActivity :
 
         binding.btnInsertToFridge.setOnClickListener {
             val intent = Intent()
-
-            intent.extras?.getString(EXTRA_INGREDIENT_TITLE)?.let {
+            binding.title?.let {
                 val entity = FridgeIngredientEntity(
                     name = it
                 )
