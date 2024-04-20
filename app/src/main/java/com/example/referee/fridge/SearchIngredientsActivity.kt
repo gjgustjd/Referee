@@ -8,6 +8,7 @@ import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivitySearchIngredientsBinding
+import com.example.referee.fridge.ingredientpage.IngredientPageActivity
 import com.example.referee.fridge.model.SearchIngredientsEvent
 
 class SearchIngredientsActivity :

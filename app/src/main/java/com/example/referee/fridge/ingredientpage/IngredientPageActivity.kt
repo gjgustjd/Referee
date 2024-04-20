@@ -1,4 +1,4 @@
-package com.example.referee.fridge
+package com.example.referee.fridge.ingredientpage
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.webkit.WebViewClient
 import com.example.referee.R
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityIngredientWebPageBinding
+import com.example.referee.fridge.model.FridgeIngredientEntity
 import com.example.referee.network.LinkUtils
 
 class IngredientPageActivity :
@@ -16,6 +17,7 @@ class IngredientPageActivity :
 
     companion object {
         const val EXTRA_INGREDIENT_TITLE = "EXTRA_INGREDIENT_TITLE"
+        const val EXTRA_RESULT_INGREDIENT_DATA = "EXTRA_RESULT_INGREDIENT_DATA"
 
         fun newIntent(context: Context, title: String): Intent {
             return Intent(context, IngredientPageActivity::class.java).apply {
@@ -53,7 +55,15 @@ class IngredientPageActivity :
         }
 
         binding.btnInsertToFridge.setOnClickListener {
-            setResult(RESULT_OK)
+            val intent = Intent()
+
+            intent.extras?.getString(EXTRA_INGREDIENT_TITLE)?.let {
+                val entity = FridgeIngredientEntity(
+                    name = it
+                )
+                intent.putExtra(EXTRA_RESULT_INGREDIENT_DATA, entity)
+            }
+            setResult(RESULT_OK, intent)
             finish()
         }
     }
