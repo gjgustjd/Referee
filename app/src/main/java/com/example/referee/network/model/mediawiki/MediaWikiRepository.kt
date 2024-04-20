@@ -13,7 +13,7 @@ object MediaWikiRepository {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
 
-    fun getSinglePageById(pageId:String) =
+    fun getSinglePageById(pageId:Int) =
         MediaWikiApiUtil.getMediaWikiAPI()
             .searchPageByPageId(pageId)
             .subscribeOn(Schedulers.io())

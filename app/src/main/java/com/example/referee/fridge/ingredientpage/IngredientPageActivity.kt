@@ -6,11 +6,12 @@ import android.graphics.Bitmap
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.viewModels
 import com.example.referee.R
-import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityIngredientWebPageBinding
 import com.example.referee.fridge.model.FridgeIngredientEntity
+import com.example.referee.fridge.model.SearchIngredientsEvent
 import com.example.referee.network.LinkUtils
 
 class IngredientPageActivity :
@@ -18,14 +19,21 @@ class IngredientPageActivity :
 
     companion object {
         const val EXTRA_INGREDIENT_TITLE = "EXTRA_INGREDIENT_TITLE"
+        const val EXTRA_INGREDIENT_PAGE_ID = "EXTRA_INGREDIENT_PAGE_ID"
+        const val EXTRA_INGREDIENT_SNIPPET = "EXTRA_INGREDIENT_SNIPPET"
         const val EXTRA_RESULT_INGREDIENT_DATA = "EXTRA_RESULT_INGREDIENT_DATA"
 
-        fun newIntent(context: Context, title: String): Intent {
+        fun newIntent(context: Context, title: String, pageId: Int, snippet: String): Intent {
             return Intent(context, IngredientPageActivity::class.java).apply {
                 putExtra(EXTRA_INGREDIENT_TITLE, title)
+                putExtra(EXTRA_INGREDIENT_PAGE_ID, pageId)
+                putExtra(EXTRA_INGREDIENT_SNIPPET, snippet)
             }
         }
     }
+
+    private val viewModel: IngredientPageViewModel by viewModels()
+    private var pageimage:String? = null
 
     override fun initViews() {
         binding.title = intent.extras?.getString(EXTRA_INGREDIENT_TITLE)
@@ -56,15 +64,42 @@ class IngredientPageActivity :
         }
 
         binding.btnInsertToFridge.setOnClickListener {
-            val intent = Intent()
-            binding.title?.let {
+            val dataIntent = Intent()
+            val name = binding.title
+            val snippet = intent.extras?.getString(EXTRA_INGREDIENT_SNIPPET)
+            val thumbnailUrl = "${LinkUtils.MEDIAWIKI_PAGE_URL}${name}#/media/파일:${pageimage}"
+            name?.let {
                 val entity = FridgeIngredientEntity(
-                    name = it
+                    name = it,
+                    description = snippet,
+                    thumbnailUrl = thumbnailUrl
                 )
-                intent.putExtra(EXTRA_RESULT_INGREDIENT_DATA, entity)
+                dataIntent.putExtra(EXTRA_RESULT_INGREDIENT_DATA, entity)
             }
-            setResult(RESULT_OK, intent)
+            setResult(RESULT_OK, dataIntent)
             finish()
+        }
+
+        intent.getIntExtra(EXTRA_INGREDIENT_PAGE_ID, -1).let { pageId ->
+            if (pageId != -1) {
+                viewModel.getIngredientPageData(pageId)
+            }
+        }
+    }
+
+    override fun initListeners() {
+        super.initListeners()
+
+        viewModel.event.observe(this) {
+            when (it.getContentIfNotHandled()) {
+                is SearchIngredientsEvent.PageSuccess -> {
+                    val page = (it.peekContent() as SearchIngredientsEvent.PageSuccess).page
+                    pageimage = page.pageimage
+                }
+
+                else -> {
+                }
+            }
         }
     }
 }

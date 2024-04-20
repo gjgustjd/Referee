@@ -32,11 +32,13 @@ class SearchIngredientsActivity :
        }
     }
     private val searchAdapter by lazy {
-        SearchIngredientsAdapter { _, title ->
+        SearchIngredientsAdapter { _, title, pageid, snippet ->
             pageActivityLauncher.launch(
                 IngredientPageActivity.newIntent(
                     this@SearchIngredientsActivity,
-                    title
+                    title,
+                    pageid,
+                    snippet
                 )
             )
         }

@@ -8,7 +8,7 @@ import com.example.referee.common.base.BaseDiffUtilRecyclerAdapter
 import com.example.referee.databinding.ItemSearchIngredientBinding
 import com.example.referee.network.model.mediawiki.List.Search
 
-class SearchIngredientsAdapter(private val onItemClick: ((position: Int, title: String) -> Unit)? = null) :
+class SearchIngredientsAdapter(private val onItemClick: ((position: Int, title: String,pageid:Int,snippet:String) -> Unit)? = null) :
     BaseDiffUtilRecyclerAdapter<Search, SearchIngredientsAdapter.SearchIngredientViewHolder>(
         object : DiffUtil.ItemCallback<Search>() {
             override fun areItemsTheSame(
@@ -42,7 +42,12 @@ class SearchIngredientsAdapter(private val onItemClick: ((position: Int, title: 
                 binding.tvName.text = item.title
                 binding.tvDesc.text = item.snippet
                 binding.root.setOnClickListener {
-                    onItemClick?.invoke(adapterPosition, item.title)
+                    onItemClick?.invoke(
+                        adapterPosition,
+                        item.title,
+                        item.pageid,
+                        item.snippet
+                    )
                 }
             }
     }

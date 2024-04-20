@@ -26,10 +26,10 @@ class SearchIngredientsViewModel : BaseViewModel<SearchIngredientsEvent>() {
             }).addDisposable()
     }
 
-    fun getPageInfo(pageId: String) {
+    fun getPageInfo(pageId: Int) {
         MediaWikiRepository.getSinglePageById(pageId)
             .subscribe({
-                _event.value = it.query.pages.values.firstOrNull()?.let { page ->
+                _event.value = it.query?.pages?.values?.firstOrNull()?.let { page ->
                     EventWrapper(SearchIngredientsEvent.PageSuccess(page))
                 } ?: EventWrapper(SearchIngredientsEvent.PageFailed)
             }, {

@@ -20,7 +20,7 @@ interface MediaWikiApi {
     fun searchAndGetIngredientPageByTitle(@Query("titles") title: String): Single<MediaWikiPageVO>
 
     @GET("$PATH&$FORMAT_JSON&$PROP")
-    fun searchPageByPageId(@Query("pageIds") pageId: String): Single<MediaWikiPageVO>
+    fun searchPageByPageId(@Query("pageids") pageId: Int): Single<MediaWikiPageVO>
 
     @GET("$PATH&$LIST_SEARCH&$FORMAT_JSON")
     fun searchIngredientResults(@Query("srsearch") keyword: String): Single<MediaWikiSearchListVO>
