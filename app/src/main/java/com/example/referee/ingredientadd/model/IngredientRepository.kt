@@ -1,13 +1,8 @@
 package com.example.referee.ingredientadd.model
 
-import com.example.referee.common.RefereeApplication
-import com.example.referee.common.model.RefereeDataBase
+import com.example.referee.common.base.BaseLocalRepository
 
-object IngredientRepository {
-    private val db by lazy {
-        val application = RefereeApplication.instance()
-        RefereeDataBase.getInstance(application)
-    }
+object IngredientRepository:BaseLocalRepository() {
 
     fun insertIngredient(item: IngredientEntity) = db.ingredientsDAO().insert(item)
 
