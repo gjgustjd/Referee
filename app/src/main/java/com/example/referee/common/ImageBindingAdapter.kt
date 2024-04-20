@@ -207,4 +207,15 @@ object ImageBindingAdapter {
         val drawable = ResourcesCompat.getDrawable(resources, resId, null)
         view.setImageDrawable(drawable)
     }
+
+    @JvmStatic
+    @BindingAdapter("imageUrl")
+    fun loadImageUrl(
+        view:ImageView,
+        url:String
+    ) {
+        Glide.with(view.context)
+            .load(url)
+            .into(view)
+    }
 }
