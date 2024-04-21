@@ -11,6 +11,7 @@ import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentFridgeBinding
+import com.example.referee.fridge.ingredientpage.IngredientPageActivity
 import com.example.referee.fridge.model.FridgeEvent
 
 class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fridge) {
@@ -27,7 +28,11 @@ class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fri
     private val viewModel:FridgeFragViewModel by activityViewModels()
 
     private val fridgeAdapter by lazy {
-       FridgeItemsAdapter()
+        FridgeItemsAdapter { name ->
+            context?.let {
+                startActivity(IngredientPageActivity.newIntent(it, name))
+            }
+       }
     }
     private val decoration by lazy {
         context?.let {

@@ -3,6 +3,8 @@ package com.example.referee.fridge.ingredientpage
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Bundle
+import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -18,25 +20,51 @@ class IngredientPageActivity :
     BaseActivity<ActivityIngredientWebPageBinding>(R.layout.activity_ingredient_web_page) {
 
     companion object {
-        const val EXTRA_INGREDIENT_TITLE = "EXTRA_INGREDIENT_TITLE"
+        const val EXTRA_INGREDIENT_NAME = "EXTRA_INGREDIENT_TITLE"
         const val EXTRA_INGREDIENT_PAGE_ID = "EXTRA_INGREDIENT_PAGE_ID"
         const val EXTRA_INGREDIENT_SNIPPET = "EXTRA_INGREDIENT_SNIPPET"
         const val EXTRA_RESULT_INGREDIENT_DATA = "EXTRA_RESULT_INGREDIENT_DATA"
+        const val EXTRA_IS_FROM_SEARCH = "EXTRA_FROM_SEARCH"
 
-        fun newIntent(context: Context, title: String, pageId: Int, snippet: String): Intent {
+        fun newIntent(
+            context: Context,
+            title: String,
+            pageId: Int? = null,
+            snippet: String? = null,
+            isFromSearch: Boolean = false
+        ): Intent {
             return Intent(context, IngredientPageActivity::class.java).apply {
-                putExtra(EXTRA_INGREDIENT_TITLE, title)
+                putExtra(EXTRA_INGREDIENT_NAME, title)
                 putExtra(EXTRA_INGREDIENT_PAGE_ID, pageId)
                 putExtra(EXTRA_INGREDIENT_SNIPPET, snippet)
+                putExtra(EXTRA_IS_FROM_SEARCH, isFromSearch)
             }
         }
     }
 
     private val viewModel: IngredientPageViewModel by viewModels()
     private var pageimage:String? = null
+    private var isFromSearch = false
+    private var pageName:String? = null
+    private var pageid:Int? = null
+    private var snippet: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        initExtras()
+        super.onCreate(savedInstanceState)
+    }
+
+    private fun initExtras() {
+        intent.extras?.run {
+            pageName = getString(EXTRA_INGREDIENT_NAME)
+            isFromSearch = getBoolean(EXTRA_IS_FROM_SEARCH)
+            pageid = getInt(EXTRA_INGREDIENT_PAGE_ID)
+            snippet = getString(EXTRA_INGREDIENT_SNIPPET)
+        }
+    }
 
     override fun initViews() {
-        binding.title = intent.extras?.getString(EXTRA_INGREDIENT_TITLE)
+        binding.title = pageName
         binding.wvContent.apply {
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(
@@ -63,11 +91,20 @@ class IngredientPageActivity :
             finish()
         }
 
+        binding.btnInsertToFridge.visibility = if (isFromSearch) {
+            pageid?.let { pageId ->
+                if (pageId != 0) {
+                    viewModel.getIngredientPageData(pageId)
+                }
+            }
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+
         binding.btnInsertToFridge.setOnClickListener {
             val dataIntent = Intent()
-            val name = binding.title
-            val snippet = intent.extras?.getString(EXTRA_INGREDIENT_SNIPPET)
-            name?.let {
+            pageName?.let {
                 val entity = FridgeIngredientEntity(
                     name = it,
                     description = snippet,
@@ -77,12 +114,6 @@ class IngredientPageActivity :
             }
             setResult(RESULT_OK, dataIntent)
             finish()
-        }
-
-        intent.getIntExtra(EXTRA_INGREDIENT_PAGE_ID, -1).let { pageId ->
-            if (pageId != -1) {
-                viewModel.getIngredientPageData(pageId)
-            }
         }
     }
 

@@ -38,7 +38,8 @@ class SearchIngredientsActivity :
                     this@SearchIngredientsActivity,
                     title,
                     pageid,
-                    snippet
+                    snippet,
+                    true
                 )
             )
         }

@@ -9,7 +9,7 @@ import com.example.referee.common.base.BaseDiffUtilRecyclerAdapter
 import com.example.referee.databinding.ItemFridgeIngredientBinding
 import com.example.referee.fridge.model.FridgeIngredientEntity
 
-class FridgeItemsAdapter :
+class FridgeItemsAdapter(private val onItemClick: ((name: String) -> Unit)? = null) :
     BaseDiffUtilRecyclerAdapter<FridgeIngredientEntity, FridgeItemsAdapter.FridgeItemViewHolder>(
         object : DiffUtil.ItemCallback<FridgeIngredientEntity>() {
             override fun areItemsTheSame(
@@ -50,7 +50,11 @@ class FridgeItemsAdapter :
     inner class FridgeItemViewHolder(val binding: ItemFridgeIngredientBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
-            binding.item = getItem(position)
+            val item = getItem(position)
+            binding.item = item
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(item.name)
+            }
         }
     }
 }
