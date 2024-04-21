@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.referee.common.base.BaseDiffUtilRecyclerAdapter
 import com.example.referee.databinding.ItemFridgeIngredientBinding
 import com.example.referee.fridge.model.FridgeIngredientEntity
@@ -27,13 +28,6 @@ class FridgeItemsAdapter :
         }
     ) {
 
-    inner class FridgeItemViewHolder(private val binding: ItemFridgeIngredientBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int) {
-            binding.item = getItem(position)
-        }
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FridgeItemViewHolder {
         return FridgeItemViewHolder(
             ItemFridgeIngredientBinding.inflate(
@@ -46,5 +40,17 @@ class FridgeItemsAdapter :
 
     override fun onBindViewHolder(holder: FridgeItemViewHolder, position: Int) {
         holder.bind(position)
+    }
+
+    override fun onViewRecycled(holder: FridgeItemViewHolder) {
+        super.onViewRecycled(holder)
+        Glide.with(holder.itemView.context).clear(holder.binding.ivThumbnail)
+    }
+
+    inner class FridgeItemViewHolder(val binding: ItemFridgeIngredientBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(position: Int) {
+            binding.item = getItem(position)
+        }
     }
 }
