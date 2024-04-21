@@ -8,8 +8,12 @@ import com.example.referee.fridge.model.FridgeIngredientEntity
 import com.example.referee.fridge.model.FridgeDAO
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientsDAO
+import com.example.referee.recipe.RecipeEntity
 
-@Database(entities = [IngredientEntity::class, FridgeIngredientEntity::class], version = 6)
+@Database(
+    entities = [IngredientEntity::class, FridgeIngredientEntity::class, RecipeEntity::class],
+    version = 7
+)
 abstract class RefereeDataBase : RoomDatabase() {
     companion object {
         private var instance: RefereeDataBase? = null
