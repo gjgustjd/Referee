@@ -1,4 +1,4 @@
-package com.example.referee.network.model.mediawiki.SIngle
+package com.example.referee.network.model.mediawiki.Single
 
 data class MediaWikiPageThumbnail(
     val height: Int,

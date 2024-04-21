@@ -1,7 +1,7 @@
 package com.example.referee.fridge.model
 
 import com.example.referee.network.model.mediawiki.List.Search
-import com.example.referee.network.model.mediawiki.SIngle.MediaWikiPage
+import com.example.referee.network.model.mediawiki.Single.MediaWikiPage
 
 sealed interface SearchIngredientsEvent {
     class SearchSuccess(val result:List<Search>):SearchIngredientsEvent

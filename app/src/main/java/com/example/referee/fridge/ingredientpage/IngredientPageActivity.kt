@@ -64,6 +64,7 @@ class IngredientPageActivity :
     }
 
     override fun initViews() {
+        showLoading()
         binding.title = pageName
         binding.wvContent.apply {
             webViewClient = object : WebViewClient() {
@@ -76,7 +77,6 @@ class IngredientPageActivity :
 
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                     super.onPageStarted(view, url, favicon)
-                    showLoading()
                 }
 
                 override fun onPageFinished(view: WebView?, url: String?) {
@@ -86,6 +86,7 @@ class IngredientPageActivity :
             }
             loadUrl(LinkUtils.MEDIAWIKI_PAGE_URL + binding.title)
         }
+
         binding.viewTopBar.ivBackButton.setOnClickListener {
             setResult(RESULT_CANCELED)
             finish()
@@ -124,7 +125,7 @@ class IngredientPageActivity :
             when (it.getContentIfNotHandled()) {
                 is SearchIngredientsEvent.PageSuccess -> {
                     val page = (it.peekContent() as SearchIngredientsEvent.PageSuccess).page
-                    pageimage = page.thumbnail.source
+                    pageimage = page.thumbnail?.source
                 }
 
                 else -> {

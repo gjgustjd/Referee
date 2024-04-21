@@ -1,4 +1,4 @@
-package com.example.referee.network.model.mediawiki.SIngle
+package com.example.referee.network.model.mediawiki.Single
 
 import com.google.gson.annotations.SerializedName
 

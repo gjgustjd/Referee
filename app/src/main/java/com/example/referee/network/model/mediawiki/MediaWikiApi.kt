@@ -2,7 +2,7 @@ package com.example.referee.network.model.mediawiki
 
 import com.example.referee.network.LinkUtils
 import com.example.referee.network.model.mediawiki.List.MediaWikiSearchListVO
-import com.example.referee.network.model.mediawiki.SIngle.MediaWikiPageVO
+import com.example.referee.network.model.mediawiki.Single.MediaWikiPageVO
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query

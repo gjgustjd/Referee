@@ -1,6 +1,6 @@
 package com.example.referee.network.model.mediawiki.List
 
-import com.example.referee.network.model.mediawiki.SIngle.MediaWikiWarnings
+import com.example.referee.network.model.mediawiki.Single.MediaWikiWarnings
 import com.google.gson.annotations.SerializedName
 
 data class MediaWikiSearchListVO(
