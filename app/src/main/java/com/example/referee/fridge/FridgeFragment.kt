@@ -7,6 +7,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
+import com.example.referee.common.CommonRecyclerViewDecoration
+import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentFridgeBinding
 import com.example.referee.fridge.model.FridgeEvent
@@ -26,6 +28,18 @@ class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fri
 
     private val fridgeAdapter by lazy {
        FridgeItemsAdapter()
+    }
+    private val decoration by lazy {
+        context?.let {
+            val margin = CommonUtil.pxToDp(
+                it,
+                resources.getDimension(R.dimen.decorator_default_margin).toInt()
+            )
+
+            CommonRecyclerViewDecoration(
+                bottomMargin = margin
+            )
+        }
     }
 
     override fun initViews() {
@@ -55,9 +69,14 @@ class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fri
 
     private fun initRecyclerView() {
         with(binding.rvIngredients) {
-            adapter = fridgeAdapter
-            layoutManager =
-                LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+            context?.let {
+                adapter = fridgeAdapter
+                layoutManager =
+                    LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                decoration?.let {
+                    addItemDecoration(it)
+                }
+            }
         }
     }
 }
