@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="recipe"
+            type="com.example.referee.recipe.model.RecipeEntity" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_ingredient_item_background"
+        android:clickable="true"
+        android:elevation="4dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvRecipeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/drawable_icon_padding"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tvServings"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            tools:text="레시피명" />
+
+        <TextView
+            android:id="@+id/tvRecipeDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text='@{recipe.dishDescription}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvRecipeUsage"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/tvRecipeName"
+            app:layout_constraintTop_toBottomOf="@id/tvRecipeName"
+            app:layout_constraintVertical_bias="0"
+            tools:text="레시피 설명입니다." />
+
+        <TextView
+            android:id="@+id/tvRecipeMethod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{recipe.cookMethod}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="굽기"/>
+
+        <TextView
+            android:id="@+id/tvRecipeUsage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text='@{recipe.cookUsage}'
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvRecipeMethod"
+            tools:text="간식" />
+
+        <TextView
+            android:id="@+id/tvCookTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{recipe.cookTime}'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="30분 이내" />
+
+        <TextView
+            android:id="@+id/tvCookLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text='@{recipe.cookLevel}'
+            app:layout_constraintEnd_toStartOf="@+id/tvCookTime"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="초급" />
+
+        <TextView
+            android:id="@+id/tvServings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text='@{recipe.servings}'
+            app:layout_constraintEnd_toStartOf="@+id/tvCookLevel"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="3인분" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
