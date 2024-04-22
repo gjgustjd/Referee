@@ -13,7 +13,8 @@ class RecipeFragViewModel :BaseViewModel<RecipeEvent>(){
     fun getRecipesByIngredients() {
         viewModelScope.launch {
             FridgeRepository.getFridgeItems().collect { ingredients ->
-                val fridgeIngredientName = ingredients.map { it.name }.first()
+                val fridgeIngredientName = ingredients.map { it.name }
+                    .firstOrNull()?:return@collect
 
                 RecipeRepository.getRecipesByIngredient(fridgeIngredientName)
                     .collect {

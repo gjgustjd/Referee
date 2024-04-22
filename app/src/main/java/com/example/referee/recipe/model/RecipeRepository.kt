@@ -13,15 +13,15 @@ object RecipeRepository:BaseLocalRepository() {
         return db.recipeDAO().getRecipesByIngredient(ingredient)
     }
 
-    fun getRecipesByIngredients(ingredients: List<String>): Flow<List<RecipeEntity>> {
-        return db.recipeDAO().getRecipesByIngredients(ingredients)
-    }
-
-    fun getRecipesByType(type: String): Flow<List<RecipeEntity>> {
-        return db.recipeDAO().getRecipesByType(type)
-    }
-
-    fun getRecipesByMethod(method: String): Flow<List<RecipeEntity>> {
-        return db.recipeDAO().getRecipesByMethod(method)
-    }
+//    fun getRecipesByIngredients(ingredients: List<String>): Flow<List<RecipeEntity>> {
+//        return db.recipeDAO().getRecipesByIngredients(ingredients)
+//    }
+//
+//    fun getRecipesByType(type: String): Flow<List<RecipeEntity>> {
+//        return db.recipeDAO().getRecipesByType(type)
+//    }
+//
+//    fun getRecipesByMethod(method: String): Flow<List<RecipeEntity>> {
+//        return db.recipeDAO().getRecipesByMethod(method)
+//    }
 }
