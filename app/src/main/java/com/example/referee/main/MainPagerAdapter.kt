@@ -7,12 +7,12 @@ import com.example.referee.common.ContainerFragment
 import com.example.referee.common.base.BaseFragment
 import com.example.referee.fridge.FridgeFragment
 import com.example.referee.ingredients.IngredientsFragment
-import com.example.referee.recipe.CookFragment
+import com.example.referee.recipe.RecipeFragment
 
 class MainPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
     private val fragments: List<ContainerFragment> = listOf(
         ContainerFragment().apply { childFragment = FridgeFragment() },
-        ContainerFragment().apply { childFragment = CookFragment() },
+        ContainerFragment().apply { childFragment = RecipeFragment() },
         ContainerFragment().apply { childFragment = IngredientsFragment() }
     )
 

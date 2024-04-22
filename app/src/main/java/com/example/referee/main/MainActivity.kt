@@ -39,7 +39,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                     }
 
                     R.id.menu_cook -> {
-                        menuTitle = getString(R.string.navigation_menu_cook)
+                        menuTitle = getString(R.string.navigation_menu_recipe)
                         1
                     }
 
