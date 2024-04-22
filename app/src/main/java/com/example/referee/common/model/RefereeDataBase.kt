@@ -8,6 +8,7 @@ import com.example.referee.fridge.model.FridgeIngredientEntity
 import com.example.referee.fridge.model.FridgeDAO
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientsDAO
+import com.example.referee.recipe.model.RecipeDAO
 import com.example.referee.recipe.model.RecipeEntity
 
 @Database(
@@ -35,4 +36,5 @@ abstract class RefereeDataBase : RoomDatabase() {
 
     abstract fun ingredientsDAO():IngredientsDAO
     abstract fun fridgeDAO():FridgeDAO
+    abstract fun RecipeDAO():RecipeDAO
 }
