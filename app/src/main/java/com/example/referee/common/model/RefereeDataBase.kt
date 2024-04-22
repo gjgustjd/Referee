@@ -8,7 +8,7 @@ import com.example.referee.fridge.model.FridgeIngredientEntity
 import com.example.referee.fridge.model.FridgeDAO
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientsDAO
-import com.example.referee.recipe.RecipeEntity
+import com.example.referee.recipe.model.RecipeEntity
 
 @Database(
     entities = [IngredientEntity::class, FridgeIngredientEntity::class, RecipeEntity::class],
