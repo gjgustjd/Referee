@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface RecipeDAO {
 
     fun getRecipesByTitle(title: String): Flow<List<RecipeEntity>>
-    fun getRecipesByIngredients(vararg ingredients: String): Flow<List<RecipeEntity>>
+    fun getRecipesByIngredients(ingredients: List<String>): Flow<List<RecipeEntity>>
     fun getRecipesByType(type:String):Flow<List<RecipeEntity>>
     fun getRecipesByMethod(method:String):Flow<List<RecipeEntity>>
 }

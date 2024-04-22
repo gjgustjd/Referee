@@ -36,5 +36,5 @@ abstract class RefereeDataBase : RoomDatabase() {
 
     abstract fun ingredientsDAO():IngredientsDAO
     abstract fun fridgeDAO():FridgeDAO
-    abstract fun RecipeDAO():RecipeDAO
+    abstract fun recipeDAO():RecipeDAO
 }
