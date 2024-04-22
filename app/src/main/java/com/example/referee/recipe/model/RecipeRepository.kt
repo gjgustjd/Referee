@@ -9,6 +9,10 @@ object RecipeRepository:BaseLocalRepository() {
         return db.recipeDAO().getRecipesByTitle(title)
     }
 
+    fun getRecipesByIngredient(ingredient: String): Flow<List<RecipeEntity>> {
+        return db.recipeDAO().getRecipesByIngredient(ingredient)
+    }
+
     fun getRecipesByIngredients(ingredients: List<String>): Flow<List<RecipeEntity>> {
         return db.recipeDAO().getRecipesByIngredients(ingredients)
     }
