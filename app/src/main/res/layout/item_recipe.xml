@@ -7,6 +7,7 @@
             name="recipe"
             type="com.example.referee.recipe.model.RecipeEntity" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,84 +19,101 @@
 
         <TextView
             android:id="@+id/tvRecipeName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:drawablePadding="@dimen/drawable_icon_padding"
             android:ellipsize="end"
             android:singleLine="true"
+            android:text='@{recipe.recipeName}'
             android:textSize="16dp"
             android:textStyle="bold"
-            android:text='@{recipe.recipeName}'
-            app:layout_constraintEnd_toStartOf="@+id/tvServings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0"
             tools:text="레시피명" />
 
         <TextView
             android:id="@+id/tvRecipeDesc"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:text='@{recipe.dishDescription}'
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvRecipeUsage"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/tvRecipeName"
             app:layout_constraintTop_toBottomOf="@id/tvRecipeName"
             app:layout_constraintVertical_bias="0"
-            tools:text="레시피 설명입니다." />
+            tools:text="레시피 설명입니다.레시피 설명입니다.레시피 설명입니다..레시피 설명입니다..레시피 설명입니다..레시피 설명입니다..레시피 설명입니다..레시피 설명입니다." />
 
         <TextView
             android:id="@+id/tvRecipeMethod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawablePadding="4dp"
             android:text='@{recipe.cookMethod}'
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="12dp"
+            app:drawableStartCompat="@drawable/layerlist_icon_cook_method"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="굽기"/>
+            app:layout_constraintStart_toEndOf="@+id/tvRecipeUsage"
+            app:layout_constraintTop_toTopOf="@+id/tvRecipeUsage"
+            tools:text="굽기" />
 
         <TextView
             android:id="@+id/tvRecipeUsage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:drawablePadding="4dp"
             android:text='@{recipe.cookUsage}'
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="12dp"
+            app:drawableStartCompat="@drawable/layerlist_icon_dish_type"
             app:layout_constraintEnd_toStartOf="@+id/tvRecipeMethod"
+            app:layout_constraintStart_toEndOf="@+id/tvCookLevel"
+            app:layout_constraintTop_toTopOf="@+id/tvCookLevel"
             tools:text="간식" />
 
         <TextView
             android:id="@+id/tvCookTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawablePadding="4dp"
             android:text='@{recipe.cookTime}'
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="12dp"
+            app:drawableStartCompat="@drawable/layerlist_icon_cook_time"
+            app:layout_constraintEnd_toStartOf="@+id/tvCookLevel"
+            app:layout_constraintStart_toEndOf="@+id/tvServings"
+            app:layout_constraintTop_toTopOf="@+id/tvServings"
             tools:text="30분 이내" />
 
         <TextView
             android:id="@+id/tvCookLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:drawablePadding="4dp"
             android:text='@{recipe.cookLevel}'
-            app:layout_constraintEnd_toStartOf="@+id/tvCookTime"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="12dp"
+            app:drawableStartCompat="@drawable/layerlist_icon_cook_level"
+            app:layout_constraintEnd_toStartOf="@+id/tvRecipeUsage"
+            app:layout_constraintStart_toEndOf="@+id/tvCookTime"
+            app:layout_constraintTop_toTopOf="@+id/tvCookTime"
             tools:text="초급" />
 
         <TextView
             android:id="@+id/tvServings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginTop="16dp"
+            android:drawablePadding="4dp"
             android:text='@{recipe.servings}'
-            app:layout_constraintEnd_toStartOf="@+id/tvCookLevel"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="12dp"
+            app:drawableStartCompat="@drawable/layerlist_icon_servings"
+            app:layout_constraintEnd_toStartOf="@+id/tvCookTime"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRecipeDesc"
             tools:text="3인분" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
