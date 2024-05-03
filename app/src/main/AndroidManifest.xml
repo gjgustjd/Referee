@@ -41,6 +41,8 @@
             android:name=".fridge.ingredientpage.IngredientPageActivity"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Referee.NoActionBar" />
+        <activity android:name=".recipe.search.SearchRecipeActivity"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>

@@ -223,7 +223,7 @@ class IngredientAddActivity :
                             InputMethodManager.HIDE_NOT_ALWAYS
                         )
                 }.apply {
-                    compositeDisposable.add(this)
+                    addDisposable(this)
                 }
 
             ivPhoto.setOnClickListener {

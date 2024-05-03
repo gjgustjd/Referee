@@ -1,6 +1,7 @@
 package com.example.referee.fridge
 
 import android.content.Intent
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -9,16 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
-import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseActivity
-import com.example.referee.databinding.ActivitySearchIngredientsBinding
+import com.example.referee.databinding.ActivitySearchItemBinding
 import com.example.referee.fridge.ingredientpage.IngredientPageActivity
 import com.example.referee.fridge.ingredientpage.IngredientPageActivity.Companion.EXTRA_RESULT_INGREDIENT_DATA
 import com.example.referee.fridge.model.FridgeIngredientEntity
 import com.example.referee.fridge.model.SearchIngredientsEvent
 
 class SearchIngredientsActivity :
-    BaseActivity<ActivitySearchIngredientsBinding>(R.layout.activity_search_ingredients) {
+    BaseActivity<ActivitySearchItemBinding>(R.layout.activity_search_item) {
 
     private val viewModel:SearchIngredientsViewModel by viewModels()
     private val pageActivityLauncher:ActivityResultLauncher<Intent> = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -70,6 +70,8 @@ class SearchIngredientsActivity :
             if(!it.hasBeenHandled) {
                 when(it.peekContent()) {
                     is SearchIngredientsEvent.SearchSuccess -> {
+                        binding.tvEmptyList.visibility = View.GONE
+                        binding.rvSearchResults.visibility = View.VISIBLE
                         val result =
                             (it.peekContent() as SearchIngredientsEvent.SearchSuccess).result
                         searchAdapter.submitList(result)
