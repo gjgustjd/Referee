@@ -2,9 +2,18 @@ package com.example.referee.recipe.search
 
 import android.content.Context
 import android.content.Intent
+import android.view.View
+import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
+import com.example.referee.common.CommonRecyclerViewDecoration
+import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivitySearchItemBinding
+import com.example.referee.recipe.RecipeAdapter
+import com.example.referee.recipe.search.model.SearchRecipeEvent
+import com.jakewharton.rxbinding4.view.clicks
+import java.util.concurrent.TimeUnit
 
 class SearchRecipeActivity :BaseActivity<ActivitySearchItemBinding>(R.layout.activity_search_item){
 
@@ -14,10 +23,56 @@ class SearchRecipeActivity :BaseActivity<ActivitySearchItemBinding>(R.layout.act
         }
     }
 
+    private val viewModel:SearchRecipeViewModel by viewModels()
+    private val recipeAdapter by lazy {
+        RecipeAdapter()
+    }
+
     override fun initViews() {
         with(binding) {
             title = getString(R.string.recipe_search_title)
             etKeyword.hint = getString(R.string.recipe_search_item)
+        }
+        initRecyclerView()
+    }
+
+    override fun initListeners() {
+        super.initListeners()
+
+        with(binding) {
+            btnConfirm.clicks()
+                .throttleFirst(
+                    resources.getInteger(R.integer.click_throttle_default_duration).toLong(),
+                    TimeUnit.MILLISECONDS
+                )
+                .subscribe {
+                    showLoading()
+                    viewModel.getRecipesByTitle(etKeyword.text.toString())
+                }
+                .apply { addDisposable(this) }
+        }
+        viewModel.event.observe(this) {
+            when (it.getContentIfNotHandled()) {
+                is SearchRecipeEvent.SearchRecipeSuccess -> {
+                    hideLoading()
+                    binding.tvEmptyList.visibility = View.GONE
+                    val recipes = (it.peekContent() as SearchRecipeEvent.SearchRecipeSuccess).recipes
+                    recipeAdapter.submitList(recipes)
+                    binding.rvSearchResults.visibility = View.VISIBLE
+                }
+
+                else -> Unit
+            }
+        }
+    }
+
+    private fun initRecyclerView() {
+        val margin = resources.getDimension(R.dimen.decorator_default_margin).toInt()
+        with(binding.rvSearchResults) {
+            adapter = recipeAdapter
+            layoutManager =
+                LinearLayoutManager(this@SearchRecipeActivity, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(CommonRecyclerViewDecoration(exceptIndex = 0, topMargin = margin))
         }
     }
 }
