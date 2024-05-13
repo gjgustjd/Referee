@@ -43,6 +43,8 @@
             android:theme="@style/Theme.Referee.NoActionBar" />
         <activity android:name=".recipe.search.SearchRecipeActivity"
             android:launchMode="singleTask"/>
+        <activity android:name=".common.CommonWebViewActivity"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>
