@@ -40,6 +40,10 @@ class RecipeAdapter(private val onItemClick: ((position: Int) -> Unit)? = null) 
         holder.bind(position)
     }
 
+    fun getRecipeNumber(position: Int):Int {
+        return getItem(position).recipe_no
+    }
+
     inner class RecipeViewHolder(private val binding: ItemRecipeBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {

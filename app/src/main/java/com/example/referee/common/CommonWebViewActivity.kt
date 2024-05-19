@@ -2,6 +2,9 @@ package com.example.referee.common
 
 import android.content.Context
 import android.content.Intent
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.example.referee.R
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityWebviewCommonBinding
@@ -31,6 +34,14 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
     private fun initWebView() {
         url?.let {
             binding.wvContent.loadUrl(it)
+            binding.wvContent.webViewClient = object :WebViewClient() {
+                override fun shouldOverrideUrlLoading(
+                    view: WebView?,
+                    request: WebResourceRequest?
+                ): Boolean {
+                    return false
+                }
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
+import com.example.referee.common.CommonWebViewActivity
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivitySearchItemBinding
 import com.example.referee.recipe.RecipeAdapter
@@ -24,8 +25,26 @@ class SearchRecipeActivity :BaseActivity<ActivitySearchItemBinding>(R.layout.act
     }
 
     private val viewModel:SearchRecipeViewModel by viewModels()
-    private val recipeAdapter by lazy {
-        RecipeAdapter()
+    private val recipeAdapter:RecipeAdapter by lazy {
+        RecipeAdapter { position ->
+            val intent = CommonWebViewActivity.newIntent(
+                this@SearchRecipeActivity,
+                "",
+                "https://www.10000recipe.com/recipe/${recipeAdapter.getRecipeNumber(position)}"
+            )
+            startActivity(intent)
+        }
+    }
+
+    private val decoration by lazy {
+        val margin = CommonUtil.pxToDp(
+            this@SearchRecipeActivity,
+            resources.getDimension(R.dimen.decorator_default_margin).toInt()
+        )
+
+        CommonRecyclerViewDecoration(
+            bottomMargin = margin
+        )
     }
 
     override fun initViews() {
@@ -67,12 +86,11 @@ class SearchRecipeActivity :BaseActivity<ActivitySearchItemBinding>(R.layout.act
     }
 
     private fun initRecyclerView() {
-        val margin = resources.getDimension(R.dimen.decorator_default_margin).toInt()
         with(binding.rvSearchResults) {
             adapter = recipeAdapter
             layoutManager =
                 LinearLayoutManager(this@SearchRecipeActivity, LinearLayoutManager.VERTICAL, false)
-            addItemDecoration(CommonRecyclerViewDecoration(exceptIndex = 0, topMargin = margin))
+            addItemDecoration(decoration)
         }
     }
 }

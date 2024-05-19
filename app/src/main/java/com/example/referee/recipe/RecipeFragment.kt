@@ -1,13 +1,12 @@
 package com.example.referee.recipe
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
+import com.example.referee.common.CommonUtil
+import com.example.referee.common.CommonWebViewActivity
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentCookBinding
@@ -28,8 +27,26 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
     }
 
     private val viewModel:RecipeFragViewModel by activityViewModels()
-    private val recipeAdapter by lazy {
-        RecipeAdapter()
+    private val recipeAdapter:RecipeAdapter by lazy {
+        RecipeAdapter { position ->
+            context?.let {
+                val intent = CommonWebViewActivity.newIntent(it,"","https://www.10000recipe.com/recipe/${recipeAdapter.getRecipeNumber(position)}")
+                startActivity(intent)
+            }
+        }
+    }
+
+    private val decoration by lazy {
+        activity?.let {
+            val margin = CommonUtil.pxToDp(
+                it,
+                resources.getDimension(R.dimen.decorator_default_margin).toInt()
+            )
+
+            CommonRecyclerViewDecoration(
+                bottomMargin = margin
+            )
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,13 +92,9 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
             with(binding.rvRecipes) {
                 adapter = recipeAdapter
                 layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-                addItemDecoration(
-                    CommonRecyclerViewDecoration(
-                        bottomMargin = activity.resources.getDimension(
-                            R.dimen.decorator_default_margin
-                        ).toInt()
-                    )
-                )
+                decoration?.let {
+                    addItemDecoration(it)
+                }
             }
         }
     }
