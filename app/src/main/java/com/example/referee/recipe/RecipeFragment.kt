@@ -10,6 +10,7 @@ import com.example.referee.common.CommonWebViewActivity
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.common.base.BaseFragment
 import com.example.referee.databinding.FragmentCookBinding
+import com.example.referee.network.LinkUtils
 import com.example.referee.recipe.model.RecipeEvent
 import com.example.referee.recipe.search.SearchRecipeActivity
 import com.jakewharton.rxbinding4.view.clicks
@@ -30,7 +31,10 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
     private val recipeAdapter:RecipeAdapter by lazy {
         RecipeAdapter { position ->
             context?.let {
-                val intent = CommonWebViewActivity.newIntent(it,"","https://www.10000recipe.com/recipe/${recipeAdapter.getRecipeNumber(position)}")
+                val intent = CommonWebViewActivity.newIntent(
+                    it,
+                    "${LinkUtils.RECIPE_1000_URL}${recipeAdapter.getRecipeNumber(position)}",
+                )
                 startActivity(intent)
             }
         }

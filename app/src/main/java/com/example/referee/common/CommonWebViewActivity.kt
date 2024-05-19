@@ -1,5 +1,6 @@
 package com.example.referee.common
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.webkit.WebResourceRequest
@@ -15,7 +16,11 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
         const val EXTRA_TITLE="EXTRA_TITLE"
         const val EXTRA_URL="EXTRA_URL"
 
-        fun newIntent(context: Context, title: String, url: String): Intent {
+        fun newIntent(
+            context: Context,
+            url: String,
+            title: String? = null
+        ): Intent {
             return Intent(context, CommonWebViewActivity::class.java).apply {
                 putExtra(EXTRA_TITLE, title)
                 putExtra(EXTRA_URL, url)
@@ -23,7 +28,7 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
         }
     }
 
-    private var title: String? = null
+    private var topBarTitle: String? = null
     private var url: String? = null
 
     override fun initViews() {
@@ -31,22 +36,33 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
         initWebView()
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun initWebView() {
         url?.let {
-            binding.wvContent.loadUrl(it)
-            binding.wvContent.webViewClient = object :WebViewClient() {
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-                ): Boolean {
-                    return false
+            with(binding.wvContent) {
+                webViewClient = object :WebViewClient() {
+                    override fun shouldOverrideUrlLoading(
+                        view: WebView?,
+                        request: WebResourceRequest?
+                    ): Boolean {
+                        return false
+                    }
                 }
+                settings.apply {
+                    javaScriptEnabled = true
+                }
+
+                loadUrl(it)
             }
+        }
+
+        topBarTitle?.let {
+            supportActionBar?.hide()
         }
     }
 
     private fun initExtra() {
-        title = intent?.getStringExtra(EXTRA_TITLE)
+        topBarTitle = intent?.getStringExtra(EXTRA_TITLE)
         url = intent?.getStringExtra(EXTRA_URL)
     }
 }

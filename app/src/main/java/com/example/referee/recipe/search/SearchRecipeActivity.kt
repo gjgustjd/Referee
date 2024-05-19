@@ -11,6 +11,7 @@ import com.example.referee.common.CommonUtil
 import com.example.referee.common.CommonWebViewActivity
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivitySearchItemBinding
+import com.example.referee.network.LinkUtils
 import com.example.referee.recipe.RecipeAdapter
 import com.example.referee.recipe.search.model.SearchRecipeEvent
 import com.jakewharton.rxbinding4.view.clicks
@@ -29,8 +30,7 @@ class SearchRecipeActivity :BaseActivity<ActivitySearchItemBinding>(R.layout.act
         RecipeAdapter { position ->
             val intent = CommonWebViewActivity.newIntent(
                 this@SearchRecipeActivity,
-                "",
-                "https://www.10000recipe.com/recipe/${recipeAdapter.getRecipeNumber(position)}"
+                "${LinkUtils.RECIPE_1000_URL}${recipeAdapter.getRecipeNumber(position)}"
             )
             startActivity(intent)
         }
