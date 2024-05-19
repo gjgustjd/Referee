@@ -151,6 +151,11 @@ class IngredientsFragment :
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.title = getString(R.string.navigation_menu_ingredient)
+    }
+
     fun onMainFabClick() {
         Log.i("FabTest", "onMainFabClick")
         Log.i("FabTest", "value:${viewModel.fabState.value}")

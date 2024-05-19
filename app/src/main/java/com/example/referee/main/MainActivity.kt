@@ -30,27 +30,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         super.initListeners()
 
         binding.bottomNavigationView.setOnItemSelectedListener {
-            val menuTitle: String
             binding.vpMain.currentItem =
                 when (it.itemId) {
-                    R.id.menu_fridge -> {
-                        menuTitle = getString(R.string.navigation_menu_fridger)
-                        0
-                    }
-
-                    R.id.menu_cook -> {
-                        menuTitle = getString(R.string.navigation_menu_recipe)
-                        1
-                    }
-
-                    R.id.menu_ingredients -> {
-                        menuTitle = getString(R.string.navigation_menu_ingredient)
-                        2
-                    }
+                    R.id.menu_fridge -> 0
+                    R.id.menu_cook -> 1
+                    R.id.menu_ingredients -> 2
 
                     else -> return@setOnItemSelectedListener false
                 }
-            title = menuTitle
 
             return@setOnItemSelectedListener true
         }

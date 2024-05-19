@@ -72,6 +72,11 @@ class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fri
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        activity?.title = getString(R.string.navigation_menu_fridger)
+    }
+
     private fun initRecyclerView() {
         with(binding.rvIngredients) {
             context?.let {
