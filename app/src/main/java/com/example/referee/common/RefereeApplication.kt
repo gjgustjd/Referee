@@ -1,6 +1,7 @@
 package com.example.referee.common
 
 import android.app.Application
+import com.example.referee.common.model.RefereeDataBase
 
 class RefereeApplication :Application() {
 
@@ -13,5 +14,10 @@ class RefereeApplication :Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        RefereeDataBase.getInstance(this).close()
     }
 }

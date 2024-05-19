@@ -5,10 +5,12 @@ import kotlinx.coroutines.flow.Flow
 
 object RecipeRepository:BaseLocalRepository() {
 
+    @Synchronized
     fun getRecipesByTitle(title: String): Flow<List<RecipeEntity>> {
         return db.recipeDAO().getRecipesByTitle(title)
     }
 
+    @Synchronized
     fun getRecipesByIngredient(ingredient: String): Flow<List<RecipeEntity>> {
         return db.recipeDAO().getRecipesByIngredient(ingredient)
     }
