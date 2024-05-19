@@ -120,23 +120,36 @@ class IngredientsFragment :
     }
 
     override fun initListeners() {
+        Logger.i()
         assignAndStartObserveJob()
         viewModel.fabState.observe(requireActivity()) {
             when (viewModel.fabState.value?.getContentIfNotHandled()) {
                 IngredientFragFABState.None -> {
-                    requireActivity().title = getString(R.string.navigation_menu_ingredient)
+                    Logger.i()
+
+                    if(isResumed) {
+                        requireActivity().title = getString(R.string.navigation_menu_ingredient)
+                    }
                 }
 
                 IngredientFragFABState.SubMenu -> {
-                    requireActivity().title = getString(R.string.navigation_menu_ingredient)
+                    Logger.i()
+
+                    if(isResumed) {
+                        requireActivity().title = getString(R.string.navigation_menu_ingredient)
+                    }
                 }
 
                 IngredientFragFABState.DeleteMenu -> {
-                    requireActivity().title = getString(R.string.ingredient_delete_title)
+                    if(isResumed) {
+                        requireActivity().title = getString(R.string.ingredient_delete_title)
+                    }
                 }
 
                 IngredientFragFABState.SearchMenu -> {
-                    requireActivity().title = getString(R.string.ingredient_search_title)
+                        if(isResumed) {
+                            requireActivity().title = getString(R.string.ingredient_search_title)
+                        }
                 }
 
                 else -> Unit
@@ -153,7 +166,14 @@ class IngredientsFragment :
 
     override fun onResume() {
         super.onResume()
+        Logger.i()
         activity?.title = getString(R.string.navigation_menu_ingredient)
+        requestRecyclerItems()
+    }
+
+    private fun requestRecyclerItems() {
+        showLoading()
+        viewModel.getIngredientsList()
     }
 
     fun onMainFabClick() {
@@ -298,8 +318,6 @@ class IngredientsFragment :
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(decoration)
         }
-        showLoading()
-        viewModel.getIngredientsList()
     }
 
     private fun updateRecyclerView(items: List<IngredientEntity>) {

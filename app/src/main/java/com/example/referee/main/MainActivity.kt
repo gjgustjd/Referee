@@ -32,9 +32,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         binding.bottomNavigationView.setOnItemSelectedListener {
             binding.vpMain.currentItem =
                 when (it.itemId) {
-                    R.id.menu_fridge -> 0
-                    R.id.menu_cook -> 1
-                    R.id.menu_ingredients -> 2
+                    R.id.menu_fridge -> {
+                        0
+                    }
+
+                    R.id.menu_cook -> {
+                        1
+                    }
+
+                    R.id.menu_ingredients -> {
+                        2
+                    }
 
                     else -> return@setOnItemSelectedListener false
                 }

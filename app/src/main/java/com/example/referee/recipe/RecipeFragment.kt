@@ -53,11 +53,6 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.getRecipesByIngredients()
-    }
-
     override fun initViews() {
         initRecyclerView()
         binding.fabSearchRecipe.clicks()
@@ -80,11 +75,10 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
                 is RecipeEvent.RecipeSuccess -> {
                     val result = it.peekContent() as RecipeEvent.RecipeSuccess
                     recipeAdapter.submitList(result.recipes)
+                    hideLoading()
                 }
 
-                is RecipeEvent.RecipeFailure -> {
-
-                }
+                is RecipeEvent.RecipeFailure -> Unit
 
                 else -> Unit
             }
@@ -94,6 +88,7 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
     override fun onResume() {
         super.onResume()
         activity?.title = getString(R.string.navigation_menu_recipe)
+        viewModel.getRecipesByIngredients()
     }
 
     private fun initRecyclerView() {

@@ -27,7 +27,6 @@ abstract class RefereeDataBase : RoomDatabase() {
 
         private fun buildDatabase(application: Application): RefereeDataBase {
             return Room.databaseBuilder(application.applicationContext, RefereeDataBase::class.java, DB_NAME)
-                .fallbackToDestructiveMigration()
                 .createFromAsset("recipes_10000.db")
                 .build()
 
