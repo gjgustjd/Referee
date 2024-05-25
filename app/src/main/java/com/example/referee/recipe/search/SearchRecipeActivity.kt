@@ -3,6 +3,7 @@ package com.example.referee.recipe.search
 import android.content.Context
 import android.content.Intent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
@@ -66,9 +67,19 @@ class SearchRecipeActivity :BaseActivity<ActivitySearchItemBinding>(R.layout.act
                 )
                 .subscribe {
                     showLoading()
+                    hideKeyBoard()
                     viewModel.getRecipesByTitle(etKeyword.text.toString())
                 }
                 .apply { addDisposable(this) }
+
+            etKeyword.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    btnConfirm.performClick()
+                    true
+                } else {
+                    false
+                }
+            }
         }
         viewModel.event.observe(this) {
             when (it.getContentIfNotHandled()) {

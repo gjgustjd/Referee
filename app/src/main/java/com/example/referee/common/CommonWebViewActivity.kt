@@ -3,6 +3,7 @@ package com.example.referee.common
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -47,9 +48,22 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
                     ): Boolean {
                         return false
                     }
+
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        super.onPageStarted(view, url, favicon)
+                        showLoading()
+                    }
+
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        hideTopBar()
+                        hideLoading()
+                        visible()
+                    }
                 }
                 settings.apply {
                     javaScriptEnabled = true
+                    domStorageEnabled = true
                 }
 
                 loadUrl(it)
@@ -57,8 +71,23 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
         }
 
         topBarTitle?.let {
-            supportActionBar?.hide()
-        }
+          title = it
+        }?:supportActionBar?.hide()
+    }
+
+
+    private fun hideTopBar() {
+        // 상단바를 숨기는 자바스크립트를 웹뷰에 로드합니다.
+        val js = """
+            (function() {
+                var topBar = document.querySelector('.navbar.navbar-new.navbar-fixed-top'); // 상단바의 선택자
+                
+                if (topBar) {
+                    topBar.classList.add('hidden');
+                }
+            })();
+        """
+        binding.wvContent.evaluateJavascript(js, null)
     }
 
     private fun initExtra() {

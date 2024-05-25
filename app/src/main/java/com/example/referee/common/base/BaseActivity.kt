@@ -1,6 +1,9 @@
 package com.example.referee.common.base
 
+import android.content.Context
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -91,7 +94,29 @@ abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActi
         showLoadingRequestSubject.onNext(CommonEvent.ShowLoading(onBackPressed))
     }
 
-     fun hideLoading() {
-         hideLoadingRequestSubject.onNext(CommonEvent.HideLoading)
+    fun hideLoading() {
+        hideLoadingRequestSubject.onNext(CommonEvent.HideLoading)
+    }
+
+    fun View.showKeyBoard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    fun hideKeyBoard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
+    }
+
+    fun View.visible() {
+        visibility = View.VISIBLE
+    }
+
+    fun View.gone() {
+        visibility = View.GONE
+    }
+
+    fun View.invisible() {
+        visibility = View.INVISIBLE
     }
 }
