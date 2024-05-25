@@ -34,6 +34,7 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
                 val intent = CommonWebViewActivity.newIntent(
                     it,
                     "${LinkUtils.RECIPE_1000_URL}${recipeAdapter.getRecipeNumber(position)}",
+                    onPageFinishedJavaScript = "javascript/Hide10000RecipePageTopBar.js"
                 )
                 startActivity(intent)
             }

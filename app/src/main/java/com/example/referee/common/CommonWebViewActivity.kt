@@ -16,21 +16,25 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
     companion object {
         const val EXTRA_TITLE="EXTRA_TITLE"
         const val EXTRA_URL="EXTRA_URL"
+        const val EXTRA_ON_PAGE_FINISED_JAVASCRIPT_FILE_NAME = "EXTRA_ON_PAGE_FINISED_JAVASCRIPT_FILE_NAME"
 
         fun newIntent(
             context: Context,
             url: String,
-            title: String? = null
+            title: String? = null,
+            onPageFinishedJavaScript: String? = null
         ): Intent {
             return Intent(context, CommonWebViewActivity::class.java).apply {
                 putExtra(EXTRA_TITLE, title)
                 putExtra(EXTRA_URL, url)
+                putExtra(EXTRA_ON_PAGE_FINISED_JAVASCRIPT_FILE_NAME, onPageFinishedJavaScript)
             }
         }
     }
 
     private var topBarTitle: String? = null
     private var url: String? = null
+    private var onPageFinishedJavaScript: String? = null
 
     override fun initViews() {
         initExtra()
@@ -46,6 +50,7 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
                         view: WebView?,
                         request: WebResourceRequest?
                     ): Boolean {
+                        gone()
                         return false
                     }
 
@@ -56,7 +61,9 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
 
                     override fun onPageFinished(view: WebView?, url: String?) {
                         super.onPageFinished(view, url)
-                        hideTopBar()
+                        onPageFinishedJavaScript?.let {
+                            injectJavaScriptFromAssetsFile(it)
+                        }
                         hideLoading()
                         visible()
                     }
@@ -76,22 +83,9 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
     }
 
 
-    private fun hideTopBar() {
-        // 상단바를 숨기는 자바스크립트를 웹뷰에 로드합니다.
-        val js = """
-            (function() {
-                var topBar = document.querySelector('.navbar.navbar-new.navbar-fixed-top'); // 상단바의 선택자
-                
-                if (topBar) {
-                    topBar.classList.add('hidden');
-                }
-            })();
-        """
-        binding.wvContent.evaluateJavascript(js, null)
-    }
-
     private fun initExtra() {
         topBarTitle = intent?.getStringExtra(EXTRA_TITLE)
         url = intent?.getStringExtra(EXTRA_URL)
+        onPageFinishedJavaScript = intent?.getStringExtra(EXTRA_ON_PAGE_FINISED_JAVASCRIPT_FILE_NAME)
     }
 }

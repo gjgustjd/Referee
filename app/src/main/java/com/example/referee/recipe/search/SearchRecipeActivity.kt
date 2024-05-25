@@ -31,7 +31,8 @@ class SearchRecipeActivity :BaseActivity<ActivitySearchItemBinding>(R.layout.act
         RecipeAdapter { position ->
             val intent = CommonWebViewActivity.newIntent(
                 this@SearchRecipeActivity,
-                "${LinkUtils.RECIPE_1000_URL}${recipeAdapter.getRecipeNumber(position)}"
+                "${LinkUtils.RECIPE_1000_URL}${recipeAdapter.getRecipeNumber(position)}",
+                onPageFinishedJavaScript = "javascript/Hide10000RecipePageTopBar.js"
             )
             startActivity(intent)
         }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -14,6 +15,7 @@ import com.example.referee.common.model.CommonEvent
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.io.BufferedReader
 import java.util.concurrent.TimeUnit
 
 abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActivity() where T : ViewDataBinding {
@@ -118,5 +120,11 @@ abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActi
 
     fun View.invisible() {
         visibility = View.INVISIBLE
+    }
+
+    protected fun WebView.injectJavaScriptFromAssetsFile(fileName: String) {
+        val inputStream = assets.open(fileName)
+        val script = inputStream.bufferedReader().use(BufferedReader::readText)
+        evaluateJavascript(script, null)
     }
 }
