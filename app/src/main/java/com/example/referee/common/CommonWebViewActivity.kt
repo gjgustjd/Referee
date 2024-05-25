@@ -45,13 +45,19 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
     private fun initWebView() {
         url?.let {
             with(binding.wvContent) {
-                webViewClient = object :WebViewClient() {
+                webViewClient = object : WebViewClient() {
                     override fun shouldOverrideUrlLoading(
                         view: WebView?,
                         request: WebResourceRequest?
                     ): Boolean {
                         gone()
-                        return false
+
+                        if (request != null && request.isRedirect) {
+                            view?.loadUrl(request.url.toString())
+                            return true
+                        }
+
+                        return super.shouldOverrideUrlLoading(view, request)
                     }
 
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -81,7 +87,6 @@ class CommonWebViewActivity :BaseActivity<ActivityWebviewCommonBinding>(R.layout
           title = it
         }?:supportActionBar?.hide()
     }
-
 
     private fun initExtra() {
         topBarTitle = intent?.getStringExtra(EXTRA_TITLE)

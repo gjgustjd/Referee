@@ -81,6 +81,12 @@ class SearchRecipeActivity :BaseActivity<ActivitySearchItemBinding>(R.layout.act
                     false
                 }
             }
+
+            rvSearchResults.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                if (scrollY != oldScrollY) {
+                    hideKeyBoard()
+                }
+            }
         }
         viewModel.event.observe(this) {
             when (it.getContentIfNotHandled()) {
