@@ -68,6 +68,7 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
             }.apply {
                 (activity as? BaseActivity<*>)?.addDisposable(this)
             }
+        loadRecipes()
     }
 
     override fun initListeners() {
@@ -89,7 +90,11 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
     override fun onResume() {
         super.onResume()
         activity?.title = getString(R.string.navigation_menu_recipe)
-        viewModel.getRecipesByIngredients()
+    }
+
+    private fun loadRecipes() {
+        showLoading()
+        viewModel.getRecipesByFridgeIngredients()
     }
 
     private fun initRecyclerView() {

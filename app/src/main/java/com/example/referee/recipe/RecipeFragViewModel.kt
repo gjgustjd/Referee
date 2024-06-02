@@ -6,20 +6,18 @@ import com.example.referee.common.base.BaseViewModel
 import com.example.referee.fridge.model.FridgeRepository
 import com.example.referee.recipe.model.RecipeEvent
 import com.example.referee.recipe.model.RecipeRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class RecipeFragViewModel :BaseViewModel<RecipeEvent>(){
 
-    fun getRecipesByIngredients() {
-        viewModelScope.launch {
+    fun getRecipesByFridgeIngredients() {
+        viewModelScope.launch(Dispatchers.IO) {
             FridgeRepository.getFridgeItems().collect { ingredients ->
                 val fridgeIngredientName = ingredients.map { it.name }
-                    .firstOrNull()?:return@collect
-
-                RecipeRepository.getRecipesByIngredient(fridgeIngredientName)
-                    .collect {
-                        _event.value = EventWrapper(RecipeEvent.RecipeSuccess(it))
-                    }
+                val recipes =
+                    RecipeRepository.getRecipesByFridgeIngredientNames(fridgeIngredientName)
+                _event.postValue(EventWrapper(RecipeEvent.RecipeSuccess(recipes)))
             }
         }
     }
