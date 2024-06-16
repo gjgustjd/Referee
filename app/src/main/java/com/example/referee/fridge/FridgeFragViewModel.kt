@@ -11,7 +11,7 @@ class FridgeFragViewModel :BaseViewModel<FridgeEvent>(){
 
     fun getFridgeItems() {
         viewModelScope.launch {
-            FridgeRepository.getFridgeItems().collect {
+            FridgeRepository.fridgeItems.collect {
                 _event.value = EventWrapper(FridgeEvent.FridgeItemsEvent(it))
             }
         }

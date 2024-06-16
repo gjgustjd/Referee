@@ -23,6 +23,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                     binding.bottomNavigationView.menu.getItem(position).isChecked = true
                 }
             })
+            offscreenPageLimit = 3
         }
     }
 
