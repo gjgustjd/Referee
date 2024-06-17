@@ -13,7 +13,7 @@ import com.example.referee.recipe.model.RecipeEntity
 
 @Database(
     entities = [IngredientEntity::class, FridgeIngredientEntity::class, RecipeEntity::class],
-    version = 7
+    version = 8
 )
 abstract class RefereeDataBase : RoomDatabase() {
     companion object {
