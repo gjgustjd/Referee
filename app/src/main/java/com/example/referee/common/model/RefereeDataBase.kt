@@ -24,6 +24,7 @@ abstract class RefereeDataBase : RoomDatabase() {
             return Room.databaseBuilder(application.applicationContext, RefereeDataBase::class.java, DB_NAME)
                 .fallbackToDestructiveMigration()
                 .build()
+
         }
     }
 
