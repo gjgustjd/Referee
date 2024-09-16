@@ -4,9 +4,10 @@ import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.referee.common.DataBaseConst
 import java.io.Serializable
 
-@Entity(tableName = "ingredients")
+@Entity(tableName = DataBaseConst.TABLE_NAME_INGREDIENTS)
 data class IngredientEntity(
     val name: String,
     val photoName: String? = null,

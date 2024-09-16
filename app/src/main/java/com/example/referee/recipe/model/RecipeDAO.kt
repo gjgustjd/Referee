@@ -3,6 +3,7 @@ package com.example.referee.recipe.model
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.RawQuery
+import androidx.room.Transaction
 import androidx.sqlite.db.SupportSQLiteQuery
 import kotlinx.coroutines.flow.Flow
 
@@ -14,6 +15,16 @@ interface RecipeDAO {
 
     @Query("SELECT * FROM recipes WHERE CKG_MTRL_CN LIKE  '%' || :ingredient || '%'")
     fun getRecipesByIngredient(ingredient: String): Flow<List<RecipeEntity>>
+
+    @Transaction
+    @Query(
+        """
+        SELECT recipes.* FROM recipes 
+        JOIN fts_recipes ON recipes.ID = fts_recipes.rowid 
+        WHERE fts_recipes.RCP_TTL MATCH :title
+        """
+    )
+    fun getRecipesByTitleFts(title:String):Flow<List<RecipeEntity>>
 
     @RawQuery
     fun excueteRawQuery(query: SupportSQLiteQuery): List<RecipeEntity>

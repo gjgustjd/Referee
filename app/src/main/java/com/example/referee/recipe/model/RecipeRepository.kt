@@ -9,7 +9,7 @@ object RecipeRepository:BaseLocalRepository() {
 
     @Synchronized
     fun getRecipesByTitle(title: String): Flow<List<RecipeEntity>> {
-        return db.recipeDAO().getRecipesByTitle(title)
+        return db.recipeDAO().getRecipesByTitleFts(title)
     }
 
     @Synchronized

@@ -2,11 +2,10 @@ package com.example.referee.recipe.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Fts4
-import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.example.referee.common.DataBaseConst
 
-@Entity(tableName = "recipes", indices = [Index(value = ["CKG_MTRL_CN"])])
+@Entity(tableName = DataBaseConst.TABLE_NAME_RECIPES)
 data class RecipeEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("ID") val id:Int,

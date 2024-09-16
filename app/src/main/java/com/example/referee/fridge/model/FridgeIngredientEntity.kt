@@ -3,9 +3,10 @@ package com.example.referee.fridge.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.referee.common.DataBaseConst
 import kotlinx.android.parcel.Parcelize
 
-@Entity(tableName = "fridge")
+@Entity(tableName = DataBaseConst.TABLE_NAME_FRIDGE)
 @Parcelize
 data class FridgeIngredientEntity(
     val name: String,
