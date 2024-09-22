@@ -2,6 +2,7 @@ package com.example.referee.recipe.model
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
+import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseLocalRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -32,10 +33,27 @@ object RecipeRepository:BaseLocalRepository() {
         limit: Int = 10,
         offset: Int = 0
     ): SupportSQLiteQuery {
+        val keywords = arrayListOf<String>()
+
+        for (i in 1..ingredients.size) {
+            keywords.add(ingredients.take(i).joinToString(" "))
+        }
+
         val matchCases =
-            ingredients.joinToString(" + ") { "CASE WHEN CKG_MTRL_CN LIKE '%$it%' THEN 1 ELSE 0 END" }
+            keywords.joinToString(" UNION ") { keyword ->
+                """
+                    SELECT recipes.*,matchInfo(fts_recipes,'p') AS MatchInfo
+                    FROM recipes
+                    JOIN fts_recipes ON recipes.ID = fts_recipes.rowid
+                    WHERE fts_recipes.CKG_MTRL_CN MATCH '$keyword'
+                """
+            }
         val query =
-            "SELECT *, ($matchCases) AS MatchCount FROM recipes ORDER BY MatchCount DESC LIMIT $limit OFFSET $offset"
+            """
+                WITH matchCases AS($matchCases)
+                SELECT * FROM matchCases ORDER BY hex(MatchInfo) DESC LIMIT $limit OFFSET $offset
+            """.trimIndent()
+        Logger.i("query:$query")
         return SimpleSQLiteQuery(query)
     }
 
