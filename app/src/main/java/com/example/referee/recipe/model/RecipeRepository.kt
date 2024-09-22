@@ -2,6 +2,7 @@ package com.example.referee.recipe.model
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
+import com.example.referee.common.DataBaseConst
 import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseLocalRepository
 import kotlinx.coroutines.flow.Flow
@@ -33,25 +34,18 @@ object RecipeRepository:BaseLocalRepository() {
         limit: Int = 10,
         offset: Int = 0
     ): SupportSQLiteQuery {
-        val keywords = arrayListOf<String>()
-
-        for (i in 1..ingredients.size) {
-            keywords.add(ingredients.take(i).joinToString(" "))
-        }
-
-        val matchCases =
-            keywords.joinToString(" UNION ") { keyword ->
-                """
-                    SELECT recipes.*,matchInfo(fts_recipes,'p') AS MatchInfo
-                    FROM recipes
-                    JOIN fts_recipes ON recipes.ID = fts_recipes.rowid
-                    WHERE fts_recipes.CKG_MTRL_CN MATCH '$keyword'
-                """
-            }
+        val keywords = ingredients.joinToString(" OR ")
         val query =
             """
-                WITH matchCases AS($matchCases)
-                SELECT * FROM matchCases ORDER BY hex(MatchInfo) DESC LIMIT $limit OFFSET $offset
+                SELECT 
+                    ${DataBaseConst.TABLE_NAME_RECIPES}.*,
+                    replace(quote(matchInfo(${DataBaseConst.TABLE_NAME_FTS_RECIPES},'b')),'0','') AS MatchCount
+                FROM ${DataBaseConst.TABLE_NAME_RECIPES}
+                JOIN ${DataBaseConst.TABLE_NAME_FTS_RECIPES} 
+                    ON recipes.ID = ${DataBaseConst.TABLE_NAME_FTS_RECIPES}.rowid
+                WHERE ${DataBaseConst.TABLE_NAME_FTS_RECIPES}.CKG_MTRL_CN MATCH '$keywords'
+                ORDER BY MatchCount DESC
+                LIMIT $limit OFFSET $offset
             """.trimIndent()
         Logger.i("query:$query")
         return SimpleSQLiteQuery(query)
