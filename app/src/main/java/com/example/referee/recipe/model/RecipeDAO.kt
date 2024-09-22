@@ -10,12 +10,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RecipeDAO {
 
-    @Query("SELECT * FROM recipes WHERE RCP_TTL LIKE  '%' || :title || '%' LIMIT :limit OFFSET :offset")
-    fun getRecipesByTitle(title: String, limit: Int = 20, offset: Int = 0): Flow<List<RecipeEntity>>
-
-    @Query("SELECT * FROM recipes WHERE CKG_MTRL_CN LIKE  '%' || :ingredient || '%'")
-    fun getRecipesByIngredient(ingredient: String): Flow<List<RecipeEntity>>
-
     @Transaction
     @Query(
         """
@@ -25,6 +19,26 @@ interface RecipeDAO {
         """
     )
     fun getRecipesByTitleFts(title:String):Flow<List<RecipeEntity>>
+
+    @Transaction
+    @Query(
+        """
+        SELECT 
+            recipes.*,
+            replace(quote(matchInfo(fts_recipes,'b')),'0','') AS MatchCount
+        FROM recipes
+        JOIN fts_recipes 
+            ON recipes.ID = fts_recipes.rowid
+        WHERE fts_recipes.CKG_MTRL_CN MATCH :matchQueryString
+        ORDER BY MatchCount DESC
+        LIMIT :limit OFFSET :offset
+        """
+    )
+    fun getRecipesContainsFridgeIngredients(
+        limit: Int = 10,
+        offset: Int = 0,
+        matchQueryString: String
+    ): List<RecipeEntity>
 
     @RawQuery
     fun excueteRawQuery(query: SupportSQLiteQuery): List<RecipeEntity>
