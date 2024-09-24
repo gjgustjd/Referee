@@ -1,0 +1,5 @@
+outs:
+- md5: dd86f1e33a8be987a074da8c85af1014
+  size: 371761152
+  hash: md5
+  path: recipes_10000.db
