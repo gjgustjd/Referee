@@ -10,20 +10,14 @@ import com.example.referee.recipe.model.RecipeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class RecipeFragViewModel :BaseViewModel<RecipeEvent>(){
+class RecipeFragViewModel : BaseViewModel<RecipeEvent>() {
 
     fun getRecipesByFridgeIngredients() {
         viewModelScope.launch(Dispatchers.IO) {
-            FridgeRepository.fridgeItems.collect { ingredients ->
+            FridgeRepository.fridgeItems.collect {
                 Logger.i()
-                val fridgeIngredientName = ingredients.map { it.name }
-                if(fridgeIngredientName.isNotEmpty()) {
-                    val recipes =
-                        RecipeRepository.getRecipesByFridgeIngredientNames(fridgeIngredientName)
-                    _event.postValue(EventWrapper(RecipeEvent.RecipeSuccess(recipes)))
-                } else {
-                    _event.postValue(EventWrapper(RecipeEvent.RecipeSuccess(emptyList())))
-                }
+                val recipes = RecipeRepository.getRecipesByFridgeIngredientNames()
+                _event.postValue(EventWrapper(RecipeEvent.RecipeSuccess(recipes)))
             }
         }
     }

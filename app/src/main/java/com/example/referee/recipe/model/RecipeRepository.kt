@@ -11,13 +11,10 @@ object RecipeRepository:BaseLocalRepository() {
     }
 
     fun getRecipesByFridgeIngredientNames(
-        ingredientNames:List<String>,
         limit: Int = 10,
         offset: Int = 0
     ): List<RecipeEntity> {
-        val keywords = ingredientNames.joinToString(" OR ")
-
-        return db.recipeDAO().getRecipesContainsFridgeIngredients(limit,offset,keywords)
+        return db.recipeDAO().getRecipesContainsFridgeIngredients(limit,offset)
     }
 
 //    fun getRecipesByIngredients(ingredients: List<String>): Flow<List<RecipeEntity>> {

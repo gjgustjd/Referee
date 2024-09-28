@@ -29,15 +29,19 @@ interface RecipeDAO {
         FROM recipes
         JOIN fts_recipes 
             ON recipes.ID = fts_recipes.rowid
-        WHERE fts_recipes.CKG_MTRL_CN MATCH :matchQueryString
+        WHERE fts_recipes.CKG_MTRL_CN 
+        MATCH 
+            (
+            SELECT GROUP_CONCAT(name,' OR ') AS concatResult
+            FROM fridge
+            )
         ORDER BY MatchCount DESC
         LIMIT :limit OFFSET :offset
         """
     )
     fun getRecipesContainsFridgeIngredients(
         limit: Int = 10,
-        offset: Int = 0,
-        matchQueryString: String
+        offset: Int = 0
     ): List<RecipeEntity>
 
     @RawQuery
