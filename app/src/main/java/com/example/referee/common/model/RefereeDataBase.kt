@@ -10,6 +10,7 @@ import com.example.referee.fridge.model.FridgeIngredientEntity
 import com.example.referee.fridge.model.FridgeDAO
 import com.example.referee.ingredientadd.model.IngredientEntity
 import com.example.referee.ingredientadd.model.IngredientsDAO
+import com.example.referee.recipe.model.RecipeCacheDAO
 import com.example.referee.recipe.model.RecipeCacheEntity
 import com.example.referee.recipe.model.RecipeDAO
 import com.example.referee.recipe.model.RecipeEntity
@@ -47,6 +48,7 @@ abstract class RefereeDataBase : RoomDatabase() {
     abstract fun ingredientsDAO():IngredientsDAO
     abstract fun fridgeDAO():FridgeDAO
     abstract fun recipeDAO():RecipeDAO
+    abstract fun recipeCacheDAO():RecipeCacheDAO
 }
 
 class RefereeDBCallback: RoomDatabase.Callback() {

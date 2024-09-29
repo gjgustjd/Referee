@@ -10,7 +10,7 @@ import com.example.referee.common.DataBaseConst
 data class RecipeCacheEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("order")
-    val order: Int,
+    val order: Int = 0,
     @Embedded
     val recipe: RecipeEntity
 )

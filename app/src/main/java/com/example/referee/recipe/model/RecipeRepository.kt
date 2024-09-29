@@ -17,15 +17,14 @@ object RecipeRepository:BaseLocalRepository() {
         return db.recipeDAO().getRecipesContainsFridgeIngredients(limit,offset)
     }
 
-//    fun getRecipesByIngredients(ingredients: List<String>): Flow<List<RecipeEntity>> {
-//        return db.recipeDAO().getRecipesByIngredients(ingredients)
-//    }
-//
-//    fun getRecipesByType(type: String): Flow<List<RecipeEntity>> {
-//        return db.recipeDAO().getRecipesByType(type)
-//    }
-//
-//    fun getRecipesByMethod(method: String): Flow<List<RecipeEntity>> {
-//        return db.recipeDAO().getRecipesByMethod(method)
-//    }
+    fun getCachedRecipes(): Flow<List<RecipeEntity>> {
+        return db.recipeCacheDAO().getCachedRecipes()
+    }
+
+    fun cacheRecipes(recipes: List<RecipeEntity>) {
+        val recipeCacheEntities = recipes.map { RecipeCacheEntity(recipe = it) }
+        db.recipeCacheDAO().insertList(recipeCacheEntities)
+    }
+
+    fun clearRecipeCache() = db.recipeCacheDAO().clearRecipeCache()
 }

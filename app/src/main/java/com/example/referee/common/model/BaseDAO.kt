@@ -10,6 +10,9 @@ interface BaseDAO<T> {
     @Insert
     fun insert(item: T): Long
 
+    @Insert
+    fun insertList(items:List<T>)
+
     @Delete
     fun delete(item: T)
 
