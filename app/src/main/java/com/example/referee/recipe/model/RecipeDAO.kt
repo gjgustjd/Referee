@@ -3,14 +3,12 @@ package com.example.referee.recipe.model
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.RawQuery
-import androidx.room.Transaction
 import androidx.sqlite.db.SupportSQLiteQuery
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RecipeDAO {
 
-    @Transaction
     @Query(
         """
         SELECT recipes.* FROM recipes 
@@ -20,7 +18,6 @@ interface RecipeDAO {
     )
     fun getRecipesByTitleFts(title:String):Flow<List<RecipeEntity>>
 
-    @Transaction
     @Query(
         """
         SELECT 
@@ -46,7 +43,4 @@ interface RecipeDAO {
 
     @RawQuery
     fun excueteRawQuery(query: SupportSQLiteQuery): List<RecipeEntity>
-//    fun getRecipesByIngredients(ingredients: List<String>): Flow<List<RecipeEntity>>
-//    fun getRecipesByType(type:String):Flow<List<RecipeEntity>>
-//    fun getRecipesByMethod(method:String):Flow<List<RecipeEntity>>
 }

@@ -13,9 +13,9 @@ interface FridgeDAO:BaseDAO<FridgeIngredientEntity> {
     fun getFridgeIngredients(): Flow<List<FridgeIngredientEntity>>
 
     @Transaction
-    fun insertIngredientAndClearRecipeCache(ingredient:FridgeIngredientEntity) {
-        insert(ingredient)
+    fun insertIngredientAndClearRecipeCache(ingredient: FridgeIngredientEntity): Long {
         clearRecipeCache()
+        return insert(ingredient)
     }
 
     @Query("DELETE FROM recipes_cache")

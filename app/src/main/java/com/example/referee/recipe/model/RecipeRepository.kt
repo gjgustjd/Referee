@@ -10,12 +10,11 @@ import kotlinx.coroutines.flow.stateIn
 object RecipeRepository:BaseLocalRepository() {
 
     val recipes: StateFlow<List<RecipeEntity>> by lazy {
-        getCachedRecipes()
-            .stateIn(
-                scope = applicationScope,
-                started = SharingStarted.WhileSubscribed(),
-                initialValue = emptyList()
-            )
+        getCachedRecipes().stateIn(
+            scope = applicationScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList()
+        )
     }
 
     @Synchronized
