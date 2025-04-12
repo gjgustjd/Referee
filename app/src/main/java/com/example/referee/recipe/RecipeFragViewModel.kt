@@ -7,14 +7,13 @@ import com.example.referee.common.base.BaseViewModel
 import com.example.referee.recipe.model.RecipeEvent
 import com.example.referee.recipe.model.RecipeRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 
 class RecipeFragViewModel : BaseViewModel<RecipeEvent>() {
 
     fun getRecipesByFridgeIngredients() {
         viewModelScope.launch(Dispatchers.IO) {
-            RecipeRepository.recipes.drop(1).collect { recipes ->
+            RecipeRepository.recipes.collect { recipes ->
                 Logger.i(recipes.toString())
 
                 if (recipes.isEmpty()) {
