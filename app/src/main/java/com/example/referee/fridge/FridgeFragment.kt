@@ -80,17 +80,17 @@ class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fri
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.title = getString(R.string.navigation_menu_fridger)
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
+
+        if(menuVisible) activity?.title = getString(R.string.navigation_menu_fridger)
     }
 
     private fun initRecyclerView() {
         with(binding.rvIngredients) {
             context?.let {
                 adapter = fridgeAdapter
-                layoutManager =
-                    LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                 decoration?.let {
                     addItemDecoration(it)
                 }

@@ -169,7 +169,8 @@ class IngredientsFragment :
 
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
-        activity?.title = getString(R.string.navigation_menu_ingredient)
+
+        if (menuVisible) activity?.title = getString(R.string.navigation_menu_ingredient)
     }
 
     private fun requestRecyclerItems() {

@@ -99,9 +99,9 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        activity?.title = getString(R.string.navigation_menu_recipe)
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
+        if (menuVisible) activity?.title = getString(R.string.navigation_menu_recipe)
     }
 
     private fun loadRecipes() {
