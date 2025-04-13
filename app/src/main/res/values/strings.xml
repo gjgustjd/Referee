@@ -40,6 +40,7 @@
     <string name="ingredient_add_please_grant_permission_toast">권한 허용에 동의해주세요.</string>
     <string name="ingredient_add_please_input_name">식재료명을 입력해주세요.</string>
     <string name="ingredient_add_there_is_same_item_toast">중복된 이름의 식재료가 있습니다.</string>
+    <string name="ingredients_empty">추가된 식재료가 없습니다.</string>
     <string-array name="ingredient_unit">
         <item>개</item>
         <item>묶음</item>
@@ -60,10 +61,11 @@
     <string name="fridge_add_ingredient_to_fridge">냉장고에 추가하기</string>
     <string name="fridge_add_ingredient_success_toast">식재료를 냉장고에 추가하였습니다.</string>
     <string name="fridge_add_ingredient_failed_toast">식재료를 냉장고에 추가하는데에 실패했습니다.</string>
+
 <!-- 레시피 화면  -->
     <string name="recipe_search_item">검색하려는 레시피를 입력해주세요.</string>
     <string name="recipe_search_title">레시피 검색</string>
-
+    <string name="recipe_empty">레시피를 추천할 재료가 없습니다.\n냉장고에 재료를 추가해주세요.</string>
 <!--  공통  -->
     <string name="search_empty_list_desc">검색된 결과가 없습니다.</string>
 </resources>

@@ -61,10 +61,18 @@ class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fri
         viewModel.event.observe(activity as LifecycleOwner) {
             when (it.getContentIfNotHandled()) {
                 is FridgeEvent.FridgeItemsEvent -> {
-                    binding.tvEmptyList.visibility = View.GONE
-                    binding.rvIngredients.visibility = View.VISIBLE
                     val data = it.peekContent() as FridgeEvent.FridgeItemsEvent
-                    fridgeAdapter.submitList(data.items)
+
+                    with(binding) {
+                        if (data.items.isEmpty()) {
+                            tvEmptyList.visibility = View.VISIBLE
+                            rvIngredients.visibility = View.GONE
+                        } else {
+                            tvEmptyList.visibility = View.GONE
+                            rvIngredients.visibility = View.VISIBLE
+                            fridgeAdapter.submitList(data.items)
+                        }
+                    }
                 }
 
                 else -> Unit

@@ -1,6 +1,7 @@
 package com.example.referee.recipe
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
@@ -76,7 +77,18 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
             when(it.getContentIfNotHandled()) {
                 is RecipeEvent.RecipeSuccess -> {
                     val result = it.peekContent() as RecipeEvent.RecipeSuccess
-                    recipeAdapter.submitList(result.recipes)
+
+                    with(binding) {
+                        if (result.recipes.isEmpty()) {
+                            tvEmpty.visibility = View.VISIBLE
+                            rvRecipes.visibility = View.GONE
+                        } else {
+                            tvEmpty.visibility = View.GONE
+                            rvRecipes.visibility = View.VISIBLE
+                            recipeAdapter.submitList(result.recipes)
+                        }
+                    }
+
                     hideLoading()
                 }
 

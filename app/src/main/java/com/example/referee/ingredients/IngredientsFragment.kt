@@ -340,11 +340,18 @@ class IngredientsFragment :
         }
 
         ingredientAdapter?.run {
-            submitList(
-                items.map { IngredientsSelectableItem(it) }.toMutableList(),
-                updatePosition
-            )
-            Logger.i("adapter is not null")
+            val data = items.map { IngredientsSelectableItem(it) }.toMutableList()
+
+            with(binding) {
+                if(data.isEmpty()) {
+                    tvEmpty.visibility = View.VISIBLE
+                    rvIngredients.visibility = View.GONE
+                } else {
+                    tvEmpty.visibility = View.GONE
+                    rvIngredients.visibility = View.VISIBLE
+                    submitList(data, updatePosition)
+                }
+            }
         } ?: run {
             ingredientAdapter = IngredientsAdapter(
                 ::editItem
