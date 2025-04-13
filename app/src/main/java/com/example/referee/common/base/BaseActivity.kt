@@ -110,18 +110,6 @@ abstract class BaseActivity<T>(private val layoutResourceId:Int) : AppCompatActi
         imm.hideSoftInputFromWindow(binding.root.windowToken, 0)
     }
 
-    fun View.visible() {
-        visibility = View.VISIBLE
-    }
-
-    fun View.gone() {
-        visibility = View.GONE
-    }
-
-    fun View.invisible() {
-        visibility = View.INVISIBLE
-    }
-
     protected fun WebView.injectJavaScriptFromAssetsFile(fileName: String) {
         val inputStream = assets.open(fileName)
         val script = inputStream.bufferedReader().use(BufferedReader::readText)

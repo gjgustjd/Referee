@@ -2,7 +2,6 @@ package com.example.referee.recipe.search
 
 import android.content.Context
 import android.content.Intent
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +10,8 @@ import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
 import com.example.referee.common.CommonWebViewActivity
 import com.example.referee.common.base.BaseActivity
+import com.example.referee.common.extensions.visible
+import com.example.referee.common.extensions.gone
 import com.example.referee.databinding.ActivitySearchItemBinding
 import com.example.referee.network.LinkUtils
 import com.example.referee.recipe.RecipeAdapter
@@ -92,10 +93,10 @@ class SearchRecipeActivity :BaseActivity<ActivitySearchItemBinding>(R.layout.act
             when (it.getContentIfNotHandled()) {
                 is SearchRecipeEvent.SearchRecipeSuccess -> {
                     hideLoading()
-                    binding.tvEmptyList.visibility = View.GONE
+                    binding.tvEmptyList.gone()
                     val recipes = (it.peekContent() as SearchRecipeEvent.SearchRecipeSuccess).recipes
                     recipeAdapter.submitList(recipes)
-                    binding.rvSearchResults.visibility = View.VISIBLE
+                    binding.rvSearchResults.visible()
                 }
 
                 else -> Unit

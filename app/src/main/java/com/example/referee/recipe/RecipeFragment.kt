@@ -1,7 +1,8 @@
 package com.example.referee.recipe
 
 import android.os.Bundle
-import android.view.View
+import com.example.referee.common.extensions.visible
+import com.example.referee.common.extensions.gone
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
@@ -80,11 +81,11 @@ class RecipeFragment : BaseFragment<FragmentCookBinding>(R.layout.fragment_cook)
 
                     with(binding) {
                         if (result.recipes.isEmpty()) {
-                            tvEmpty.visibility = View.VISIBLE
-                            rvRecipes.visibility = View.GONE
+                            tvEmpty.visible()
+                            rvRecipes.gone()
                         } else {
-                            tvEmpty.visibility = View.GONE
-                            rvRecipes.visibility = View.VISIBLE
+                            tvEmpty.gone()
+                            rvRecipes.visible()
                             recipeAdapter.submitList(result.recipes)
                         }
                     }

@@ -1,7 +1,6 @@
 package com.example.referee.fridge
 
 import android.content.Intent
-import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -11,6 +10,8 @@ import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
 import com.example.referee.common.base.BaseActivity
+import com.example.referee.common.extensions.visible
+import com.example.referee.common.extensions.gone
 import com.example.referee.databinding.ActivitySearchItemBinding
 import com.example.referee.fridge.ingredientpage.IngredientPageActivity
 import com.example.referee.fridge.ingredientpage.IngredientPageActivity.Companion.EXTRA_RESULT_INGREDIENT_DATA
@@ -70,8 +71,8 @@ class SearchIngredientsActivity :
             if(!it.hasBeenHandled) {
                 when(it.peekContent()) {
                     is SearchIngredientsEvent.SearchSuccess -> {
-                        binding.tvEmptyList.visibility = View.GONE
-                        binding.rvSearchResults.visibility = View.VISIBLE
+                        binding.tvEmptyList.gone()
+                        binding.rvSearchResults.visible()
                         val result =
                             (it.peekContent() as SearchIngredientsEvent.SearchSuccess).result
                         searchAdapter.submitList(result)

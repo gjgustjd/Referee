@@ -5,6 +5,8 @@ import android.content.Intent
 import android.transition.Transition
 import android.util.Log
 import android.view.View
+import com.example.referee.common.extensions.visible
+import com.example.referee.common.extensions.gone
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import androidx.core.app.ActivityOptionsCompat
@@ -346,11 +348,11 @@ class IngredientsFragment :
 
             with(binding) {
                 if(data.isEmpty()) {
-                    tvEmpty.visibility = View.VISIBLE
-                    rvIngredients.visibility = View.GONE
+                    tvEmpty.visible()
+                    rvIngredients.gone()
                 } else {
-                    tvEmpty.visibility = View.GONE
-                    rvIngredients.visibility = View.VISIBLE
+                    tvEmpty.gone()
+                    rvIngredients.visible()
                     submitList(data, updatePosition)
                 }
             }

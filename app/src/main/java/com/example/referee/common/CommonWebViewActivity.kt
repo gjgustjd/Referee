@@ -7,6 +7,8 @@ import android.graphics.Bitmap
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.example.referee.common.extensions.visible
+import com.example.referee.common.extensions.gone
 import com.example.referee.R
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.databinding.ActivityWebviewCommonBinding

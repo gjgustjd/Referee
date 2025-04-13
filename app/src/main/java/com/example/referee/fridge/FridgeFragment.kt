@@ -2,7 +2,8 @@ package com.example.referee.fridge
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import com.example.referee.common.extensions.visible
+import com.example.referee.common.extensions.gone
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -65,11 +66,11 @@ class FridgeFragment : BaseFragment<FragmentFridgeBinding>(R.layout.fragment_fri
 
                     with(binding) {
                         if (data.items.isEmpty()) {
-                            tvEmptyList.visibility = View.VISIBLE
-                            rvIngredients.visibility = View.GONE
+                            tvEmptyList.visible()
+                            rvIngredients.gone()
                         } else {
-                            tvEmptyList.visibility = View.GONE
-                            rvIngredients.visibility = View.VISIBLE
+                            tvEmptyList.gone()
+                            rvIngredients.visible()
                             fridgeAdapter.submitList(data.items)
                         }
                     }
