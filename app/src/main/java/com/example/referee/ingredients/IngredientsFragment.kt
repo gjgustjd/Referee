@@ -114,9 +114,12 @@ class IngredientsFragment :
 
     override fun initViews() {
         initRecyclerView()
-        binding.viewModel = viewModel
-        binding.fragment = this
-        binding.lifecycleOwner = this
+        with(binding) {
+            viewModel = this@IngredientsFragment.viewModel
+            fragment = this@IngredientsFragment
+            lifecycleOwner = this@IngredientsFragment
+        }
+        requestRecyclerItems()
     }
 
     override fun initListeners() {
@@ -164,11 +167,9 @@ class IngredientsFragment :
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        Logger.i()
+    override fun setMenuVisibility(menuVisible: Boolean) {
+        super.setMenuVisibility(menuVisible)
         activity?.title = getString(R.string.navigation_menu_ingredient)
-        requestRecyclerItems()
     }
 
     private fun requestRecyclerItems() {
