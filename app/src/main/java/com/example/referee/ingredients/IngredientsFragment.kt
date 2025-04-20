@@ -49,11 +49,7 @@ class IngredientsFragment :
             resources.getDimension(R.dimen.decorator_default_margin).toInt()
         )
 
-        CommonRecyclerViewDecoration(
-            rightMargin = margin,
-            leftMargin = margin,
-            bottomMargin = margin
-        )
+        CommonRecyclerViewDecoration(bottomMargin = margin)
     }
     private lateinit var itemTouchHelper: ItemTouchHelper
     private val subFabArray by lazy { arrayOf(binding.fabDelete, binding.fabSearch) }

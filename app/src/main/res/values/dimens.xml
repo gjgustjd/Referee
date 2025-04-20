@@ -7,4 +7,5 @@
     <dimen name="ingredient_placeholder_inset">20dp</dimen>
     <dimen name="add_ingredient_placeholder_inset">30dp</dimen>
     <dimen name="decorator_default_margin">30dp</dimen>
+    <dimen name="recyclerview_padding">16dp</dimen>
 </resources>
