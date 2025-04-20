@@ -83,15 +83,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:backgroundTint="@color/colorButtonEnable"
             android:onClick='@{()->fragment.onMainFabClick()}'
             android:onLongClick='@{()->fragment.onMainFabLongClick()}'
-            tools:src="@drawable/ic_add"
             app:fabState='@{viewModel.fabState.peekContent()}'
             app:fabType="@{IngredientsFABType.MAIN_FAB}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:shapeAppearanceOverlay="@style/CustomShapeAppearance.FloatingActionButton" />
+            app:shapeAppearanceOverlay="@style/CustomShapeAppearance.FloatingActionButton"
+            tools:src="@drawable/ic_add" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -9,11 +9,18 @@
             @transition/change_image_transform</item>
         <item name="android:windowSharedElementExitTransition">
             @transition/change_image_transform</item>
+        <item name="actionBarStyle">@style/Theme.Referee.ActionBar</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="tabStyle">@style/TabLayout</item>
     </style>
 
     <style name="Theme.Referee.NoActionBar" parent="Theme.Referee">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
     </style>
     <style name="WindowAnimationTransition">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
@@ -21,4 +28,11 @@
         <item name="android:activityCloseEnterAnimation">@anim/stay_still</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
     </style>
+    <style name="Theme.Referee.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#D2DFF8</item>
+    </style>
+    <style name="Theme.Referee.ActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">@color/colorActionBarBackground</item>
+    </style>
+
 </resources>
