@@ -1,10 +1,10 @@
 package com.example.referee.fridge
 
 import android.content.Intent
+import android.view.inputmethod.EditorInfo
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
@@ -57,50 +57,65 @@ class SearchIngredientsActivity :
     }
 
     override fun initViews() {
+        with(binding.etKeyword) {
+            requestFocus()
+            showKeyBoard()
+        }
+
         initRecyclerView()
     }
 
     override fun initListeners() {
         super.initListeners()
-        binding.etKeyword.addTextChangedListener { }
-        binding.btnConfirm.setOnClickListener {
-            showLoading()
-            viewModel.searchIngredients(binding.etKeyword.text.toString())
-        }
-        viewModel.event.observe(this) {
-            if(!it.hasBeenHandled) {
-                when(it.peekContent()) {
-                    is SearchIngredientsEvent.SearchSuccess -> {
-                        binding.tvEmptyList.gone()
-                        binding.rvSearchResults.visible()
-                        val result =
-                            (it.peekContent() as SearchIngredientsEvent.SearchSuccess).result
-                        searchAdapter.submitList(result)
-                        hideLoading()
-                    }
+        with(binding) {
+            etKeyword.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    btnConfirm.performClick()
+                    true
+                } else {
+                    false
+                }
+            }
 
-                    is SearchIngredientsEvent.SearchFailed -> {
-                        hideLoading()
-                    }
+            btnConfirm.setOnClickListener {
+                etKeyword.clearFocus()
+                hideKeyBoard()
+                showLoading()
+                viewModel.searchIngredients(etKeyword.text.toString())
+            }
 
-                    is SearchIngredientsEvent.PageSuccess -> {
-                        hideLoading()
-                    }
+            rvSearchResults.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+                if (scrollY != oldScrollY) {
+                    etKeyword.clearFocus()
+                    hideKeyBoard()
+                }
+            }
 
-                    is SearchIngredientsEvent.PageFailed -> {
-                        hideLoading()
-                    }
+            viewModel.event.observe(this@SearchIngredientsActivity) {
+                if (!it.hasBeenHandled) {
+                    when (val eventContent = it.peekContent()) {
+                        is SearchIngredientsEvent.SearchSuccess -> {
+                            tvEmptyList.gone()
+                            rvSearchResults.visible()
+                            searchAdapter.submitList(eventContent.result)
+                            hideLoading()
+                        }
 
-                    is SearchIngredientsEvent.InsertFridgeIngredientSuccess -> {
-                        hideLoading()
-                        showToast(getString(R.string.fridge_add_ingredient_success_toast))
-                        finish()
-                    }
+                        is SearchIngredientsEvent.SearchFailed,
+                        is SearchIngredientsEvent.PageSuccess,
+                        is SearchIngredientsEvent.PageFailed -> hideLoading()
 
-                    is SearchIngredientsEvent.InsertFridgeIngredientFailure -> {
-                        hideLoading()
-                        showToast(getString(R.string.fridge_add_ingredient_failed_toast))
-                        finish()
+                        is SearchIngredientsEvent.InsertFridgeIngredientSuccess -> {
+                            hideLoading()
+                            showToast(getString(R.string.fridge_add_ingredient_success_toast))
+                            finish()
+                        }
+
+                        is SearchIngredientsEvent.InsertFridgeIngredientFailure -> {
+                            hideLoading()
+                            showToast(getString(R.string.fridge_add_ingredient_failed_toast))
+                            finish()
+                        }
                     }
                 }
             }

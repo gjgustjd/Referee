@@ -39,6 +39,7 @@
         <activity android:name=".fridge.SearchIngredientsActivity"
             android:label="@string/fridge_ingredient_search_title"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateVisible"
             android:theme="@style/Theme.Referee"/>
         <activity
             android:name=".fridge.ingredientpage.IngredientPageActivity"

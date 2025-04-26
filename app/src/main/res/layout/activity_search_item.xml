@@ -18,6 +18,8 @@
             android:hint="@string/fridge_ingredient_search_hint"
             android:padding="10dp"
             android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
             app:layout_constraintEnd_toStartOf="@+id/btnConfirm"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
