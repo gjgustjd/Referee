@@ -5,9 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/recyclerview_padding"
-        android:clipChildren="false"
-        android:clipToPadding="false"
+        android:paddingTop="@dimen/recyclerview_padding"
         android:background="@color/background_gray">
 
         <EditText
@@ -15,6 +13,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+            android:layout_marginStart="@dimen/recyclerview_padding"
             android:background="@drawable/shape_edit_text_background_white"
             android:hint="@string/fridge_ingredient_search_hint"
             android:padding="10dp"
@@ -27,23 +26,35 @@
             android:id="@+id/btnConfirm"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/recyclerview_padding"
             android:text="@string/confirm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSearchResults"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:paddingHorizontal="@dimen/recyclerview_padding"
+            android:clipToPadding="false"
+            android:clipChildren="false"
             android:layout_marginTop="15dp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etKeyword"
-            tools:listitem="@layout/item_search_ingredient"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toBottomOf="@+id/etKeyword">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSearchResults"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:overScrollMode="never"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:listitem="@layout/item_search_ingredient"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/tvEmptyList"
@@ -53,6 +64,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/etKeyword" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
