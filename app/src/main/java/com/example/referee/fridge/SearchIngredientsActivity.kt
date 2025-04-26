@@ -5,10 +5,12 @@ import android.view.inputmethod.EditorInfo
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.referee.R
 import com.example.referee.common.CommonRecyclerViewDecoration
 import com.example.referee.common.CommonUtil
+import com.example.referee.common.Logger
 import com.example.referee.common.base.BaseActivity
 import com.example.referee.common.extensions.visible
 import com.example.referee.common.extensions.gone
@@ -77,11 +79,22 @@ class SearchIngredientsActivity :
                 }
             }
 
+            etKeyword.doAfterTextChanged { text ->
+                text?.let {
+                    Logger.i(text.toString().isNotEmpty().toString())
+                    btnConfirm.isEnabled = text.toString().isNotEmpty()
+                }
+            }
+
             btnConfirm.setOnClickListener {
-                etKeyword.clearFocus()
-                hideKeyBoard()
-                showLoading()
-                viewModel.searchIngredients(etKeyword.text.toString())
+                if(etKeyword.text.isEmpty()) {
+                  showToast(getString(R.string.search_keyword_is_empty))
+                } else {
+                    etKeyword.clearFocus()
+                    hideKeyBoard()
+                    showLoading()
+                    viewModel.searchIngredients(etKeyword.text.toString())
+                }
             }
 
             rvSearchResults.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->

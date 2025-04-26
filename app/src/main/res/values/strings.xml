@@ -67,5 +67,6 @@
     <string name="recipe_search_title">레시피 검색</string>
     <string name="recipe_empty">레시피를 추천할 재료가 없습니다.\n냉장고에 재료를 추가해주세요.</string>
 <!--  공통  -->
+    <string name="search_keyword_is_empty">검색어를 입력해주세요.</string>
     <string name="search_empty_list_desc">검색된 결과가 없습니다.</string>
 </resources>
