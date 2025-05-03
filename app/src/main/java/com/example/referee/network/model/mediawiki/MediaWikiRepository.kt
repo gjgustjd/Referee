@@ -4,7 +4,6 @@ import com.example.referee.network.MediaWikiApiUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-
 object MediaWikiRepository {
 
     fun getSinglePageByTitle(title:String) =

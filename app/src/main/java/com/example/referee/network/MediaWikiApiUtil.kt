@@ -31,6 +31,6 @@ object MediaWikiApiUtil {
             .build()
     }
 
-    fun getMediaWikiAPI() =
+    fun getMediaWikiAPI(): MediaWikiApi =
         getMediaWikiRetrofitBuilder().create(MediaWikiApi::class.java)
 }
